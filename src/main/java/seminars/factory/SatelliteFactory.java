@@ -1,6 +1,6 @@
 package seminars.factory;
 
-import seminars.domains.Satellite;
+import seminars.domains.satellites.Satellite;
 
 public interface SatelliteFactory {
     Satellite createSatellite(String name, double batteryLevel);

@@ -1,4 +1,4 @@
-package seminars.domains;
+package seminars.domains.satellites;
 
 import lombok.Data;
 import seminars.constants.EnergySystemConstants;

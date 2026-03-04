@@ -1,8 +1,8 @@
 package seminars.factory;
 
 import org.springframework.stereotype.Component;
-import seminars.domains.ImagingSatellite;
-import seminars.domains.Satellite;
+import seminars.domains.satellites.ImagingSatellite;
+import seminars.domains.satellites.Satellite;
 
 @Component
 public class ImagingSatelliteFactory implements SatelliteFactory {

@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import seminars.domains.CommunicationSatellite;
-import seminars.domains.ImagingSatellite;
-import seminars.domains.Satellite;
+import seminars.domains.satellites.CommunicationSatellite;
+import seminars.domains.satellites.ImagingSatellite;
+import seminars.domains.satellites.Satellite;
 
 @DisplayName("Тесты фабрик спутников")
 public class SatelliteFactoryTest {
