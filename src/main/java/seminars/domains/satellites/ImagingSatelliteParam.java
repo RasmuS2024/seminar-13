@@ -1,5 +1,8 @@
 package seminars.domains.satellites;
 
+import lombok.Getter;
+
+@Getter
 public class ImagingSatelliteParam extends SatelliteParam {
     private double resolution;
 

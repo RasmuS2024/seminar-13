@@ -5,10 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import seminars.domains.satellites.CommunicationSatellite;
-import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.Satellite;
+import seminars.domains.satellites.*;
 import seminars.SatelliteConstellation;
+import seminars.exceptions.SpaceOperationException;
+import seminars.factory.impl.CommunicationSatelliteFactory;
+import seminars.factory.impl.ImagingSatelliteFactory;
 import seminars.repository.ConstellationRepository;
 
 import java.util.UUID;
@@ -32,6 +33,12 @@ public class SpaceOperationCenterServiceIntegrationTest {
     @Autowired
     private ConstellationRepository constellationRepository;
 
+    @Autowired
+    private CommunicationSatelliteFactory communicationFactory;
+
+    @Autowired
+    private ImagingSatelliteFactory imagingFactory;
+
     private String uniqueConstellationName;
 
     @BeforeEach
@@ -49,8 +56,13 @@ public class SpaceOperationCenterServiceIntegrationTest {
         assertEquals(0, constellation.getSatellites().size());
 
         // Добавление спутников
-        CommunicationSatellite commSat = new CommunicationSatellite(COMM_SATELLITE_NAME, FULL_BATTERY, COMM_POWER);
-        ImagingSatellite imgSat = new ImagingSatellite(IMAGING_SATELLITE_NAME, FULL_BATTERY, IMG_RESOLUTION);
+        Satellite commSat = communicationFactory.createSatelliteWithParameter(
+                new CommunicationSatelliteParam(COMM_SATELLITE_NAME, FULL_BATTERY, COMM_POWER)
+        );
+        Satellite imgSat = imagingFactory.createSatelliteWithParameter(
+                new ImagingSatelliteParam(IMAGING_SATELLITE_NAME, FULL_BATTERY, IMG_RESOLUTION)
+        );
+
         spaceOperationCenterService.addSatelliteToConstellation(uniqueConstellationName, commSat);
         spaceOperationCenterService.addSatelliteToConstellation(uniqueConstellationName, imgSat);
 
@@ -88,11 +100,11 @@ public class SpaceOperationCenterServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Попытка выполнить миссию для несуществующей группировки вызывает RuntimeException с сообщением")
-    void executeConstellationMission_WithNonExistentConstellation_ThrowsRuntimeException() {
+    @DisplayName("Попытка выполнить миссию для несуществующей группировки вызывает SpaceOperationException с сообщением")
+    void executeConstellationMission_WithNonExistentConstellation_ThrowsSpaceOperationException() {
         String nonExistentName = "не-существует";
 
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        SpaceOperationException exception = assertThrows(SpaceOperationException.class,
                 () -> spaceOperationCenterService.executeConstellationMission(nonExistentName));
 
         assertEquals("Группировка не найдена: " + nonExistentName, exception.getMessage(),

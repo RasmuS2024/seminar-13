@@ -1,9 +1,11 @@
 package seminars.factory;
 
 import seminars.domains.satellites.Satellite;
+import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.SatelliteType;
 
 public interface SatelliteFactory {
-    Satellite createSatellite(String name, double batteryLevel);
+    Satellite createSatelliteWithParameter(SatelliteParam param);
 
-    Satellite createSatelliteWithParameter(String name, double batteryLevel, double parameter);
+    boolean isSatelliteTypeSupported(SatelliteType type);
 }

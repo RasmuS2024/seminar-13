@@ -2,6 +2,7 @@ package seminars.repository;
 
 import org.springframework.stereotype.Service;
 import seminars.SatelliteConstellation;
+import seminars.exceptions.SpaceOperationException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ConstellationRepository {
     public SatelliteConstellation getConstellation(String name) {
         SatelliteConstellation constellation = constellations.get(name);
         if (constellation == null) {
-            throw new RuntimeException("Группировка не найдена: " + name);
+            throw new SpaceOperationException("Группировка не найдена: " + name);
         }
         return constellation;
     }

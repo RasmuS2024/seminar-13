@@ -3,6 +3,7 @@ package seminars;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 
 import java.util.Map;
@@ -83,7 +84,7 @@ class ConstellationRepositoryTest {
     @DisplayName("Получение несуществующей группировки должно выбрасывать исключение с правильным сообщением")
     void getNonExistentConstellation_ShouldThrowException() {
         // act & assert
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        SpaceOperationException exception = assertThrows(SpaceOperationException.class,
                 () -> repository.getConstellation(NON_EXIST_NAME));
         assertEquals("Группировка не найдена: " + NON_EXIST_NAME, exception.getMessage());
     }

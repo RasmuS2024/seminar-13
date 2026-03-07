@@ -1,5 +1,8 @@
 package seminars.domains.satellites;
 
+import lombok.Getter;
+
+@Getter
 public class CommunicationSatelliteParam extends SatelliteParam {
     private double bandwidth;
 

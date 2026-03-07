@@ -5,9 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import seminars.domains.satellites.CommunicationSatellite;
-import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.Satellite;
+import seminars.domains.satellites.*;
 import seminars.factory.impl.CommunicationSatelliteFactory;
 import seminars.factory.impl.ImagingSatelliteFactory;
 
@@ -26,46 +24,6 @@ public class SatelliteFactoryTest {
     }
 
     @Test
-    @DisplayName("Фабрика спутников связи создает спутник с дефолтными параметрами")
-    void communicationFactoryCreateSatelliteWithDefaultParameters() {
-        // Arrange
-        String name = "Спутник связи 1";
-        double batteryLevel = 0.8;
-
-        // Act
-        Satellite satellite = communicationFactory.createSatellite(name, batteryLevel);
-
-        // Assert
-        assertNotNull(satellite);
-        assertInstanceOf(CommunicationSatellite.class, satellite);
-        assertEquals(name, satellite.getName());
-        assertEquals(batteryLevel, satellite.getEnergy().getBatteryLevel(), 0.001);
-
-        CommunicationSatellite commSatellite = (CommunicationSatellite) satellite;
-        assertEquals(DEFAULT_BANDWIDTH, commSatellite.getBandwidth(), 0.001);
-    }
-
-    @Test
-    @DisplayName("Фабрика спутников ДЗЗ создает спутник с дефолтными параметрами")
-    void imagingFactoryCreateSatelliteWithDefaultParameters() {
-        // Arrange
-        String name = "Спутник ДЗЗ 1";
-        double batteryLevel = 0.8;
-
-        // Act
-        Satellite satellite = imagingFactory.createSatellite(name, batteryLevel);
-
-        // Assert
-        assertNotNull(satellite);
-        assertInstanceOf(ImagingSatellite.class, satellite);
-        assertEquals(name, satellite.getName());
-        assertEquals(batteryLevel, satellite.getEnergy().getBatteryLevel(), 0.001);
-
-        ImagingSatellite imagingSatellite = (ImagingSatellite) satellite;
-        assertEquals(DEFAULT_RESOLUTION, imagingSatellite.getResolution(), 0.001);
-    }
-
-    @Test
     @DisplayName("Фабрика спутников связи создает спутник с параметрами")
     void communicationFactoryCreateSatelliteWithParameters() {
         // Arrange
@@ -74,7 +32,9 @@ public class SatelliteFactoryTest {
         double bandwidth = 125;
 
         // Act
-        Satellite satellite = communicationFactory.createSatelliteWithParameter(name, batteryLevel, bandwidth);
+        Satellite satellite = communicationFactory.createSatelliteWithParameter(
+                new CommunicationSatelliteParam(name, batteryLevel, bandwidth)
+        );
 
         // Assert
         assertNotNull(satellite);
@@ -95,7 +55,9 @@ public class SatelliteFactoryTest {
         double resolution = 48;
 
         // Act
-        Satellite satellite = imagingFactory.createSatelliteWithParameter(name, batteryLevel, resolution);
+        Satellite satellite = imagingFactory.createSatelliteWithParameter(
+                new ImagingSatelliteParam(name, batteryLevel, resolution)
+        );
 
         // Assert
         assertNotNull(satellite);
@@ -111,9 +73,12 @@ public class SatelliteFactoryTest {
     @DisplayName("Созданные фабриками спутники могут быть активированы")
     void factoryCreatedSatellitesCanBeActivated() {
         // Arrange
-        Satellite commSatellite = communicationFactory.createSatellite("АктивныйКомСат", 0.9);
-        Satellite imagingSatellite = imagingFactory.createSatellite("АктивныйДЗЗ", 0.9);
-
+        Satellite commSatellite = communicationFactory.createSatelliteWithParameter(
+                new CommunicationSatelliteParam("АктивныйКомСат", 0.9, 150.0)
+        );
+        Satellite imagingSatellite = imagingFactory.createSatelliteWithParameter(
+                new ImagingSatelliteParam("АктивныйДЗЗ", 0.9, 20.0)
+        );
         // Act & Assert
         assertTrue(commSatellite.activate());
         assertTrue(commSatellite.getState().isActive());
@@ -127,9 +92,12 @@ public class SatelliteFactoryTest {
     @DisplayName("Созданные фабриками спутники с низким зарядом не могут быть активированы")
     void factoryCreatedSatellitesWithLowBatteryNotBeActivated() {
         // Arrange
-        Satellite commSatellite = communicationFactory.createSatellite("АктивныйКомСат", 0.1);
-        Satellite imagingSatellite = imagingFactory.createSatellite("АктивныйДЗЗ", 0.001);
-
+        Satellite commSatellite = communicationFactory.createSatelliteWithParameter(
+                new CommunicationSatelliteParam("НизкийЗарядКомСат", 0.1, 150.0)
+        );
+        Satellite imagingSatellite = imagingFactory.createSatelliteWithParameter(
+                new ImagingSatelliteParam("НизкийЗарядДЗЗ", 0.001, 20.0)
+        );
         // Act & Assert
         assertFalse(commSatellite.activate());
         assertFalse(commSatellite.getState().isActive());
