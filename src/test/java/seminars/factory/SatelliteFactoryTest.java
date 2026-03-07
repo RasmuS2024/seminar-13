@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import seminars.domains.satellites.CommunicationSatellite;
 import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
+import seminars.factory.impl.CommunicationSatelliteFactory;
+import seminars.factory.impl.ImagingSatelliteFactory;
 
 @DisplayName("Тесты фабрик спутников")
 public class SatelliteFactoryTest {

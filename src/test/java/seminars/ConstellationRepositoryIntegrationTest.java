@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import seminars.domains.satellites.CommunicationSatellite;
 import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
-import seminars.factory.CommunicationSatelliteFactory;
-import seminars.factory.ImagingSatelliteFactory;
+import seminars.factory.impl.CommunicationSatelliteFactory;
+import seminars.factory.impl.ImagingSatelliteFactory;
 import seminars.repository.ConstellationRepository;
 
 import java.util.UUID;
