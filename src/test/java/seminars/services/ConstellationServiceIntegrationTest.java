@@ -17,8 +17,8 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@DisplayName("Интеграционные тесты для SpaceOperationCenterService")
-public class SpaceOperationCenterServiceIntegrationTest {
+@DisplayName("Интеграционные тесты для ConstellationService")
+public class ConstellationServiceIntegrationTest {
 
     private static final String CONSTELLATION_BASE_NAME = "Тестовая-группировка";
     private static final String COMM_SATELLITE_NAME = "Спутник связи-1";
@@ -28,7 +28,7 @@ public class SpaceOperationCenterServiceIntegrationTest {
     private static final double IMG_RESOLUTION = 5.0;
 
     @Autowired
-    private SpaceOperationCenterService spaceOperationCenterService;
+    private ConstellationService constellationService;
 
     @Autowired
     private ConstellationRepository constellationRepository;
@@ -50,7 +50,7 @@ public class SpaceOperationCenterServiceIntegrationTest {
     @DisplayName("Полный жизненный цикл: создание → добавление спутников → активация → выполнение миссий")
     void fullLifecycleThroughService_ShouldWorkCorrectly() {
         // Создание
-        spaceOperationCenterService.createAndSaveConstellation(uniqueConstellationName);
+        constellationService.createAndSaveConstellation(uniqueConstellationName);
         SatelliteConstellation constellation = constellationRepository.getConstellation(uniqueConstellationName);
         assertNotNull(constellation);
         assertEquals(0, constellation.getSatellites().size());
@@ -63,8 +63,8 @@ public class SpaceOperationCenterServiceIntegrationTest {
                 new ImagingSatelliteParam(IMAGING_SATELLITE_NAME, FULL_BATTERY, IMG_RESOLUTION)
         );
 
-        spaceOperationCenterService.addSatelliteToConstellation(uniqueConstellationName, commSat);
-        spaceOperationCenterService.addSatelliteToConstellation(uniqueConstellationName, imgSat);
+        constellationService.addSatelliteToConstellation(uniqueConstellationName, commSat);
+        constellationService.addSatelliteToConstellation(uniqueConstellationName, imgSat);
 
         constellation = constellationRepository.getConstellation(uniqueConstellationName);
         assertEquals(2, constellation.getSatellites().size());
@@ -73,7 +73,7 @@ public class SpaceOperationCenterServiceIntegrationTest {
         }
 
         // Активация
-        spaceOperationCenterService.activateAllSatellites(uniqueConstellationName);
+        constellationService.activateAllSatellites(uniqueConstellationName);
         constellation = constellationRepository.getConstellation(uniqueConstellationName);
         for (Satellite s : constellation.getSatellites()) {
             assertTrue(s.getState().isActive());
@@ -83,7 +83,7 @@ public class SpaceOperationCenterServiceIntegrationTest {
         double initialCommBattery = commSat.getEnergy().getBatteryLevel();
         double initialImgBattery = imgSat.getEnergy().getBatteryLevel();
 
-        spaceOperationCenterService.executeConstellationMission(uniqueConstellationName);
+        constellationService.executeConstellationMission(uniqueConstellationName);
 
         constellation = constellationRepository.getConstellation(uniqueConstellationName);
         CommunicationSatellite updatedComm = (CommunicationSatellite) constellation.getSatellites()
@@ -105,7 +105,7 @@ public class SpaceOperationCenterServiceIntegrationTest {
         String nonExistentName = "не-существует";
 
         SpaceOperationException exception = assertThrows(SpaceOperationException.class,
-                () -> spaceOperationCenterService.executeConstellationMission(nonExistentName));
+                () -> constellationService.executeConstellationMission(nonExistentName));
 
         assertEquals("Группировка не найдена: " + nonExistentName, exception.getMessage(),
                 "Сообщение исключения должно содержать имя несуществующей группировки");

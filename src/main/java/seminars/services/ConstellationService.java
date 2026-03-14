@@ -7,10 +7,10 @@ import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 
 @Service
-public class SpaceOperationCenterService {
+public class ConstellationService {
     protected ConstellationRepository constellationRepository;
 
-    public SpaceOperationCenterService(ConstellationRepository constellationRepository) {
+    public ConstellationService(ConstellationRepository constellationRepository) {
         this.constellationRepository = constellationRepository;
     }
 
