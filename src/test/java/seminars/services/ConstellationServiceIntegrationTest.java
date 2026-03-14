@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Интеграционные тесты для ConstellationService")
-public class ConstellationServiceIntegrationTest {
+class ConstellationServiceIntegrationTest {
 
     private static final String CONSTELLATION_BASE_NAME = "Тестовая-группировка";
     private static final String COMM_SATELLITE_NAME = "Спутник связи-1";

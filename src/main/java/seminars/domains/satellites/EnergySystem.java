@@ -12,11 +12,15 @@ public class EnergySystem {
     private double minBattery;
 
     public boolean consume(double amount) {
-        if (amount <= 0 || batteryLevel <= minBattery) {
+        if (amount <= 0) {
             return false;
         }
 
-        batteryLevel = Math.max(minBattery, batteryLevel - amount);
+        if (batteryLevel - amount < lowBatteryThreshold) {
+            return false;
+        }
+
+        batteryLevel -= amount;
         return true;
     }
     

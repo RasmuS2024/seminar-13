@@ -10,12 +10,9 @@ import seminars.factory.impl.CommunicationSatelliteFactory;
 import seminars.factory.impl.ImagingSatelliteFactory;
 
 @DisplayName("Тесты фабрик спутников")
-public class SatelliteFactoryTest {
+class SatelliteFactoryTest {
     private static CommunicationSatelliteFactory communicationFactory;
     private static ImagingSatelliteFactory imagingFactory;
-
-    private static final double DEFAULT_BANDWIDTH = 100.0;
-    private static final double DEFAULT_RESOLUTION = 100.0;
 
     @BeforeAll
     static void setUp() {

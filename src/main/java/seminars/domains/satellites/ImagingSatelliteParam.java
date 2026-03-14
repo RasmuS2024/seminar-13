@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ImagingSatelliteParam extends SatelliteParam {
-    private double resolution;
+    private final double resolution;
 
     public ImagingSatelliteParam(String name, double batteryLevel, double resolution) {
         super(SatelliteType.IMAGE, name, batteryLevel);

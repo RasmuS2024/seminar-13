@@ -9,7 +9,7 @@ public abstract class Satellite {
     protected SatelliteState state;
     protected EnergySystem energy;
 
-    public Satellite(String name, double batteryLevel) {
+    protected Satellite(String name, double batteryLevel) {
         this.name = name;
         this.state = new SatelliteState();
         this.energy = EnergySystem.builder()

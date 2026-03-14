@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Тесты сервиса спутников")
-public class SatelliteServiceTest {
+class SatelliteServiceTest {
     private static final String NAME = "TestSatellite";
     private static final double BATTERY_LEVEL = 0.6;
     private static final double PARAM = 0.1;
@@ -24,10 +24,13 @@ public class SatelliteServiceTest {
     @Test
     @DisplayName("Спутник ДЗЗ создается с нужными параметрами")
     void createSatelliteTest() {
+        // Arrange
         SatelliteParam imagingParam = new ImagingSatelliteParam(NAME, BATTERY_LEVEL, PARAM);
 
+        // Act
         Satellite satellite = satelliteService.createSatellite(imagingParam);
 
+        // Assert
         assertNotNull(satellite);
         assertInstanceOf(ImagingSatellite.class, satellite);
         ImagingSatellite imagingSatellite = (ImagingSatellite) satellite;
@@ -36,4 +39,6 @@ public class SatelliteServiceTest {
         assertEquals(BATTERY_LEVEL, imagingSatellite.getEnergy().getBatteryLevel());
         assertEquals(PARAM, imagingSatellite.getResolution());
     }
+
+
 }

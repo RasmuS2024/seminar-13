@@ -2,8 +2,9 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import requests.AddSatelliteRequest;
-import requests.MissionRequest;
+import seminars.aop.LogExecutionTime;
+import seminars.domains.satellites.requests.AddSatelliteRequest;
+import seminars.domains.satellites.requests.MissionRequest;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.SatelliteParam;
 import seminars.exceptions.SpaceOperationException;
@@ -19,6 +20,7 @@ public class SpaceOperationCenterService {
      * Добавляет спутник в репозиторий
      * @param addSatelliteRequest   запрос на добавление спутника
      */
+    @LogExecutionTime()
     public void addSatellite(AddSatelliteRequest addSatelliteRequest) {
         try {
             constellationService.showConstellationStatus(addSatelliteRequest.constellationName());

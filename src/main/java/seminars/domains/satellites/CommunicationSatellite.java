@@ -1,11 +1,14 @@
 package seminars.domains.satellites;
 
 import lombok.Getter;
+import lombok.ToString;
 
+import static seminars.constants.CommunicationSatelliteConstants.SEND_DATA_ENERGY_CONSUMPTION;
+
+@Getter
+@ToString
 public class CommunicationSatellite extends Satellite {
-    @Getter
     private final double bandwidth;
-    private static final double SEND_DATA_ENERGY_CONSUMPTION = 0.03;    //количество энергии для отправки данных
 
     public CommunicationSatellite(String name, double batteryLevel, double bandwidth) {
         super(name, batteryLevel);
@@ -29,13 +32,4 @@ public class CommunicationSatellite extends Satellite {
         }
     }
 
-    @Override
-    public String toString() {
-        return "CommunicationSatellite{" +
-                "bandwidth=" + bandwidth +
-                ", name='" + name +
-                "', state=" + state +
-                ", energy=" + energy +
-                "}";
-    }
 }

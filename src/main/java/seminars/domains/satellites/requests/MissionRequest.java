@@ -1,8 +1,4 @@
-package requests;
-
-import seminars.domains.satellites.SatelliteParam;
-
-import java.util.List;
+package seminars.domains.satellites.requests;
 
 /**
  * Запрос на выполнение миссий

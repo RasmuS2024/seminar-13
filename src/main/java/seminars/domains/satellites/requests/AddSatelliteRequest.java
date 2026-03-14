@@ -1,4 +1,4 @@
-package requests;
+package seminars.domains.satellites.requests;
 
 import seminars.domains.satellites.SatelliteParam;
 import java.util.List;

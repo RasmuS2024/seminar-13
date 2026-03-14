@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Mock-тесты для ConstellationRepository")
-public class ConstellationRepositoryMockTest {
+class ConstellationRepositoryMockTest {
 
     private static final String CONSTELLATION_NAME_1 = "testConstellation1";
     private static final String CONSTELLATION_NAME_2 = "testConstellation2";

@@ -1,12 +1,15 @@
 package seminars.domains.satellites;
 
 import lombok.Getter;
+import lombok.ToString;
+
+import static seminars.constants.ImagingSatelliteConstants.PHOTO_ENERGY_CONSUMPTION;
 
 @Getter
+@ToString
 public class ImagingSatellite extends Satellite{
     private final double resolution;
     private int photosTaken;
-    private static final double PHOTO_ENERGY_CONSUMPTION = 0.07;    //количество энергии для фотографирования
 
     public ImagingSatellite(String name, double batteryLevel, double resolution) {
         super(name, batteryLevel);
@@ -32,14 +35,4 @@ public class ImagingSatellite extends Satellite{
         }
     }
 
-    @Override
-    public String toString() {
-        return "ImagingSatellite{" +
-                "resolution=" + resolution +
-                ", photosTaken=" + photosTaken +
-                ", name='" + name +
-                "', state=" + state +
-                ", energy=" + energy +
-                "}";
-    }
 }
