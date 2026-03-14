@@ -30,9 +30,7 @@ public class ConstellationRepository {
     }
 
     public void updateConstellation(String name, SatelliteConstellation updatedConstellation) {
-        if (constellations.containsKey(name)) {
-            constellations.put(name, updatedConstellation);
-        }
+        constellations.computeIfPresent(name, (k, v) -> updatedConstellation);
         System.out.println("Обновлена группировка: " + name);
     }
 

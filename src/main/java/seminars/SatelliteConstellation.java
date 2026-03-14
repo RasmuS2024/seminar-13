@@ -1,6 +1,7 @@
 package seminars;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import seminars.domains.satellites.Satellite;
 
@@ -14,6 +15,7 @@ public class SatelliteConstellation {
     private final String constellationName;
     private final List<Satellite> satellites = new ArrayList<>();
 
+    @Autowired
     public SatelliteConstellation() {
         this.constellationName = "";
     }
@@ -51,6 +53,8 @@ public class SatelliteConstellation {
     public void getAllSatellitesStatuses() {
         System.out.println("СТАТУС ГРУППИРОВКИ: " + constellationName.toUpperCase());
         System.out.println("=".repeat(50));
+
+        System.out.println("Количество спутников: " + satellites.size());
 
         for (Satellite satellite : satellites) {
             System.out.println(satellite.getState());

@@ -3,8 +3,9 @@ package seminars.services;
 import org.springframework.stereotype.Service;
 import seminars.domains.satellites.Satellite;
 import seminars.SatelliteConstellation;
-import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
+
+import java.util.Map;
 
 @Service
 public class ConstellationService {
@@ -14,57 +15,57 @@ public class ConstellationService {
         this.constellationRepository = constellationRepository;
     }
 
-    public void createAndSaveConstellation(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new SpaceOperationException("Имя группировки не может быть пустым");
-        }
-        this.constellationRepository.addConstellation(new SatelliteConstellation(name));
+    public void createAndSaveConstellation(String constellationName) {
+        validateName(constellationName);
+
+        this.constellationRepository.addConstellation(new SatelliteConstellation(constellationName));
     }
 
     public void addSatelliteToConstellation(String constellationName, Satellite satellite) {
-        if (constellationName == null || constellationName.trim().isEmpty()) {
-            throw new SpaceOperationException("Имя группировки не может быть пустым");
-        }
+        validateName(constellationName);
+
         if (satellite == null) {
-            throw new SpaceOperationException("Спутник не может быть null");
+            throw new IllegalArgumentException("Спутник не может быть null");
         }
 
-        SatelliteConstellation constellation = getConstellationOrThrow(constellationName);
+        SatelliteConstellation constellation = getConstellation(constellationName);
         constellation.addSatellite(satellite);
     }
 
     public void executeConstellationMission(String constellationName) {
-        if (constellationName == null || constellationName.trim().isEmpty()) {
-            throw new SpaceOperationException("Имя группировки не может быть пустым");
-        }
+        validateName(constellationName);
 
-        SatelliteConstellation constellation = getConstellationOrThrow(constellationName);
+        SatelliteConstellation constellation = getConstellation(constellationName);
         constellation.executeAllMissions();
     }
 
     public void activateAllSatellites(String constellationName) {
-        if (constellationName == null || constellationName.trim().isEmpty()) {
-            throw new SpaceOperationException("Имя группировки не может быть пустым");
-        }
+        validateName(constellationName);
 
-        SatelliteConstellation constellation = getConstellationOrThrow(constellationName);
+        SatelliteConstellation constellation = getConstellation(constellationName);
         constellation.activateAllSatellites();
     }
 
     public void showConstellationStatus(String constellationName) {
-        if (constellationName == null || constellationName.trim().isEmpty()) {
-            throw new SpaceOperationException("Имя группировки не может быть пустым");
-        }
+        validateName(constellationName);
 
-        SatelliteConstellation satelliteConstellation = getConstellationOrThrow(constellationName);
+        SatelliteConstellation satelliteConstellation = getConstellation(constellationName);
         satelliteConstellation.getAllSatellitesStatuses();
     }
 
-    private SatelliteConstellation getConstellationOrThrow(String constellationName) {
-        SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
-        if (constellation == null) {
-            throw new SpaceOperationException("Группировка не найдена: " + constellationName);
+    public SatelliteConstellation getConstellation(String constellationName) {
+        validateName(constellationName);
+
+        return constellationRepository.getConstellation(constellationName);
+    }
+
+    public Map<String, SatelliteConstellation> getAllConstellations() {
+        return constellationRepository.getAllConstellations();
+    }
+
+    private void validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Имя группировки не может быть пустым");
         }
-        return constellation;
     }
 }
