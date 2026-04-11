@@ -1,6 +1,10 @@
 package seminars.constants;
 
 public class ImagingSatelliteConstants {
+    private ImagingSatelliteConstants() {
+        /* This utility class should not be instantiated */
+    }
+
     /**
      * Количество энергии затрачиваемой для фотографирования
      */
