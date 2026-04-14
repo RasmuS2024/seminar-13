@@ -60,6 +60,23 @@ public class SpaceOperationCenterService {
     }
 
     /**
+     * Выводит спутник из эксплуатации (удаляет из группировки)
+     * @param constellationName имя группировки
+     * @param satelliteName     имя спутника
+     */
+    public void decommissionSatellite(String constellationName, String satelliteName) {
+        var constellation = constellationService.getConstellation(constellationName);
+        if (constellation == null) {
+            throw new SpaceOperationException("Группировка не найдена: " + constellationName);
+        }
+
+        boolean removed = constellationService.removeSatelliteFromConstellation(constellationName, satelliteName);
+        if (!removed) {
+            throw new SpaceOperationException("Спутник не найден в группировке: " + satelliteName);
+        }
+    }
+
+    /**
      * Возвращает общую сводку по всем группировкам и спутникам
      */
     public String getSystemOverview() {
@@ -69,7 +86,7 @@ public class SpaceOperationCenterService {
         sb.append("Всего группировок: ").append(allConstellations.size()).append("\n");
         allConstellations.values().forEach(cons -> {
             sb.append("  Группировка '").append(cons.getConstellationName())
-                    .append("': спутников").append(cons.getSatellites().size()).append("\n");
+                    .append("': спутников: ").append(cons.getSatellites().size()).append("\n");
             cons.getSatellites().forEach(sat ->
                     sb.append("    - ").append(sat.getName())
                             .append(" [").append(sat.getState().isActive() ? "Активен" : "Неактивен")

@@ -59,6 +59,21 @@ public class ConstellationService {
         return constellationRepository.getConstellation(constellationName);
     }
 
+    /**
+     * Удаляет спутник из группировки
+     * @param constellationName имя группировки
+     * @param satelliteName     имя спутника
+     * @return true, если спутник был удалён
+     */
+    public boolean removeSatelliteFromConstellation(String constellationName, String satelliteName) {
+        SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
+        if (constellation == null) {
+            return false;
+        }
+        return constellation.getSatellites()
+                .removeIf(sat -> sat.getName().equals(satelliteName));
+    }
+
     public Map<String, SatelliteConstellation> getAllConstellations() {
         return constellationRepository.getAllConstellations();
     }

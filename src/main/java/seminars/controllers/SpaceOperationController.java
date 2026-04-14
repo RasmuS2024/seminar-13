@@ -26,11 +26,18 @@ public class SpaceOperationController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    /*
-    @GetMapping("/missions")
-    public ResponseEntity<List<MissionDto>> getAllMissions() {
-        List<MissionDto> missions = spaceOperationCenterService.getAllMissions();
-        return ResponseEntity.ok(missions);
+    @GetMapping("/overview")
+    public ResponseEntity<String> getSystemOverview(){
+        String overview = spaceOperationCenterService.getSystemOverview();
+        return ResponseEntity.ok(overview);
     }
-    */
+
+    @DeleteMapping("/constellations/{constellationName}/satellites/{satelliteName}")
+    public ResponseEntity<Void> decommissionSatellite(
+            @PathVariable String constellationName,
+            @PathVariable String satelliteName) {
+        spaceOperationCenterService.decommissionSatellite(constellationName, satelliteName);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
 }
