@@ -1,4 +1,4 @@
-package seminars.domains.satellites.requests;
+package seminars.domains.mission;
 
 public enum MissionTargetType {
     CONSTELLATION, SINGLE_SATELLITE

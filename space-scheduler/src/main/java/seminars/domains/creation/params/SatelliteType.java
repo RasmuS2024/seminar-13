@@ -1,4 +1,4 @@
-package seminars.domains.satellites;
+package seminars.domains.creation.params;
 
 public enum SatelliteType {
     IMAGE,

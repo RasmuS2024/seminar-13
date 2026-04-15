@@ -1,10 +1,10 @@
-package seminars.domains.satellites;
+package seminars.domains.creation.params;
 
 import lombok.Getter;
 
 @Getter
 public class CommunicationSatelliteParam extends SatelliteParam {
-    private double bandwidth;
+    private final double bandwidth;
 
     public CommunicationSatelliteParam(String name, double batteryLevel, double bandwidth) {
         super(SatelliteType.COMMUNICATION, name, batteryLevel);

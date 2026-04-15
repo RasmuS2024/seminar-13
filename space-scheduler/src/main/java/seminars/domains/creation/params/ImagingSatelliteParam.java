@@ -1,4 +1,4 @@
-package seminars.domains.satellites;
+package seminars.domains.creation.params;
 
 import lombok.Getter;
 

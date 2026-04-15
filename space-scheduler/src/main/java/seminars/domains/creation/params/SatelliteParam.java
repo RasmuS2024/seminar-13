@@ -1,10 +1,9 @@
-package seminars.domains.satellites;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+package seminars.domains.creation.params;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @AllArgsConstructor
 @Getter
 public class SatelliteParam {
-    private  SatelliteType type;
+    private SatelliteType type;
     private String name;
     private double batteryLevel;
 }
