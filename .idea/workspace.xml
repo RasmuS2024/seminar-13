@@ -5,51 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9444b1d-1e5a-4acb-afe0-97c96f8c0ff2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/properties/SpaceCenterServiceProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-api/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/space-api/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-api/src/main/java/seminars/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-api/src/main/java/seminars/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/SatelliteConstellation.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/SatelliteFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/aop/LogExecutionTime.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/aop/LoggingAspect.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/constants/CommunicationSatelliteConstants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/constants/EnergySystemConstants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/constants/ImagingSatelliteConstants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/controllers/SpaceOperationController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/CommunicationSatellite.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/CommunicationSatelliteParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/creation/params/CommunicationSatelliteParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/EnergySystem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/ImagingSatellite.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/ImagingSatelliteParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/creation/params/ImagingSatelliteParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/Satellite.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/SatelliteParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/creation/params/SatelliteParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/SatelliteState.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/SatelliteType.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/creation/params/SatelliteType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/requests/AddSatelliteRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/creation/AddSatelliteRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/requests/MissionRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/mission/MissionRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/satellites/requests/MissionTargetType.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/domains/mission/MissionTargetType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/exceptions/SpaceOperationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/factory/SatelliteFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/factory/impl/CommunicationSatelliteFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/factory/impl/ImagingSatelliteFactory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/repository/ConstellationRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConstellationService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/SatelliteService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/SatelliteServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/SpaceOperationCenterService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/ConstellationRepositoryIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/ConstellationRepositoryMockTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/ConstellationRepositoryUnitTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/domains/satellites/EnergySystemTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/domains/satellites/SatelliteTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/factory/SatelliteFactoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/services/ConstellationServiceIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/services/SatelliteServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/test/java/seminars/services/SpaceOperationCenterServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/space-api/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/space-scheduler/README.MD" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +181,7 @@
       <recent name="seminars.domains.creation" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.EnergySystemTest.testConsumeLimitToMin">
     <configuration name="EnergySystemTest.testConsumeLimitToMin" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -412,7 +370,7 @@
       <workItem from="1773605890992" duration="615000" />
       <workItem from="1774033889037" duration="824000" />
       <workItem from="1774086650731" duration="2413000" />
-      <workItem from="1775841616644" duration="30455000" />
+      <workItem from="1775841616644" duration="30786000" />
     </task>
     <servers />
   </component>
