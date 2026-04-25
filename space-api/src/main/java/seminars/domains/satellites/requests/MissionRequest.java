@@ -1,6 +1,5 @@
 package seminars.domains.satellites.requests;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,19 +18,4 @@ public record MissionRequest(
 
         String satelliteName
 ) {
-    @AssertTrue(message = "Имя спутника обязательно при SINGLE_SATELLITE")
-    private boolean isSatelliteNameValid() {
-        if (targetType == MissionTargetType.SINGLE_SATELLITE) {
-            return satelliteName != null && !satelliteName.isBlank();
-        }
-        return true;
-    }
-
-    @AssertTrue(message = "Имя спутника не должно указываться при CONSTELLATION")
-    private boolean isSatelliteNameNotPresentForConstellation() {
-        if (targetType == MissionTargetType.CONSTELLATION) {
-            return satelliteName == null || satelliteName.isBlank();
-        }
-        return true;
-    }
 }

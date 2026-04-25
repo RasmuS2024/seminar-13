@@ -15,10 +15,6 @@ public class SatelliteConstellation {
     private final String constellationName;
     private final List<Satellite> satellites = new ArrayList<>();
 
-    public SatelliteConstellation() {
-        this.constellationName = "";
-    }
-
     public SatelliteConstellation(String constellationName) {
         this.constellationName = constellationName;
         log.info("Создана спутниковая группировка: {}", constellationName);

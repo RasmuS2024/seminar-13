@@ -116,7 +116,7 @@ class SpaceOperationControllerIntegrationTest {
 
         SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
         assertNotNull(constellation, "Группировка должна существовать");
-        assertTrue(constellation.getSatellites().get(0).getState().isActive(),
+        assertTrue(constellation.getSatellites().getFirst().getState().isActive(),
                 "Спутник должен быть активен после выполнения миссии");
     }
 
@@ -195,7 +195,7 @@ class SpaceOperationControllerIntegrationTest {
         assertNotNull(constellation);
         assertEquals(1, constellation.getSatellites().size(),
                 "После удаления должен остаться один спутник");
-        assertEquals(imgSatName, constellation.getSatellites().get(0).getName(),
+        assertEquals(imgSatName, constellation.getSatellites().getFirst().getName(),
                 "Оставшийся спутник должен иметь имя второго спутника");
     }
 }
