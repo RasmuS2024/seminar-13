@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9444b1d-1e5a-4acb-afe0-97c96f8c0ff2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/clients/SpaceOperationClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/configuration/RestClientConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,84 +86,84 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build seminar1.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryIntegrationTest.activateSatellite_WithBatteryExactlyAtThreshold_ShouldActivate.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryIntegrationTest.activateSatellite_WithLowBattery_ShouldFail.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryIntegrationTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryIntegrationTest.testRepository.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryMockTest.testRepository.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryMockTest.testUpdateConstellationNonExistent.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryTest.getNonExistentConstellation_ShouldThrowException.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryTest.testRepository.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ConstellationRepositoryTest.toString_ShouldReturnFormattedString.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.EnergySystemTest.testConsumeLimitToMin.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.communicationFactoryCreateSatelliteWithDefaultParameters.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.communicationFactoryCreateSatelliteWithParameters.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.factoryCreatedSatellitesCanBeActivated.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.factoryCreatedSatellitesWithLowBatteryNotBeActivated.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteFactoryTest.imagingFactoryCreateSatelliteWithParameters.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteServiceTest.addAllConstellationTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteServiceTest.deactivateSatelliteTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SatelliteTest.testActivateAlreadyActive.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceIntegrationTest.executeConstellationMission_WithNonExistentConstellation_ThrowsRuntimeException.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceIntegrationTest.executeConstellationMission_WithNonExistentConstellation_ThrowsSpaceOperationException.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceIntegrationTest.fullLifecycleThroughService_ShouldWorkCorrectly.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceTest.addSatelliteTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceTest.executeConstellationMissionTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.SpaceOperationCenterServiceTest.getSystemOverviewTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [:org.example.Application.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [:org.example.Main.main()].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [check].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [init].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [jacocoTestCoverageVerification].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [jacocoTestReport].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.seminar1 [test].executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;Makefile Target.lint.executor&quot;: &quot;Run&quot;,
-    &quot;Makefile Target.test.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Notification.DisplayName-DoNotAsk-Spring Boot Application Endpoints&quot;: &quot;Spring Boot application endpoints&quot;,
-    &quot;Notification.DoNotAsk-Spring Boot Application Endpoints&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.Application.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.Main.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;seminar-8&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Projects/Java/seminar1/space-scheduler/src/main/java/seminars/domains/creation/params&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Projects/Java/seminar1/untitled/src/main/java/org/example/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Main.executor": "Run",
+    "Gradle.Build seminar1.executor": "Run",
+    "Gradle.ConstellationRepositoryIntegrationTest.activateSatellite_WithBatteryExactlyAtThreshold_ShouldActivate.executor": "Run",
+    "Gradle.ConstellationRepositoryIntegrationTest.activateSatellite_WithLowBattery_ShouldFail.executor": "Run",
+    "Gradle.ConstellationRepositoryIntegrationTest.executor": "Run",
+    "Gradle.ConstellationRepositoryIntegrationTest.testRepository.executor": "Run",
+    "Gradle.ConstellationRepositoryMockTest.testRepository.executor": "Run",
+    "Gradle.ConstellationRepositoryMockTest.testUpdateConstellationNonExistent.executor": "Run",
+    "Gradle.ConstellationRepositoryTest.executor": "Run",
+    "Gradle.ConstellationRepositoryTest.getNonExistentConstellation_ShouldThrowException.executor": "Run",
+    "Gradle.ConstellationRepositoryTest.testRepository.executor": "Run",
+    "Gradle.ConstellationRepositoryTest.toString_ShouldReturnFormattedString.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
+    "Gradle.EnergySystemTest.testConsumeLimitToMin.executor": "Run",
+    "Gradle.SatelliteFactoryTest.communicationFactoryCreateSatelliteWithDefaultParameters.executor": "Run",
+    "Gradle.SatelliteFactoryTest.communicationFactoryCreateSatelliteWithParameters.executor": "Run",
+    "Gradle.SatelliteFactoryTest.executor": "Run",
+    "Gradle.SatelliteFactoryTest.factoryCreatedSatellitesCanBeActivated.executor": "Run",
+    "Gradle.SatelliteFactoryTest.factoryCreatedSatellitesWithLowBatteryNotBeActivated.executor": "Run",
+    "Gradle.SatelliteFactoryTest.imagingFactoryCreateSatelliteWithParameters.executor": "Run",
+    "Gradle.SatelliteServiceTest.addAllConstellationTest.executor": "Run",
+    "Gradle.SatelliteServiceTest.deactivateSatelliteTest.executor": "Run",
+    "Gradle.SatelliteServiceTest.executor": "Run",
+    "Gradle.SatelliteTest.executor": "Run",
+    "Gradle.SatelliteTest.testActivateAlreadyActive.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceIntegrationTest.executeConstellationMission_WithNonExistentConstellation_ThrowsRuntimeException.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceIntegrationTest.executeConstellationMission_WithNonExistentConstellation_ThrowsSpaceOperationException.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceIntegrationTest.fullLifecycleThroughService_ShouldWorkCorrectly.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceTest.addSatelliteTest.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceTest.executeConstellationMissionTest.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceTest.executor": "Run",
+    "Gradle.SpaceOperationCenterServiceTest.getSystemOverviewTest.executor": "Run",
+    "Gradle.seminar1 [:org.example.Application.main()].executor": "Run",
+    "Gradle.seminar1 [:org.example.Main.main()].executor": "Run",
+    "Gradle.seminar1 [check].executor": "Run",
+    "Gradle.seminar1 [init].executor": "Run",
+    "Gradle.seminar1 [jacocoTestCoverageVerification].executor": "Run",
+    "Gradle.seminar1 [jacocoTestReport].executor": "Run",
+    "Gradle.seminar1 [test].executor": "Run",
+    "JavaScript Debug.index.html.executor": "Run",
+    "Makefile Target.lint.executor": "Run",
+    "Makefile Target.test.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Notification.DisplayName-DoNotAsk-Spring Boot Application Endpoints": "Spring Boot application endpoints",
+    "Notification.DoNotAsk-Spring Boot Application Endpoints": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.Application.executor": "Run",
+    "Spring Boot.Main.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "seminar-9",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Projects/Java/seminar1/space-scheduler/src/main/java/seminars/domains/creation/params",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Projects/Java/seminar1/untitled/src/main/java/org/example/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="seminars.clients" />
@@ -341,7 +338,7 @@
       <workItem from="1773605890992" duration="615000" />
       <workItem from="1774033889037" duration="824000" />
       <workItem from="1774086650731" duration="2413000" />
-      <workItem from="1775841616644" duration="38197000" />
+      <workItem from="1775841616644" duration="39577000" />
     </task>
     <servers />
   </component>
