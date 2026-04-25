@@ -104,4 +104,30 @@ class SatelliteFactoryTest {
 
     }
 
+    @Test
+    @DisplayName("Фабрики реализуют общий интерфейс SatelliteFactory")
+    void factoriesImplementCommonInterface() {
+        // Arrange
+        String imagingName = "ДЗЗ-1";
+        String commName = "Связь-1";
+        double batteryLevel = 0.9;
+        double resolution = 2.5;
+        double bandwidth = 100.0;
+
+        // Act
+        Satellite imagingSatellite = imagingFactory.createSatelliteWithParameter(
+                new ImagingSatelliteParam(imagingName, batteryLevel, resolution)
+        );
+
+        Satellite commSatellite = communicationFactory.createSatelliteWithParameter(
+                new CommunicationSatelliteParam(commName, batteryLevel, bandwidth)
+        );
+
+        // Assert
+        assertNotNull(imagingSatellite, "Спутник связи должен быть создан");
+        assertNotNull(commSatellite, "Спутник ДЗЗ должен быть создан");
+        assertInstanceOf(Satellite.class, imagingSatellite);
+        assertInstanceOf(Satellite.class, commSatellite);
+    }
+
 }

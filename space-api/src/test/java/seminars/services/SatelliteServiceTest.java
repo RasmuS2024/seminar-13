@@ -19,7 +19,7 @@ class SatelliteServiceTest {
     private static final double PARAM = 0.1;
 
     @Autowired
-    private SatelliteServiceImpl satelliteService;
+    private SatelliteService satelliteService;
 
     @Test
     @DisplayName("Спутник ДЗЗ создается с нужными параметрами")

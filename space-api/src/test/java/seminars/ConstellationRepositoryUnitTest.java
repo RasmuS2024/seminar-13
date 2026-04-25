@@ -3,6 +3,7 @@ package seminars;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import seminars.domains.constellations.SatelliteConstellation;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 

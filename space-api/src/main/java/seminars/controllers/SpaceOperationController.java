@@ -37,7 +37,7 @@ public class SpaceOperationController {
             @PathVariable String constellationName,
             @PathVariable String satelliteName) {
         spaceOperationCenterService.decommissionSatellite(constellationName, satelliteName);
-        return ResponseEntity.noContent().build(); // 204 No Content
+        return ResponseEntity.noContent().build();
     }
 
 }
