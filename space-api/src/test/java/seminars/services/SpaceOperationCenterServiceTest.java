@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
 import seminars.domains.satellites.requests.MissionTargetType;
-import seminars.SatelliteConstellation;
+import seminars.domains.constellations.SatelliteConstellation;
 import seminars.domains.satellites.CommunicationSatelliteParam;
 import seminars.domains.satellites.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;

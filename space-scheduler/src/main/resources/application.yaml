@@ -13,5 +13,5 @@ app:
         satelliteName: "Sat-1"
         cron: "0 30 8 * * MON" # каждый понедельник в 8:30
       - targetType: CONSTELLATION
-        constellationName: "TestConstellation"
+        constellationName: "Восток"
         cron: "0 */1 * * * *" # каждую минуту

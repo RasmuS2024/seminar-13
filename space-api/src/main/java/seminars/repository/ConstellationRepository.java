@@ -1,7 +1,7 @@
 package seminars.repository;
 
 import org.springframework.stereotype.Service;
-import seminars.SatelliteConstellation;
+import seminars.domains.constellations.SatelliteConstellation;
 import seminars.exceptions.SpaceOperationException;
 
 import java.util.HashMap;

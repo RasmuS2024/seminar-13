@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9444b1d-1e5a-4acb-afe0-97c96f8c0ff2" name="Changes" comment="" />
+    <list default="true" id="e9444b1d-1e5a-4acb-afe0-97c96f8c0ff2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/clients/SpaceOperationClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/configuration/RestClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,9 +26,6 @@
         <task path="$PROJECT_DIR$">
           <activation />
         </task>
-        <task path="$PROJECT_DIR$/space-scheduler">
-          <activation />
-        </task>
         <projects_view>
           <tree_state>
             <expand>
@@ -34,36 +36,17 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-api" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-api" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-api" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="verification" type="c8890929:TasksNode$1" />
+                <item name="build" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-scheduler" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-scheduler" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="space-system" type="f1a62948:ProjectNode" />
-                <item name="space-scheduler" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="verification" type="c8890929:TasksNode$1" />
               </path>
