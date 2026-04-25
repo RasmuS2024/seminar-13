@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9444b1d-1e5a-4acb-afe0-97c96f8c0ff2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/clients/SpaceOperationClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/configuration/RestClientConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-api/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/space-scheduler/README.MD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/space-scheduler/src/main/java/seminars/services/ConfiguredMissionScheduler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,23 +31,24 @@
             <expand>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Seminars" type="f1a62948:ProjectNode" />
+                <item name="space-system" type="f1a62948:ProjectNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Seminars" type="f1a62948:ProjectNode" />
+                <item name="space-system" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Seminars" type="f1a62948:ProjectNode" />
+                <item name="space-system" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="space-system" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="verification" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="Seminars" type="f1a62948:ProjectNode" />
-                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
               </path>
             </expand>
             <select />
@@ -130,6 +132,8 @@
     &quot;Gradle.seminar1 [jacocoTestReport].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.seminar1 [test].executor&quot;: &quot;Run&quot;,
     &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;Makefile Target.lint.executor&quot;: &quot;Run&quot;,
+    &quot;Makefile Target.test.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;Notification.DisplayName-DoNotAsk-Spring Boot Application Endpoints&quot;: &quot;Spring Boot application endpoints&quot;,
     &quot;Notification.DoNotAsk-Spring Boot Application Endpoints&quot;: &quot;true&quot;,
@@ -165,6 +169,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="seminars.clients" />
       <recent name="seminars" />
       <recent name="org.example" />
     </key>
@@ -181,7 +186,7 @@
       <recent name="seminars.domains.creation" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.EnergySystemTest.testConsumeLimitToMin">
+  <component name="RunManager" selected="Makefile Target.lint">
     <configuration name="EnergySystemTest.testConsumeLimitToMin" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -196,30 +201,6 @@
             <option value=":test" />
             <option value="--tests" />
             <option value="&quot;seminars.domains.satellites.EnergySystemTest.testConsumeLimitToMin&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
-    <configuration name="SatelliteTest.testActivateAlreadyActive" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;seminars.domains.satellites.SatelliteTest.testActivateAlreadyActive&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -274,28 +255,6 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="seminar1 [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="test" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="space-system" />
       <method v="2">
@@ -305,6 +264,18 @@
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <module name="space-system" />
       <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="lint" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="lint" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="MAKEFILE_TARGET_RUN_CONFIGURATION" factoryName="Makefile" temporary="true">
+      <makefile filename="$PROJECT_DIR$/Makefile" target="test" workingDirectory="" arguments="">
+        <envs />
+      </makefile>
       <method v="2" />
     </configuration>
     <configuration name="Main (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -323,11 +294,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Makefile Target.lint" />
+        <item itemvalue="Makefile Target.test" />
         <item itemvalue="Gradle.EnergySystemTest.testConsumeLimitToMin" />
         <item itemvalue="Gradle.seminar1 [jacocoTestReport]" />
         <item itemvalue="Gradle.seminar1 [jacocoTestCoverageVerification]" />
-        <item itemvalue="Gradle.seminar1 [test]" />
-        <item itemvalue="Gradle.SatelliteTest.testActivateAlreadyActive" />
       </list>
     </recent_temporary>
   </component>
@@ -370,7 +341,7 @@
       <workItem from="1773605890992" duration="615000" />
       <workItem from="1774033889037" duration="824000" />
       <workItem from="1774086650731" duration="2413000" />
-      <workItem from="1775841616644" duration="30786000" />
+      <workItem from="1775841616644" duration="38197000" />
     </task>
     <servers />
   </component>
