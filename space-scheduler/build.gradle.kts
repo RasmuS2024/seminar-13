@@ -27,6 +27,10 @@ dependencies {
 
 }
 
+springBoot {
+    mainClass = "seminars.Main"
+}
+
 tasks.test {
     useJUnitPlatform()
 }
