@@ -17,3 +17,5 @@
 
 ![Docker Build](https://github.com/rasmus2024/seminar1/actions/workflows/deploy.yml/badge.svg)
 
+![Trivy Scan](https://github.com/rasmus2024/seminar1/actions/workflows/security.yml/badge.svg)
+

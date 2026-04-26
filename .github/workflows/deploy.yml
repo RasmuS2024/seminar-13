@@ -41,24 +41,6 @@
             docker push ghcr.io/rasmus2024/seminar1/space-api:${{ github.sha }}
             docker push ghcr.io/rasmus2024/seminar1/space-scheduler:${{ github.sha }}
 
-        - name: Run Trivy vulnerability scanner for space-api
-          uses: aquasecurity/trivy-action@master
-          with:
-            image-ref: 'ghcr.io/rasmus2024/seminar1/space-api:latest'
-            format: 'table'
-            exit-code: '1'
-            ignore-unfixed: true
-            severity: 'CRITICAL,HIGH'
-
-        - name: Run Trivy vulnerability scanner for space-scheduler
-          uses: aquasecurity/trivy-action@master
-          with:
-            image-ref: 'ghcr.io/rasmus2024/seminar1/space-scheduler:latest'
-            format: 'table'
-            exit-code: '1'
-            ignore-unfixed: true
-            severity: 'CRITICAL,HIGH'
-
     test-compose:
       needs: build-and-push
       runs-on: ubuntu-latest
