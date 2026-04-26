@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - -seminar-9
+      - seminar-9
   pull_request:
     branches:
       - main
@@ -25,15 +25,15 @@ jobs:
           distribution: 'temurin'
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Install dependencies and build
-        run: make build
+      - name: Build with Gradle
+        run: ./gradlew build
 
       - name: Run tests
-        run: make test
+        run: ./gradlew test
