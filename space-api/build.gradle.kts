@@ -5,6 +5,8 @@ plugins {
     id("jacoco")
 }
 
+ext["tomcat.version"] = "11.0.20"
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
