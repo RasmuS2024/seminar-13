@@ -32,20 +32,27 @@ jobs:
       - name: Build images with compose
         run: docker compose build
 
-      - name: Tag and push space-api
+      - name: Build and push space-api
         run: |
-          docker tag space-api ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:latest
-          docker tag space-api ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}
+          docker compose build space-api
+          # Получаем ID собранного образа
+          IMAGE_ID=$(docker compose images -q space-api)
+          echo "space-api image ID: $IMAGE_ID"
+          # Тегируем и пушим
+          docker tag $IMAGE_ID ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:latest
+          docker tag $IMAGE_ID ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}
 
-      - name: Tag and push space-scheduler
+      - name: Build and push space-scheduler
         run: |
-          docker tag space-scheduler ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:latest
-          docker tag space-scheduler ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:${{ github.sha }}
+          docker compose build space-scheduler
+          IMAGE_ID=$(docker compose images -q space-scheduler)
+          echo "space-scheduler image ID: $IMAGE_ID"
+          docker tag $IMAGE_ID ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:latest
+          docker tag $IMAGE_ID ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.SCHEDULER_IMAGE_NAME }}:${{ github.sha }}
-
 
   test-compose:
     needs: build-and-push
