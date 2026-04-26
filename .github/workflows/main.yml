@@ -3,10 +3,12 @@ name: Java CI
 on:
   push:
     branches:
-      - main, seminar-9
+      - main
+      - -seminar-9
   pull_request:
     branches:
-      - main, seminar-9
+      - main
+      - seminar-9
 
 jobs:
   build:
@@ -19,7 +21,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '24'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Cache Gradle dependencies
