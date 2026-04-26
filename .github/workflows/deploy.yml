@@ -51,7 +51,7 @@
         - name: Build and start services
           run: |
             docker compose up -d
-            sleep 30
+            sleep 35
 
         - name: Verify space-api health
           run: curl --fail http://localhost:8080/api || (echo "API not responding" && docker compose logs && exit 1)
