@@ -12,18 +12,9 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-    implementation ("org.springframework.boot:spring-boot-starter-web")
-
-    compileOnly ("org.projectlombok:lombok")
-    annotationProcessor ("org.projectlombok:lombok")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-
+checkstyle {
+        toolVersion = "10.12.5"
+        configFile = rootProject.file("config/checkstyle/sun_checks.xml")
 }
 
 tasks.test {
