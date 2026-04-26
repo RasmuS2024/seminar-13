@@ -1,7 +1,7 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY build.gradle.kts settings.gradle gradlew ./
 COPY gradle ./gradle
 COPY space-api/build.gradle.kts ./space-api/
 COPY space-api/src ./space-api/src

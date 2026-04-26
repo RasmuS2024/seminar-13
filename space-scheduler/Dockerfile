@@ -1,7 +1,7 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle.kts gradlew ./
+COPY build.gradle.kts settings.gradle gradlew ./
 COPY gradle ./gradle
 COPY space-scheduler/build.gradle.kts ./space-scheduler/
 COPY space-scheduler/src ./space-scheduler/src
