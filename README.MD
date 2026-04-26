@@ -15,3 +15,5 @@
 
 ![Java CI](https://github.com/RasmuS2024/seminar1/actions/workflows/main.yml/badge.svg)
 
+![Docker Build](https://github.com/rasmus2024/seminar1/actions/workflows/deploy.yml/badge.svg)
+
