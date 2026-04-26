@@ -40,3 +40,25 @@ jobs:
           docker tag ghcr.io/rasmus2024/seminar1/space-scheduler:latest ghcr.io/rasmus2024/seminar1/space-scheduler:${{ github.sha }}
           docker push ghcr.io/rasmus2024/seminar1/space-api:${{ github.sha }}
           docker push ghcr.io/rasmus2024/seminar1/space-scheduler:${{ github.sha }}
+
+  test-compose:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Build and start services
+        run: |
+          docker compose up -d
+          sleep 15
+
+      - name: Verify space-api health
+        run: curl --fail http://localhost:8080/api || (echo "API not responding" && docker compose logs && exit 1)
+
+      - name: Verify space-scheduler
+        run: curl --fail http://localhost:8081/api || (echo "Scheduler not responding" && docker compose logs && exit 1)
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down
