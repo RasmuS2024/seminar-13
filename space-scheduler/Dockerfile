@@ -1,9 +1,9 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle settings.gradle gradlew ./
+COPY build.gradle.kts settings.gradle.kts gradlew ./
 COPY gradle ./gradle
-COPY space-scheduler/build.gradle ./space-scheduler/
+COPY space-scheduler/build.gradle.kts ./space-scheduler/
 COPY space-scheduler/src ./space-scheduler/src
 
 RUN ./gradlew :space-scheduler:build -x test --no-daemon
