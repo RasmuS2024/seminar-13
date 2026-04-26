@@ -6,6 +6,7 @@ plugins {
 }
 
 ext["tomcat.version"] = "11.0.21"
+ext["spring-framework.version"] = "6.2.11"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
