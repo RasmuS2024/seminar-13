@@ -1,11 +1,9 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.4.5"
+    id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
 }
-
-ext["tomcat.version"] = "10.1.55"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
