@@ -1,0 +1,18 @@
+services:
+  space-api:
+   build: ./space-api
+   container_name: space-api
+   environment:
+     - SERVER_PORT=8080
+   ports:
+     - "8080:8080"
+  space-scheduler:
+    build: ./space-scheduler
+    container_name: space-scheduler
+    depends_on:
+      - space-api
+    environment:
+      - SERVER_PORT=8081
+      - APP_SPACE_CENTER_SERVICE_URL=http://space-api:8080/api
+    ports:
+      - "8081:8081"
