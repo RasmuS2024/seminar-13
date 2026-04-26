@@ -10,7 +10,7 @@
 Реализовано:
  - Dockerfile для сборки;
  - Docker compose файл;
- - добавлен GitHub Actions workflow.
+ - добавлены GitHub Actions workflow (+ Trivy Security Scan).
 
 
 ![Java CI](https://github.com/RasmuS2024/seminar1/actions/workflows/main.yml/badge.svg)
