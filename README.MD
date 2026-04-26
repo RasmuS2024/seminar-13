@@ -9,5 +9,9 @@
 
 Реализовано:
  - Dockerfile для сборки;
- - Docker compose файл.
+ - Docker compose файл;
+ - добавлен GitHub Actions workflow.
+
+
+![Java CI](https://github.com/RasmuS2024/seminar1/actions/workflows/main.yml/badge.svg)
 
