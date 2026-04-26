@@ -1,14 +1,19 @@
 services:
   space-api:
-   build: ./space-api
-   image: ghcr.io/rasmus2024/seminar1/space-api:latest
-   container_name: space-api
-   environment:
-     - SERVER_PORT=8080
-   ports:
-     - "8080:8080"
+    build:
+      context: .
+      dockerfile: ./space-api/Dockerfile
+    image: ghcr.io/rasmus2024/seminar1/space-api:latest
+    container_name: space-api
+    environment:
+      - SERVER_PORT=8080
+    ports:
+      - "8080:8080"
+
   space-scheduler:
-    build: ./space-scheduler
+    build:
+      context: .
+      dockerfile: ./space-scheduler/Dockerfile
     image: ghcr.io/rasmus2024/seminar1/space-scheduler:latest
     container_name: space-scheduler
     depends_on:
