@@ -1,4 +1,4 @@
-# Cеминар 9 по SysDеsign
+# Cеминар 9.2 по SysDеsign
 
 ## Описание проекта
 Работа со спутниками, их группировками и выполнением миссий.
@@ -8,9 +8,9 @@
 - space-scheduler (планировщик), запускается на порту 8081.
 
 Реализовано:
- - Dockerfile для сборки;
- - Docker compose файл;
- - добавлены GitHub Actions workflow (+ Trivy Security Scan).
+ - 
+ - 
+ - 
 
 
 ![Java CI](https://github.com/RasmuS2024/seminar1/actions/workflows/main.yml/badge.svg)
