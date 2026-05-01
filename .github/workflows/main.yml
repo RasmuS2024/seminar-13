@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - seminar-9
   pull_request:
     branches:
       - main
-      - seminar-9
 
 jobs:
   build:
