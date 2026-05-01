@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Аннотация для замера времени выполнения метода
+ * Аннотация для замера времени выполнения метода.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

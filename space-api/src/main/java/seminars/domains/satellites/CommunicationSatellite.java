@@ -37,8 +37,12 @@ public class CommunicationSatellite extends Satellite {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CommunicationSatellite that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CommunicationSatellite that)) {
+            return false;
+        }
         return getName().equals(that.getName());
     }
 

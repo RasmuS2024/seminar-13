@@ -3,9 +3,18 @@ package seminars.factory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-import seminars.domains.satellites.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import seminars.domains.satellites.CommunicationSatellite;
+import seminars.domains.satellites.CommunicationSatelliteParam;
+import seminars.domains.satellites.ImagingSatellite;
+import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.Satellite;
 import seminars.factory.impl.CommunicationSatelliteFactory;
 import seminars.factory.impl.ImagingSatelliteFactory;
 

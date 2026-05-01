@@ -1,6 +1,6 @@
 package seminars.constants;
 
-public class EnergySystemConstants {
+public final class EnergySystemConstants {
     private EnergySystemConstants() {
         /* This utility class should not be instantiated */
     }

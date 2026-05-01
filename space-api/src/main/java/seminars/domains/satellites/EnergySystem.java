@@ -23,13 +23,13 @@ public class EnergySystem {
         batteryLevel -= amount;
         return true;
     }
-    
+
     public boolean hasSufficientPower() {
         return batteryLevel > lowBatteryThreshold;
     }
 
     public int batteryLevelToPercent() {
-        return (int)(batteryLevel * 100);
+        return (int) (batteryLevel * 100);
     }
 
 }

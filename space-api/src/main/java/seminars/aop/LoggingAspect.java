@@ -8,12 +8,13 @@ import org.springframework.stereotype.Component;
 @Aspect // объявляет класс аспектом
 @Component // делает аспект бином Spring
 public class LoggingAspect {
-    /**
-     * Измеряет время выполнения метода и выводит его в консоль
-     * @param joinPoint точка соединения - метод к которому применятся
-     * @return результат выполнения исходного метода
-     * @throws Throwable если метод выбросил исключение
-     */
+/**
+ * Измеряет время выполнения метода и выводит его в консоль.
+ * @param joinPoint точка соединения - метод к которому применятся
+ * @param logExecutionTime имя логирования
+ * @return результат выполнения исходного метода
+ * @throws Throwable если метод выбросил исключение
+ */
     @Around("@annotation(logExecutionTime)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint, LogExecutionTime logExecutionTime) throws Throwable {
         long start = System.currentTimeMillis();

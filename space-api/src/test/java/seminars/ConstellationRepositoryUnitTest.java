@@ -9,7 +9,11 @@ import seminars.repository.ConstellationRepository;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тесты для выполнения ConstellationRepository")
 class ConstellationRepositoryTest {
@@ -51,7 +55,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Добавление группировки и получение по имени должно возвращать ту же группировку")
-    void addAndGetConstellation_ShouldReturnSameConstellation() {
+    void shouldAddAndGetConstellationReturnSameConstellation() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
 
@@ -66,7 +70,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Добавление двух группировок с одинаковым именем заменяет предыдущую")
-    void addDuplicateConstellation_ShouldReplaceOldOne() {
+    void shouldAddDuplicateConstellationReplaceOldOne() {
         // arrange
         SatelliteConstellation first = new SatelliteConstellation(CONSTELLATION_NAME_1);
         SatelliteConstellation second = new SatelliteConstellation(CONSTELLATION_NAME_1);
@@ -83,7 +87,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Получение несуществующей группировки должно выбрасывать исключение с правильным сообщением")
-    void getNonExistentConstellation_ShouldThrowException() {
+    void shouldGetNonExistentConstellationThrowException() {
         // act & assert
         SpaceOperationException exception = assertThrows(SpaceOperationException.class,
                 () -> repository.getConstellation(NON_EXIST_NAME));
@@ -92,7 +96,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Обновление существующей группировки должно изменить данные")
-    void updateExistingConstellation_ShouldUpdateData() {
+    void shouldUpdateExistingConstellationUpdateData() {
         // arrange
         SatelliteConstellation original = new SatelliteConstellation(CONSTELLATION_NAME_1);
         repository.addConstellation(original);
@@ -108,7 +112,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Обновление несуществующей группировки не должно добавлять новую")
-    void updateNonExistentConstellation_ShouldNotAddNew() {
+    void shouldUpdateNonExistentConstellationNotAddNew() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
 
@@ -122,7 +126,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Удаление существующей группировки должно убрать её из репозитория")
-    void deleteExistingConstellation_ShouldRemoveIt() {
+    void shouldDeleteExistingConstellationRemoveIt() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
         repository.addConstellation(constellation);
@@ -137,7 +141,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Удаление несуществующей группировки не должно влиять на состояние")
-    void deleteNonExistentConstellation_ShouldNotChangeState() {
+    void shouldDeleteNonExistentConstellationNotChangeState() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
         repository.addConstellation(constellation);
@@ -152,7 +156,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Метод getAllConstellations возвращает копию, не затрагивающую исходную")
-    void getAllConstellations_ShouldReturnCopy() {
+    void shouldGetAllConstellationsReturnCopy() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
         repository.addConstellation(constellation);
@@ -168,7 +172,7 @@ class ConstellationRepositoryTest {
 
     @Test
     @DisplayName("Метод containsConstellation возвращает true для существующей и false для несуществующей")
-    void containsConstellation_ShouldReturnCorrectBoolean() {
+    void shouldContainsConstellationReturnCorrectBoolean() {
         // arrange
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME_1);
         repository.addConstellation(constellation);

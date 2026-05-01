@@ -5,7 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import seminars.domains.satellites.*;
+import seminars.domains.satellites.CommunicationSatellite;
+import seminars.domains.satellites.CommunicationSatelliteParam;
+import seminars.domains.satellites.ImagingSatellite;
+import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.Satellite;
 import seminars.domains.constellations.SatelliteConstellation;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.impl.CommunicationSatelliteFactory;
@@ -14,7 +18,11 @@ import seminars.repository.ConstellationRepository;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @DisplayName("Интеграционные тесты для ConstellationService")
@@ -48,7 +56,7 @@ class ConstellationServiceIntegrationTest {
 
     @Test
     @DisplayName("Полный жизненный цикл: создание → добавление спутников → активация → выполнение миссий")
-    void fullLifecycleThroughService_ShouldWorkCorrectly() {
+    void shouldFullLifecycleThroughServiceWorkCorrectly() {
         // Создание
         constellationService.createAndSaveConstellation(uniqueConstellationName);
         SatelliteConstellation constellation = constellationRepository.getConstellation(uniqueConstellationName);
@@ -100,15 +108,17 @@ class ConstellationServiceIntegrationTest {
     }
 
     @Test
-    @DisplayName("Попытка выполнить миссию для несуществующей группировки вызывает SpaceOperationException с сообщением")
-    void executeConstellationMission_WithNonExistentConstellation_ThrowsSpaceOperationException() {
+    @DisplayName("Миссия для несуществующей группировки вызывает исключение")
+    void shouldExecuteConstellationMissionWithNonExistentConstellationThrowSpaceOperationException() {
         String nonExistentName = "не-существует";
 
         SpaceOperationException exception = assertThrows(SpaceOperationException.class,
                 () -> constellationService.executeConstellationMission(nonExistentName));
 
-        assertEquals("Группировка не найдена: " + nonExistentName, exception.getMessage(),
-                "Сообщение исключения должно содержать имя несуществующей группировки");
+        String expectedMessage = "Группировка не найдена: " + nonExistentName;
+        assertEquals(expectedMessage, exception.getMessage(),
+                "Сообщение исключения должно содержать имя "
+                        + "несуществующей группировки");
     }
 
 }

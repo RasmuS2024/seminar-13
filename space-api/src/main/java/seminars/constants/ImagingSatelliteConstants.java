@@ -1,6 +1,6 @@
 package seminars.constants;
 
-public class ImagingSatelliteConstants {
+public final class ImagingSatelliteConstants {
     private ImagingSatelliteConstants() {
         /* This utility class should not be instantiated */
     }
@@ -10,8 +10,8 @@ public class ImagingSatelliteConstants {
      */
     public static final double DEFAULT_RESOLUTION = 155;
 
-    /**
-     * Количество энергии затрачиваемой для фотографирования
-     */
+/**
+ * Количество энергии затрачиваемой для фотографирования.
+ */
     public static final double PHOTO_ENERGY_CONSUMPTION = 0.07;
 }

@@ -11,8 +11,8 @@ import lombok.Getter;
         property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CommunicationSatelliteParam.class, name = "COMMUNICATION"),
-        @JsonSubTypes.Type(value = ImagingSatelliteParam.class, name = "IMAGE")
+    @JsonSubTypes.Type(value = CommunicationSatelliteParam.class, name = "COMMUNICATION"),
+    @JsonSubTypes.Type(value = ImagingSatelliteParam.class, name = "IMAGE")
 })
 
 @AllArgsConstructor

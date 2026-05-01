@@ -3,7 +3,13 @@ package seminars.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
 import seminars.services.SpaceOperationCenterService;
@@ -27,7 +33,7 @@ public class SpaceOperationController {
     }
 
     @GetMapping("/overview")
-    public ResponseEntity<String> getSystemOverview(){
+    public ResponseEntity<String> getSystemOverview() {
         String overview = spaceOperationCenterService.getSystemOverview();
         return ResponseEntity.ok(overview);
     }
