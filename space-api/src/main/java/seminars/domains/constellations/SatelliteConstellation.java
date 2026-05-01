@@ -1,8 +1,7 @@
 package seminars.domains.constellations;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import seminars.domains.satellites.Satellite;
 
 import java.util.ArrayList;
@@ -10,8 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Slf4j
 public class SatelliteConstellation {
-    private static final Logger log = LoggerFactory.getLogger(SatelliteConstellation.class);
     private final String constellationName;
     private final List<Satellite> satellites = new ArrayList<>();
 
@@ -56,20 +55,21 @@ public class SatelliteConstellation {
             log.info("Количество спутников: {}", satellites.size());
         }
 
-        for (Satellite satellite : satellites)
+        for (Satellite satellite : satellites) {
             if (log.isInfoEnabled()) {
                 log.info(satellite.getState().toString());
             }
+        }
     }
 
     @Override
     public String toString() {
-        return "SatelliteConstellation{constellationName='" +
-                constellationName +
-                "', satellites=" +
-                satellites.stream()
+        return "SatelliteConstellation{constellationName='"
+                + constellationName
+                + "', satellites="
+                + satellites.stream()
                         .map(Satellite::toString)
-                        .collect(Collectors.joining(",\n", "[\n", "]")) +
-                "}";
+                        .collect(Collectors.joining(",\n", "[\n", "]"))
+                + "}";
     }
 }

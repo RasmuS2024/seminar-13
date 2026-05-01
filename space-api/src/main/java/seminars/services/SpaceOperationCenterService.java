@@ -16,10 +16,10 @@ public class SpaceOperationCenterService {
 
     private final SatelliteServiceImpl satelliteService;
 
-    /**
-     * Добавляет спутник в репозиторий
-     * @param addSatelliteRequest   запрос на добавление спутника
-     */
+/**
+ * Добавляет спутник в репозиторий.
+ * @param addSatelliteRequest   запрос на добавление спутника
+ */
     @LogExecutionTime()
     public void addSatellite(AddSatelliteRequest addSatelliteRequest) {
         try {
@@ -34,12 +34,12 @@ public class SpaceOperationCenterService {
         }
     }
 
-    /**
-     * Выполняет миссии в соответствии с запросом
-     * Для группировки активирует все спутники и запускает их миссии
-     * Для одного спутника - активирует его и выполняет миссию
-     * @param missionRequest    запрос на выполнение миссий
-     */
+/**
+ * Выполняет миссии в соответствии с запросом.
+ * Для группировки активирует все спутники и запускает их миссии.
+ * Для одного спутника - активирует его и выполняет миссию.
+ * @param missionRequest    запрос на выполнение миссий
+ */
     public void executeMission(MissionRequest missionRequest) {
         switch (missionRequest.targetType()) {
             case CONSTELLATION -> {
@@ -51,19 +51,23 @@ public class SpaceOperationCenterService {
                 var satellite = constellation.getSatellites().stream()
                         .filter(s -> s.getName().equals(missionRequest.satelliteName()))
                         .findFirst()
-                        .orElseThrow(() -> new SpaceOperationException("Спутник не найден: " + missionRequest.satelliteName()));
+                        .orElseThrow(() -> new SpaceOperationException(
+                                "Спутник не найден: " + missionRequest.satelliteName()));
                 satellite.activate();
                 satellite.performMission();
+            }
+            default -> {
+                throw new IllegalArgumentException("Unknown target type: " + missionRequest.targetType());
             }
         }
 
     }
 
-    /**
-     * Выводит спутник из эксплуатации (удаляет из группировки)
-     * @param constellationName имя группировки
-     * @param satelliteName     имя спутника
-     */
+/**
+ * Выводит спутник из эксплуатации (удаляет из группировки).
+ * @param constellationName имя группировки
+ * @param satelliteName     имя спутника
+ */
     public void decommissionSatellite(String constellationName, String satelliteName) {
         var constellation = constellationService.getConstellation(constellationName);
         if (constellation == null) {
@@ -76,9 +80,10 @@ public class SpaceOperationCenterService {
         }
     }
 
-    /**
-     * Возвращает общую сводку по всем группировкам и спутникам
-     */
+/**
+ * Возвращает общую сводку по всем группировкам и спутникам.
+ * @return строка с информацией о всех группировках
+ */
     public String getSystemOverview() {
         var allConstellations = constellationService.getAllConstellations();
 
@@ -90,7 +95,7 @@ public class SpaceOperationCenterService {
             cons.getSatellites().forEach(sat ->
                     sb.append("    - ").append(sat.getName())
                             .append(" [").append(sat.getState().isActive() ? "Активен" : "Неактивен")
-                            .append("], заряд: ").append((int)(sat.getEnergy().getBatteryLevel()*100)).append("%\n")
+                            .append("], заряд: ").append((int) (sat.getEnergy().getBatteryLevel() * 100)).append("%\n")
             );
         });
         return sb.toString();

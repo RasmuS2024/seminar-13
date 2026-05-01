@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Запрос на выполнение миссий
+ * Запрос на выполнение миссий.
  * @param targetType тип цели - группировка или конкретный спутник
  * @param constellationName имя группировки
  * @param satelliteName имя спутника (если targetType = SINGLE_SATELLITE)

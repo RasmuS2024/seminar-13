@@ -1,6 +1,6 @@
 package seminars.constants;
 
-public class CommunicationSatelliteConstants {
+public final class CommunicationSatelliteConstants {
     private CommunicationSatelliteConstants() {
         /* This utility class should not be instantiated */
     }
@@ -10,8 +10,8 @@ public class CommunicationSatelliteConstants {
      */
     public static final double DEFAULT_BANDWIDTH = 125;
 
-    /**
-     * Количество энергии затрачиваемой для передачи условных данных
-     */
+/**
+ * Количество энергии затрачиваемой для передачи условных данных.
+ */
     public static final double SEND_DATA_ENERGY_CONSUMPTION = 0.03;
 }

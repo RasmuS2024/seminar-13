@@ -23,9 +23,15 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,11 +69,14 @@ class SpaceOperationControllerIntegrationTest {
         }
     }
 
-    /**
-     * Вспомогательный метод для добавления спутников
-     */
-    private void addSatellites(String constellationName, SatelliteParam... params) throws Exception {
-        AddSatelliteRequest request = new AddSatelliteRequest(constellationName, List.of(params));
+/**
+ * Вспомогательный метод для добавления спутников.
+ * @param name имя группировки
+ * @param params параметры спутников
+ * @throws Exception при ошибке выполнения
+ */
+    private void addSatellites(String name, SatelliteParam... params) throws Exception {
+        AddSatelliteRequest request = new AddSatelliteRequest(name, List.of(params));
         mockMvc.perform(post("/api/add-satellites")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -76,7 +85,7 @@ class SpaceOperationControllerIntegrationTest {
 
     @Test
     @DisplayName("POST /api/add-satellites — создаёт группировку и добавляет спутники, возвращает 201")
-    void addSatellite_ShouldReturn201() throws Exception {
+    void shouldAddSatelliteReturn201() throws Exception {
         AddSatelliteRequest request = new AddSatelliteRequest(
                 constellationName,
                 List.of(
@@ -98,7 +107,7 @@ class SpaceOperationControllerIntegrationTest {
 
     @Test
     @DisplayName("POST /api/missions (CONSTELLATION) — активирует спутники и выполняет миссии, возвращает 200")
-    void executeConstellationMission_ShouldReturn200() throws Exception {
+    void shouldExecuteConstellationMissionReturn200() throws Exception {
         constellationRepository.addConstellation(new SatelliteConstellation(constellationName));
         addSatellites(constellationName, new CommunicationSatelliteParam(commSatName, 0.85, 300.0));
 
@@ -122,7 +131,7 @@ class SpaceOperationControllerIntegrationTest {
 
     @Test
     @DisplayName("POST /api/missions (SINGLE_SATELLITE) — активирует один спутник и запускает миссию, возвращает 200")
-    void executeSingleSatelliteMission_ShouldReturn200() throws Exception {
+    void shouldExecuteSingleSatelliteMissionReturn200() throws Exception {
         constellationRepository.addConstellation(new SatelliteConstellation(constellationName));
         addSatellites(constellationName,
                 new CommunicationSatelliteParam(commSatName, 0.85, 300.0),
@@ -160,7 +169,7 @@ class SpaceOperationControllerIntegrationTest {
 
     @Test
     @DisplayName("GET /api/overview — возвращает 200 с системной сводкой")
-    void getSystemOverview_ShouldReturn200() throws Exception {
+    void shouldGetSystemOverviewReturn200() throws Exception {
         mockMvc.perform(get("/api/overview"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/plain;charset=UTF-8"));
@@ -177,7 +186,7 @@ class SpaceOperationControllerIntegrationTest {
 
     @Test
     @DisplayName("DELETE /api/constellations/{name}/satellites/{name} — удаляет спутник, возвращает 204")
-    void decommissionSatellite_ShouldReturn204() throws Exception {
+    void shouldDecommissionSatelliteReturn204() throws Exception {
         addSatellites(constellationName,
                 new CommunicationSatelliteParam(commSatName, 0.85, 300.0),
                 new ImagingSatelliteParam(imgSatName, 0.8, 5.5));

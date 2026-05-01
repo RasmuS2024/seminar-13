@@ -9,7 +9,9 @@ import seminars.domains.satellites.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.SatelliteParam;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @DisplayName("Тесты сервиса спутников")

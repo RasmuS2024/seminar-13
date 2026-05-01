@@ -2,8 +2,7 @@ package seminars.domains.satellites;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
@@ -11,8 +10,8 @@ import static seminars.constants.ImagingSatelliteConstants.PHOTO_ENERGY_CONSUMPT
 
 @Getter
 @ToString
-public class ImagingSatellite extends Satellite{
-    private static final Logger log = LoggerFactory.getLogger(ImagingSatellite.class);
+@Slf4j
+public class ImagingSatellite extends Satellite {
     private final double resolution;
     private int photosTaken;
 
@@ -42,8 +41,12 @@ public class ImagingSatellite extends Satellite{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ImagingSatellite that)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ImagingSatellite that)) {
+            return false;
+        }
         return getName().equals(that.getName());
     }
 

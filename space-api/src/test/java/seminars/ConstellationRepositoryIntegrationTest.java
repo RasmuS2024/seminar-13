@@ -6,14 +6,21 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import seminars.domains.constellations.SatelliteConstellation;
-import seminars.domains.satellites.*;
+import seminars.domains.satellites.CommunicationSatellite;
+import seminars.domains.satellites.CommunicationSatelliteParam;
+import seminars.domains.satellites.ImagingSatellite;
+import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.Satellite;
 import seminars.factory.impl.CommunicationSatelliteFactory;
 import seminars.factory.impl.ImagingSatelliteFactory;
 import seminars.repository.ConstellationRepository;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @DisplayName("Интеграционные тесты для ConstellationRepository")
@@ -47,7 +54,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Создание группировки и сохранение в репозитории")
-    void createConstellation_ShouldSaveInRepository() {
+    void shouldCreateConstellationSaveInRepository() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
 
@@ -65,7 +72,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Добавление спутников в группировку и проверка сохранения в репозитории")
-    void addSatellites_ShouldUpdateInRepository() {
+    void shouldAddSatellitesUpdateInRepository() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
         repository.addConstellation(constellation);
@@ -88,7 +95,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Активация всех спутников в группировке при достаточном заряде")
-    void activateAllSatellites_WithSufficientBattery_ShouldActivateAll() {
+    void shouldActivateAllSatellitesWithSufficientBattery() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
         repository.addConstellation(constellation);
@@ -121,7 +128,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Активация спутника с низким зарядом (ниже порога 15%) должна провалиться")
-    void activateSatellite_WithLowBattery_ShouldFail() {
+    void shouldActivateSatelliteWithLowBatteryFail() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
         repository.addConstellation(constellation);
@@ -147,7 +154,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Граничный случай: спутник с зарядом точно на пороге (15%) не должен активироваться")
-    void activateSatellite_WithBatteryExactlyAtThreshold_ShouldActivate() {
+    void shouldActivateSatelliteWithBatteryExactlyAtThreshold() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
         repository.addConstellation(constellation);
@@ -167,7 +174,7 @@ class ConstellationRepositoryIntegrationTest {
 
     @Test
     @DisplayName("Выполнение миссий активными спутниками уменьшает уровень заряда")
-    void executeMissions_WithActiveSatellites_ShouldConsumeEnergy() {
+    void shouldExecuteMissionsWithActiveSatellitesConsumeEnergy() {
         // Arrange
         SatelliteConstellation constellation = new SatelliteConstellation(uniqueConstellationName);
         repository.addConstellation(constellation);

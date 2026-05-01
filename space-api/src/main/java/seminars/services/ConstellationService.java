@@ -59,12 +59,12 @@ public class ConstellationService {
         return constellationRepository.getConstellation(constellationName);
     }
 
-    /**
-     * Удаляет спутник из группировки
-     * @param constellationName имя группировки
-     * @param satelliteName     имя спутника
-     * @return true, если спутник был удалён
-     */
+/**
+ * Удаляет спутник из группировки.
+ * @param constellationName имя группировки
+ * @param satelliteName     имя спутника
+ * @return true, если спутник был удалён
+ */
     public boolean removeSatelliteFromConstellation(String constellationName, String satelliteName) {
         SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
         if (constellation == null) {

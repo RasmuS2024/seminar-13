@@ -1,7 +1,11 @@
 package seminars.factory.impl;
 
 import org.springframework.stereotype.Component;
-import seminars.domains.satellites.*;
+import seminars.domains.satellites.CommunicationSatellite;
+import seminars.domains.satellites.CommunicationSatelliteParam;
+import seminars.domains.satellites.Satellite;
+import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.SatelliteType;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 

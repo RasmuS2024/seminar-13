@@ -14,7 +14,7 @@ repositories {
 
 checkstyle {
         toolVersion = "10.12.5"
-        configFile = rootProject.file("config/checkstyle/sun_checks.xml")
+        configFile = rootProject.file("config/checkstyle/checkstyle.xml")
 }
 
 tasks.test {
