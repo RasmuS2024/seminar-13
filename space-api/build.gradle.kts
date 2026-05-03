@@ -6,7 +6,6 @@ plugins {
     id("checkstyle")
 }
 
-ext["tomcat.version"] = "11.0.21"
 ext["spring-framework.version"] = "6.2.11"
 
 group = "org.example"
@@ -21,6 +20,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation ("org.springframework.boot:spring-boot-starter-web")
     implementation ("org.springframework.boot:spring-boot-starter-actuator")
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("io.github.cdimascio:dotenv-java:3.0.0")
+    implementation ("org.springframework.boot:spring-boot-starter-validation")
 
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
 
@@ -28,6 +30,8 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 springBoot {

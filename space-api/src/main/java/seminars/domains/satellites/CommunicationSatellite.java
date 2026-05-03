@@ -1,6 +1,9 @@
 package seminars.domains.satellites;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
@@ -10,8 +13,11 @@ import static seminars.constants.CommunicationSatelliteConstants.SEND_DATA_ENERG
 @Slf4j
 @Getter
 @ToString
+@Entity
+@DiscriminatorValue("COMMUNICATION")
+@NoArgsConstructor
 public class CommunicationSatellite extends Satellite {
-    private final double bandwidth;
+    private double bandwidth;
 
     public CommunicationSatellite(String name, double batteryLevel, double bandwidth) {
         super(name, batteryLevel);

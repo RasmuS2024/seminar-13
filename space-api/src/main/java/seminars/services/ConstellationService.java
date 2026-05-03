@@ -1,24 +1,45 @@
 package seminars.services;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.constellations.SatelliteConstellation;
+import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
+import seminars.repository.SatelliteRepository;
 
 import java.util.Map;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class ConstellationService {
-    protected ConstellationRepository constellationRepository;
+    private final ConstellationRepository constellationRepository;
+    private final SatelliteRepository satelliteRepository;
 
-    public ConstellationService(ConstellationRepository constellationRepository) {
-        this.constellationRepository = constellationRepository;
+    public SatelliteConstellation createConstellation(String constellationName) {
+        validateName(constellationName);
+        SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+        log.info("Создана спутниковая группировка: {}", constellationName);
+
+        return constellationRepository.save(constellation);
     }
 
-    public void createAndSaveConstellation(String constellationName) {
+    @Transactional(readOnly=true)
+    public SatelliteConstellation getConstellationByName(String constellationName) {
         validateName(constellationName);
 
-        this.constellationRepository.addConstellation(new SatelliteConstellation(constellationName));
+        return constellationRepository.findByConstellationName(constellationName)
+                .orElseThrow(() -> new SpaceOperationException("Группировка не найдена по имени: " + constellationName));
+    }
+
+    @Transactional(readOnly=true)
+    public SatelliteConstellation getConstellationById(Long id) {
+        return constellationRepository.findById(id)
+                .orElseThrow(() -> new SpaceOperationException("Группировка не найдена по id: " + id));
     }
 
     public void addSatelliteToConstellation(String constellationName, Satellite satellite) {
@@ -28,35 +49,46 @@ public class ConstellationService {
             throw new IllegalArgumentException("Спутник не может быть null");
         }
 
-        SatelliteConstellation constellation = getConstellation(constellationName);
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
         constellation.addSatellite(satellite);
+        log.info("{} добавлен в группировку \"{}\"", satellite.getName(), constellationName);
     }
 
     public void executeConstellationMission(String constellationName) {
         validateName(constellationName);
 
-        SatelliteConstellation constellation = getConstellation(constellationName);
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
+        log.info("ВЫПОЛНЕНИЕ МИССИЙ ГРУППИРОВКИ {}", constellationName.toUpperCase());
+        log.info("=".repeat(50));
         constellation.executeAllMissions();
     }
 
     public void activateAllSatellites(String constellationName) {
         validateName(constellationName);
 
-        SatelliteConstellation constellation = getConstellation(constellationName);
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
+        log.info("АКТИВАЦИЯ СПУТНИКОВ ГРУППИРОВКИ {}", constellationName.toUpperCase());
+        log.info("=".repeat(50));
         constellation.activateAllSatellites();
     }
 
     public void showConstellationStatus(String constellationName) {
         validateName(constellationName);
 
-        SatelliteConstellation satelliteConstellation = getConstellation(constellationName);
-        satelliteConstellation.getAllSatellitesStatuses();
+        SatelliteConstellation satelliteConstellation = getConstellationByName(constellationName);
+        log.info(satelliteConstellation.getAllSatellitesStatuses());
     }
 
-    public SatelliteConstellation getConstellation(String constellationName) {
-        validateName(constellationName);
+    public void updateConstellation(String name, SatelliteConstellation updatedConstellation) {
+        validateName(name);
+        constellationRepository.updateConstellation(name, updatedConstellation);
+        log.info("Обновлена группировка: {}", name);
+    }
 
-        return constellationRepository.getConstellation(constellationName);
+    public void deleteConstellation(String name) {
+        validateName(name);
+        constellationRepository.deleteConstellation(name);
+        log.info("Удалена группировка: {}", name);
     }
 
 /**
@@ -80,7 +112,7 @@ public class ConstellationService {
 
     private void validateName(String name) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Имя группировки не может быть пустым");
+            throw new SpaceOperationException("Имя группировки не может быть пустым");
         }
     }
 }

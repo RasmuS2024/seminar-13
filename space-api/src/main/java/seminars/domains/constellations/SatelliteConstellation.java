@@ -1,65 +1,81 @@
 package seminars.domains.constellations;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import seminars.domains.satellites.Satellite;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "satellite_constellation")
 @Getter
-@Slf4j
+@Setter
+@NoArgsConstructor
 public class SatelliteConstellation {
-    private final String constellationName;
-    private final List<Satellite> satellites = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name", nullable = false, unique = true)
+    private String constellationName;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "constellation", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Satellite> satellites = new ArrayList<>();
 
     public SatelliteConstellation(String constellationName) {
         this.constellationName = constellationName;
-        log.info("Создана спутниковая группировка: {}", constellationName);
     }
 
     public void addSatellite(Satellite satellite) {
         if (satellite != null && !satellites.contains(satellite)) {
             satellites.add(satellite);
-            log.info("{} добавлен в группировку \"{}\"", satellite.getName(), constellationName);
+            satellite.setConstellation(this);
+        }
+    }
+
+    public void removeSatellite(Satellite satellite) {
+        if (satellite != null) {
+            satellite.setConstellation(null);
+            satellites.remove(satellite);
         }
     }
 
     public void activateAllSatellites() {
-        if (log.isInfoEnabled()) {
-            log.info("АКТИВАЦИЯ СПУТНИКОВ ГРУППИРОВКИ {}", constellationName.toUpperCase());
-            log.info("=".repeat(50));
-        }
-
         for (Satellite satellite : satellites) {
             satellite.activate();
         }
     }
 
     public void executeAllMissions() {
-        if (log.isInfoEnabled()) {
-            log.info("ВЫПОЛНЕНИЕ МИССИЙ ГРУППИРОВКИ {}", constellationName.toUpperCase());
-            log.info("=".repeat(50));
-        }
-
         for (Satellite satellite : satellites) {
             satellite.performMission();
         }
     }
 
-    public void getAllSatellitesStatuses() {
-        if (log.isInfoEnabled()) {
-            log.info("СТАТУС ГРУППИРОВКИ: {}", constellationName.toUpperCase());
-            log.info("=".repeat(50));
-            log.info("Количество спутников: {}", satellites.size());
-        }
+    public String getAllSatellitesStatuses() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("СТАТУС ГРУППИРОВКИ: ").append(constellationName.toUpperCase()).append("\n");
+        sb.append("=".repeat(50)).append("\n");
+        sb.append("Количество спутников: ").append(satellites.size()).append("\n");
 
         for (Satellite satellite : satellites) {
-            if (log.isInfoEnabled()) {
-                log.info(satellite.getState().toString());
-            }
+            sb.append(satellite.getState().toString()).append("\n");
         }
+
+        return sb.toString();
     }
 
     @Override

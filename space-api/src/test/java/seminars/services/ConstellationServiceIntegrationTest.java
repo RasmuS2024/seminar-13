@@ -58,7 +58,7 @@ class ConstellationServiceIntegrationTest {
     @DisplayName("Полный жизненный цикл: создание → добавление спутников → активация → выполнение миссий")
     void shouldFullLifecycleThroughServiceWorkCorrectly() {
         // Создание
-        constellationService.createAndSaveConstellation(uniqueConstellationName);
+        constellationService.createConstellation(uniqueConstellationName);
         SatelliteConstellation constellation = constellationRepository.getConstellation(uniqueConstellationName);
         assertNotNull(constellation);
         assertEquals(0, constellation.getSatellites().size());

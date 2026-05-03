@@ -1,8 +1,12 @@
 package seminars.domains.satellites;
 
-import lombok.Data;
+import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@ToString
+@Getter
+@Embeddable
 public class SatelliteState {
     protected boolean isActive = false;
     private String statusMessage;

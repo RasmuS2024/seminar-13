@@ -4,8 +4,12 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 .kotlin
+../.env
 
 ### IntelliJ IDEA ###
+.idea/*
+.idea/
+.idea
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml

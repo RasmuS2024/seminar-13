@@ -69,7 +69,7 @@ class ConstellationRepositoryMockTest {
     }
 
     @Test
-    @DisplayName("getConstellation должен возвращать группировку по имени")
+    @DisplayName("getConstellationByName должен возвращать группировку по имени")
     void testGetConstellation() {
         // arrange
         when(repository.getConstellation(CONSTELLATION_NAME_1)).thenReturn(constellation1);

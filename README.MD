@@ -13,9 +13,9 @@
  - 
 
 
-![Java CI](https://github.com/RasmuS2024/seminar1/actions/workflows/main.yml/badge.svg)
+![Java CI](https://github.com/RasmuS2024/seminar-9.2/actions/workflows/main.yml/badge.svg)
 
-![Docker Build](https://github.com/rasmus2024/seminar1/actions/workflows/deploy.yml/badge.svg)
+![Docker Build](https://github.com/RasmuS2024/seminar-9.2/actions/workflows/deploy.yml/badge.svg)
 
-![Trivy Scan](https://github.com/rasmus2024/seminar1/actions/workflows/security.yml/badge.svg)
+
 

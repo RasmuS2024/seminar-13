@@ -1,6 +1,7 @@
 package seminars.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import seminars.aop.LogExecutionTime;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
@@ -9,6 +10,7 @@ import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.SatelliteParam;
 import seminars.exceptions.SpaceOperationException;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SpaceOperationCenterService {
@@ -25,7 +27,7 @@ public class SpaceOperationCenterService {
         try {
             constellationService.showConstellationStatus(addSatelliteRequest.constellationName());
         } catch (Exception e) {
-            constellationService.createAndSaveConstellation(addSatelliteRequest.constellationName());
+            constellationService.createConstellation(addSatelliteRequest.constellationName());
         }
 
         for (SatelliteParam param : addSatelliteRequest.satelliteParams()) {
@@ -47,17 +49,24 @@ public class SpaceOperationCenterService {
                 constellationService.executeConstellationMission(missionRequest.constellationName());
             }
             case SINGLE_SATELLITE -> {
-                var constellation = constellationService.getConstellation(missionRequest.constellationName());
+                var constellation = constellationService.getConstellationByName(missionRequest.constellationName());
                 var satellite = constellation.getSatellites().stream()
                         .filter(s -> s.getName().equals(missionRequest.satelliteName()))
                         .findFirst()
                         .orElseThrow(() -> new SpaceOperationException(
                                 "Спутник не найден: " + missionRequest.satelliteName()));
-                satellite.activate();
-                satellite.performMission();
+                boolean activated = satellite.activate();
+                if (activated) {
+                    log.info("{}: Активация успешна", satellite.getName());
+                    satellite.performMission();
+                } else {
+                    log.info("{}: Ошибка активации (заряд: {}%)",
+                            satellite.getName(),
+                            (int) (satellite.getEnergy().getBatteryLevel() * 100));
+                }
             }
             default -> {
-                throw new IllegalArgumentException("Unknown target type: " + missionRequest.targetType());
+                throw new IllegalArgumentException("Данный тип цели не поддерживается: " + missionRequest.targetType());
             }
         }
 
@@ -69,7 +78,7 @@ public class SpaceOperationCenterService {
  * @param satelliteName     имя спутника
  */
     public void decommissionSatellite(String constellationName, String satelliteName) {
-        var constellation = constellationService.getConstellation(constellationName);
+        var constellation = constellationService.getConstellationByName(constellationName);
         if (constellation == null) {
             throw new SpaceOperationException("Группировка не найдена: " + constellationName);
         }

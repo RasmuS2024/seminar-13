@@ -1,6 +1,9 @@
 package seminars.domains.satellites;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,11 +11,14 @@ import java.util.Objects;
 
 import static seminars.constants.ImagingSatelliteConstants.PHOTO_ENERGY_CONSUMPTION;
 
+@Slf4j
 @Getter
 @ToString
-@Slf4j
+@Entity
+@DiscriminatorValue("IMAGING")
+@NoArgsConstructor
 public class ImagingSatellite extends Satellite {
-    private final double resolution;
+    private double resolution;
     private int photosTaken;
 
     public ImagingSatellite(String name, double batteryLevel, double resolution) {

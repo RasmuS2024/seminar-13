@@ -1,6 +1,7 @@
 package seminars.services;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.SatelliteParam;
@@ -9,6 +10,7 @@ import seminars.factory.SatelliteFactory;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class SatelliteServiceImpl implements SatelliteService {
@@ -29,6 +31,12 @@ public class SatelliteServiceImpl implements SatelliteService {
                 .findFirst()
                 .orElseThrow(() -> new SpaceOperationException("Данный тип параметров не поддерживается"));
 
-        return factory.createSatelliteWithParameter(param);
+        Satellite satellite = factory.createSatelliteWithParameter(param);
+
+        log.info("Создан спутник: {} (заряд: {}%)",
+                satellite.getName(),
+                (int) (satellite.getEnergy().getBatteryLevel() * 100));
+
+        return satellite;
     }
 }

@@ -1,12 +1,51 @@
 package seminars.domains.satellites;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import seminars.constants.EnergySystemConstants;
+import seminars.domains.constellations.SatelliteConstellation;
 
-@Data
+@Entity
+@Table(name = "satellite")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "satellite_type", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class Satellite {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     protected String name;
+
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "constellation_id")
+    protected SatelliteConstellation constellation;
+
+    @Embedded
     protected SatelliteState state;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "energy_id", unique = true)
     protected EnergySystem energy;
 
     protected Satellite(String name, double batteryLevel) {
@@ -18,26 +57,16 @@ public abstract class Satellite {
                 .maxBattery(EnergySystemConstants.MAX_BATTERY)
                 .minBattery(EnergySystemConstants.MIN_BATTERY)
                 .build();
-
-        System.out.println("Создан спутник: " + name + " (заряд: " + energy.batteryLevelToPercent() + "%)");
     }
 
     public boolean activate() {
-        if (state.activate(energy.hasSufficientPower())) {
-            System.out.println(name + ": Активация успешна");
-            return true;
-        }
-
-        System.out.println(name + ": Ошибка активации (заряд: " + (getEnergy().batteryLevelToPercent() + "%)"));
-        return false;
+        return state.activate(energy.hasSufficientPower());
     }
 
     public void deActivate() {
         if (state.isActive()) {
             state.deActivate();
         }
-
-        System.out.println(name + ": Деактивирован");
     }
 
     public abstract void performMission();
