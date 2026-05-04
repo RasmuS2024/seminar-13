@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import seminars.domains.satellites.Satellite;
+import seminars.exceptions.SpaceOperationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,21 +30,26 @@ public class SatelliteConstellation {
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true)
-    private String constellationName;
+    private String name;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "constellation", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Satellite> satellites = new ArrayList<>();
 
     public SatelliteConstellation(String constellationName) {
-        this.constellationName = constellationName;
+        this.name = constellationName;
     }
 
     public void addSatellite(Satellite satellite) {
-        if (satellite != null && !satellites.contains(satellite)) {
-            satellites.add(satellite);
-            satellite.setConstellation(this);
+        if (satellite == null || satellites.contains(satellite)) {
+            return;
         }
+        if (satellite.getConstellation() != null) {
+            throw new SpaceOperationException("Спутник уже находится в другой группировке: "
+                    + satellite.getConstellation().getName());
+        }
+        satellites.add(satellite);
+        satellite.setConstellation(this);
     }
 
     public void removeSatellite(Satellite satellite) {
@@ -67,7 +73,7 @@ public class SatelliteConstellation {
 
     public String getAllSatellitesStatuses() {
         StringBuilder sb = new StringBuilder();
-        sb.append("СТАТУС ГРУППИРОВКИ: ").append(constellationName.toUpperCase()).append("\n");
+        sb.append("СТАТУС ГРУППИРОВКИ: ").append(name.toUpperCase()).append("\n");
         sb.append("=".repeat(50)).append("\n");
         sb.append("Количество спутников: ").append(satellites.size()).append("\n");
 
@@ -80,8 +86,8 @@ public class SatelliteConstellation {
 
     @Override
     public String toString() {
-        return "SatelliteConstellation{constellationName='"
-                + constellationName
+        return "SatelliteConstellation{name='"
+                + name
                 + "', satellites="
                 + satellites.stream()
                         .map(Satellite::toString)

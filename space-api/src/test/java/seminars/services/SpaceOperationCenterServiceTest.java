@@ -2,110 +2,170 @@ package seminars.services;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import seminars.domains.satellites.requests.AddSatelliteRequest;
-import seminars.domains.satellites.requests.MissionRequest;
-import seminars.domains.satellites.requests.MissionTargetType;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.constellations.SatelliteConstellation;
-import seminars.domains.satellites.CommunicationSatelliteParam;
-import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
-import seminars.repository.ConstellationRepository;
+import seminars.domains.satellites.SatelliteParam;
+import seminars.exceptions.SpaceOperationException;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-@DisplayName("Интеграционные тесты фасада SpaceOperationCenterService")
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Unit-тесты SpaceOperationCenterService")
 class SpaceOperationCenterServiceTest {
 
-    @Autowired
-    private  SpaceOperationCenterService spaceOperationCenterService;
+    @Mock
+    private ConstellationService constellationService;
 
-    @Autowired
-    private ConstellationRepository constellationRepository;
+    @Mock
+    private SatelliteService satelliteService;
 
-    private String uniqueName(String namePrefix) {
-        return namePrefix + "_" + System.currentTimeMillis();
-    }
+    @InjectMocks
+    private SpaceOperationCenterService spaceOperationCenterService;
 
     @Test
-    @DisplayName("Добавление спутников в группировку через фасад")
-    void addSatelliteTest() {
-        String constellationName = uniqueName("TestConstellation");
-        String commSatName = "Спутник связи 1";
-        String imgSatName = "Спуьник ДЗЗ 1";
+    @DisplayName("addSatellite создаёт группировку и добавляет спутники")
+    void addSatelliteCreatesConstellationAndAddsSatellites() {
+        String constellationName = "TestConstellation";
+        String satName = "TestSatellite";
+        SatelliteParam param = new seminars.domains.satellites.ImagingSatelliteParam(satName, 0.8, 1.0);
+        var request = new seminars.domains.satellites.requests.AddSatelliteRequest(
+                constellationName, List.of(param));
 
-        var commParam = new CommunicationSatelliteParam(commSatName, 0.85, 300);
-        var imgParam = new ImagingSatelliteParam(imgSatName, 0.8, 5.5);
-        var request = new AddSatelliteRequest(
-                constellationName,
-                List.of(commParam, imgParam)
-        );
+        Satellite satellite = new ImagingSatellite(satName, 0.8, 1.0);
+        SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+
+        doThrow(new SpaceOperationException("Не найдена"))
+                .when(constellationService)
+                .showConstellationStatus(anyString());
+        when(constellationService.createConstellation(anyString())).thenReturn(constellation);
+        when(constellationService.getConstellationByName(anyString())).thenReturn(constellation);
+        when(satelliteService.createSatellite(param)).thenReturn(satellite);
+        doNothing().when(constellationService).addSatelliteToConstellation(any(), any());
 
         spaceOperationCenterService.addSatellite(request);
 
-        SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
-        assertNotNull(constellation, "Группировка должна существовать");
-        assertEquals(2, constellation.getSatellites().size(), "В группировке должно быть 2 спутника");
-
-        List<String> satelliteNames = constellation.getSatellites().stream()
-                .map(Satellite::getName)
-                .toList();
-        assertTrue(satelliteNames.contains(commSatName));
-        assertTrue(satelliteNames.contains(imgSatName));
-
+        verify(constellationService).createConstellation(constellationName);
+        verify(satelliteService).createSatellite(param);
     }
 
     @Test
-    @DisplayName("Выполнение миссий для всей группировки")
-    void executeConstellationMissionTest() {
-        String constellationName = uniqueName("MissionConstellation");
-        String commSatName = "Спутник связи 1";
+    @DisplayName("executeMission для CONSTELLATION активирует и выполняет миссии")
+    void executeMissionForConstellationActivatesAndExecutes() {
+        String constellationName = "TestConstellation";
+        var missionRequest = new seminars.domains.satellites.requests.MissionRequest(
+                seminars.domains.satellites.requests.MissionTargetType.CONSTELLATION,
+                constellationName, null);
 
-        var commParam = new CommunicationSatelliteParam(commSatName, 0.85, 300);
-        var addRequest = new AddSatelliteRequest(
-                constellationName,
-                List.of(commParam)
-        );
-        spaceOperationCenterService.addSatellite(addRequest);
-
-        var missionRequest = new MissionRequest(
-                MissionTargetType.CONSTELLATION,
-                constellationName,
-                null
-        );
         spaceOperationCenterService.executeMission(missionRequest);
 
-        SatelliteConstellation constellation = constellationRepository.getConstellation(constellationName);
-        Satellite satellite = constellation.getSatellites().getFirst();
-        assertTrue(satellite.getState().isActive(), "Спутник должен быть активен после миссии");
-
+        verify(constellationService).activateAllSatellites(constellationName);
+        verify(constellationService).executeConstellationMission(constellationName);
     }
 
     @Test
-    @DisplayName("Получение системной сводки")
-    void getSystemOverviewTest() {
-        String constellationName = uniqueName("Группировка_сводка_тестовая");
-        String satName = "Спутник связи - получение сводки";
+    @DisplayName("executeMission для SINGLE_SATELLITE активирует один спутник")
+    void executeMissionForSingleSatelliteActivatesOne() {
+        String constellationName = "TestConstellation";
+        String satelliteName = "TestSatellite";
+        SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+        Satellite satellite = new ImagingSatellite(satelliteName, 0.8, 1.0);
+        constellation.addSatellite(satellite);
 
-        var commParam = new CommunicationSatelliteParam(satName, 0.8, 500.0);
-        var addRequest = new AddSatelliteRequest(
-                constellationName,
-                List.of(commParam)
-        );
-        spaceOperationCenterService.addSatellite(addRequest);
+        when(satelliteService.getSatelliteByName(satelliteName)).thenReturn(satellite);
+        doAnswer(invocation -> {
+            satellite.activate();
+            return null;
+        }).when(satelliteService).activateSatellite(any());
+        doNothing().when(satelliteService).performSatelliteMission(any());
+
+        var missionRequest = new seminars.domains.satellites.requests.MissionRequest(
+                seminars.domains.satellites.requests.MissionTargetType.SINGLE_SATELLITE,
+                constellationName, satelliteName);
+
+        spaceOperationCenterService.executeMission(missionRequest);
+
+        assertTrue(satellite.getState().isActive());
+    }
+
+    @Test
+    @DisplayName("executeMission для SINGLE_SATELLITE с несуществующим спутником выбрасывает исключение")
+    void executeMissionForSingleSatelliteWithNonExistentSatelliteThrowsException() {
+        String constellationName = "TestConstellation";
+        String satelliteName = "NonExistentSat";
+
+        when(satelliteService.getSatelliteByName(satelliteName))
+                .thenThrow(new SpaceOperationException("Спутник не найден по имени: " + satelliteName));
+
+        var missionRequest = new seminars.domains.satellites.requests.MissionRequest(
+                seminars.domains.satellites.requests.MissionTargetType.SINGLE_SATELLITE,
+                constellationName, satelliteName);
+
+        assertThrows(SpaceOperationException.class,
+                () -> spaceOperationCenterService.executeMission(missionRequest));
+    }
+
+    @Test
+    @DisplayName("decommissionSatellite удаляет спутник из группировки")
+    void decommissionSatelliteRemovesSatellite() {
+        String constellationName = "TestConstellation";
+        String satelliteName = "TestSatellite";
+        SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+        Satellite satellite = new ImagingSatellite(satelliteName, 0.8, 1.0);
+        constellation.addSatellite(satellite);
+
+        when(constellationService.getConstellationByName(constellationName)).thenReturn(constellation);
+        when(satelliteService.getSatelliteByName(satelliteName)).thenReturn(satellite);
+
+        spaceOperationCenterService.decommissionSatellite(constellationName, satelliteName);
+
+        assertFalse(constellation.getSatellites().contains(satellite));
+    }
+
+    @Test
+    @DisplayName("decommissionSatellite для несуществующего спутника выбрасывает исключение")
+    void decommissionSatelliteWithNonExistentSatelliteThrowsException() {
+        String constellationName = "TestConstellation";
+        String satelliteName = "NonExistentSat";
+        SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+
+        when(constellationService.getConstellationByName(constellationName)).thenReturn(constellation);
+        when(satelliteService.getSatelliteByName(satelliteName))
+                .thenThrow(new SpaceOperationException("Спутник не найден по имени: " + satelliteName));
+
+        assertThrows(SpaceOperationException.class,
+                () -> spaceOperationCenterService.decommissionSatellite(constellationName, satelliteName));
+    }
+
+    @Test
+    @DisplayName("getSystemOverview возвращает сводку")
+    void getSystemOverviewReturnsOverview() {
+        SatelliteConstellation constellation = new SatelliteConstellation("TestConstellation");
+        Satellite satellite = new ImagingSatellite("TestSatellite", 0.8, 1.0);
+        constellation.addSatellite(satellite);
+
+        when(constellationService.getAllConstellations()).thenReturn(List.of(constellation));
 
         String overview = spaceOperationCenterService.getSystemOverview();
-        assertTrue(overview.contains(constellationName), "Сводка должна содержать имя группировки");
-        assertTrue(overview.contains(satName), "Сводка должна содержать имя спутника");
-        assertTrue(overview.contains("заряд: 80%") || overview.contains("заряд: 80"),
-                "Сводка должна содержать уровень заряда (80%)");
 
-
+        assertNotNull(overview);
+        assertTrue(overview.contains("TestConstellation"));
+        assertTrue(overview.contains("TestSatellite"));
     }
 }

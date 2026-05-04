@@ -8,15 +8,13 @@ import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.SatelliteParam;
-import seminars.exceptions.SpaceOperationException;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class SpaceOperationCenterService {
     private final ConstellationService constellationService;
-
-    private final SatelliteServiceImpl satelliteService;
+    private final SatelliteService satelliteService;
 
 /**
  * Добавляет спутник в репозиторий.
@@ -32,7 +30,8 @@ public class SpaceOperationCenterService {
 
         for (SatelliteParam param : addSatelliteRequest.satelliteParams()) {
             Satellite satellite = satelliteService.createSatellite(param);
-            constellationService.addSatelliteToConstellation(addSatelliteRequest.constellationName(), satellite);
+            var constellation = constellationService.getConstellationByName(addSatelliteRequest.constellationName());
+            constellationService.addSatelliteToConstellation(constellation.getId(), satellite.getId());
         }
     }
 
@@ -49,21 +48,9 @@ public class SpaceOperationCenterService {
                 constellationService.executeConstellationMission(missionRequest.constellationName());
             }
             case SINGLE_SATELLITE -> {
-                var constellation = constellationService.getConstellationByName(missionRequest.constellationName());
-                var satellite = constellation.getSatellites().stream()
-                        .filter(s -> s.getName().equals(missionRequest.satelliteName()))
-                        .findFirst()
-                        .orElseThrow(() -> new SpaceOperationException(
-                                "Спутник не найден: " + missionRequest.satelliteName()));
-                boolean activated = satellite.activate();
-                if (activated) {
-                    log.info("{}: Активация успешна", satellite.getName());
-                    satellite.performMission();
-                } else {
-                    log.info("{}: Ошибка активации (заряд: {}%)",
-                            satellite.getName(),
-                            (int) (satellite.getEnergy().getBatteryLevel() * 100));
-                }
+                var satellite = satelliteService.getSatelliteByName(missionRequest.satelliteName());
+                satelliteService.activateSatellite(satellite.getId());
+                satelliteService.performSatelliteMission(satellite.getId());
             }
             default -> {
                 throw new IllegalArgumentException("Данный тип цели не поддерживается: " + missionRequest.targetType());
@@ -79,14 +66,10 @@ public class SpaceOperationCenterService {
  */
     public void decommissionSatellite(String constellationName, String satelliteName) {
         var constellation = constellationService.getConstellationByName(constellationName);
-        if (constellation == null) {
-            throw new SpaceOperationException("Группировка не найдена: " + constellationName);
-        }
+        var satellite = satelliteService.getSatelliteByName(satelliteName);
 
-        boolean removed = constellationService.removeSatelliteFromConstellation(constellationName, satelliteName);
-        if (!removed) {
-            throw new SpaceOperationException("Спутник не найден в группировке: " + satelliteName);
-        }
+        constellation.removeSatellite(satellite);
+        log.info("Спутник {} выведен из эксплуатации (удален из группировки {})", satelliteName, constellationName);
     }
 
 /**
@@ -98,8 +81,8 @@ public class SpaceOperationCenterService {
 
         StringBuilder sb = new StringBuilder("=== СИСТЕМНАЯ СВОДКА ===\n");
         sb.append("Всего группировок: ").append(allConstellations.size()).append("\n");
-        allConstellations.values().forEach(cons -> {
-            sb.append("  Группировка '").append(cons.getConstellationName())
+        allConstellations.forEach(cons -> {
+            sb.append("  Группировка '").append(cons.getName())
                     .append("': спутников: ").append(cons.getSatellites().size()).append("\n");
             cons.getSatellites().forEach(sat ->
                     sb.append("    - ").append(sat.getName())
