@@ -8,6 +8,7 @@ public interface ConstellationService {
     SatelliteConstellation getConstellationByName(String constellationName);
     SatelliteConstellation getConstellationById(Long id);
     List<SatelliteConstellation> getAllConstellations();
+    List<SatelliteConstellation> getAllConstellationsWithSatellites();
     void deleteConstellation(Long id);
     void deleteConstellationByName(String name);
     void addSatelliteToConstellation(Long constellationId, Long satelliteId);

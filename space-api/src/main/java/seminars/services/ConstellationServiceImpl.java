@@ -56,6 +56,11 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    public List<SatelliteConstellation> getAllConstellationsWithSatellites() {
+        return constellationRepository.findAllWithSatellites();
+    }
+
+    @Override
     public void deleteConstellation(Long id) {
         if (!constellationRepository.existsById(id)) {
             throw new SpaceOperationException("Группировка с id = " + id + " не найдена");

@@ -3,6 +3,7 @@ package seminars.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import seminars.aop.LogExecutionTime;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
@@ -52,9 +53,9 @@ public class SpaceOperationCenterService {
                 satelliteService.activateSatellite(satellite.getId());
                 satelliteService.performSatelliteMission(satellite.getId());
             }
-            default -> {
-                throw new IllegalArgumentException("Данный тип цели не поддерживается: " + missionRequest.targetType());
-            }
+            default -> throw new IllegalArgumentException("Данный тип цели не поддерживается: "
+                    + missionRequest.targetType());
+
         }
 
     }
@@ -76,8 +77,9 @@ public class SpaceOperationCenterService {
  * Возвращает общую сводку по всем группировкам и спутникам.
  * @return строка с информацией о всех группировках
  */
+    @Transactional(readOnly = true)
     public String getSystemOverview() {
-        var allConstellations = constellationService.getAllConstellations();
+        var allConstellations = constellationService.getAllConstellationsWithSatellites();
 
         StringBuilder sb = new StringBuilder("=== СИСТЕМНАЯ СВОДКА ===\n");
         sb.append("Всего группировок: ").append(allConstellations.size()).append("\n");

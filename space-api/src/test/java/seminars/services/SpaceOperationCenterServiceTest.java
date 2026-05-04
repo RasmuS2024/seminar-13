@@ -160,7 +160,7 @@ class SpaceOperationCenterServiceTest {
         Satellite satellite = new ImagingSatellite("TestSatellite", 0.8, 1.0);
         constellation.addSatellite(satellite);
 
-        when(constellationService.getAllConstellations()).thenReturn(List.of(constellation));
+        when(constellationService.getAllConstellationsWithSatellites()).thenReturn(List.of(constellation));
 
         String overview = spaceOperationCenterService.getSystemOverview();
 
