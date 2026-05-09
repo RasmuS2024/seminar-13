@@ -47,6 +47,14 @@
         - name: Checkout
           uses: actions/checkout@v5
 
+        - name: Create .env file
+          run: |
+            cat > .env << 'EOF'
+            DB_NAME=space_db_test
+            DB_USERNAME=space_user
+            DB_PASSWORD=test_password_123
+            EOF
+
         - name: Build and start services
           run: |
             docker compose up -d
