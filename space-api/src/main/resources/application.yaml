@@ -8,6 +8,7 @@ spring:
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
+      connection-init-sql: CREATE SCHEMA IF NOT EXISTS space;
       connection-timeout: 30000
       maximum-pool-size: 10
       minimum-idle: 5
