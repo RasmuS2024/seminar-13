@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: ./space-api/Dockerfile
-    #image: ghcr.io/rasmus2024/seminar1/space-api:latest
+    image: ghcr.io/rasmus2024/seminar1/space-api:latest
     container_name: space-api
     depends_on:
       postgres:
@@ -44,7 +44,7 @@ services:
     build:
       context: .
       dockerfile: ./space-scheduler/Dockerfile
-    #image: ghcr.io/rasmus2024/seminar1/space-scheduler:latest
+    image: ghcr.io/rasmus2024/seminar1/space-scheduler:latest
     container_name: space-scheduler
     depends_on:
       - space-api
