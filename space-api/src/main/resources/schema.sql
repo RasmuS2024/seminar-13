@@ -1,11 +1,11 @@
 -- satellite_constellation
-CREATE TABLE satellite_constellation (
+CREATE TABLE IF NOT EXISTS satellite_constellation (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- energy_system
-CREATE TABLE energy_system (
+CREATE TABLE IF NOT EXISTS energy_system (
     id BIGSERIAL PRIMARY KEY,
     battery_level DOUBLE PRECISION NOT NULL,
     low_battery_threshold DOUBLE PRECISION NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE energy_system (
 );
 
 -- satellite
-CREATE TABLE satellite (
+CREATE TABLE IF NOT EXISTS satellite (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
     constellation_id BIGINT REFERENCES satellite_constellation(id),
