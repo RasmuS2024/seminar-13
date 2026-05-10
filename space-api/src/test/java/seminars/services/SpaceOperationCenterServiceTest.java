@@ -9,7 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.constellations.SatelliteConstellation;
 import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.ImagingSatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 import seminars.exceptions.SpaceOperationException;
 
 import java.util.List;
@@ -44,7 +45,7 @@ class SpaceOperationCenterServiceTest {
     void addSatelliteCreatesConstellationAndAddsSatellites() {
         String constellationName = "TestConstellation";
         String satName = "TestSatellite";
-        SatelliteParam param = new seminars.domains.satellites.ImagingSatelliteParam(satName, 0.8, 1.0);
+        SatelliteParam param = new ImagingSatelliteParam(satName, 0.8, 1.0);
         var request = new seminars.domains.satellites.requests.AddSatelliteRequest(
                 constellationName, List.of(param));
 

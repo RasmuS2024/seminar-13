@@ -8,7 +8,7 @@ import seminars.aop.LogExecutionTime;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 
 @Slf4j
 @RequiredArgsConstructor

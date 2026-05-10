@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "energy_system")
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class EnergySystem {
     @Id

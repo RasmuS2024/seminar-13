@@ -2,9 +2,9 @@ package seminars.factory.impl;
 
 import org.springframework.stereotype.Component;
 import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 import seminars.domains.satellites.SatelliteType;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;

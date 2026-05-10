@@ -7,13 +7,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 import seminars.domains.satellites.SatelliteType;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 import seminars.repository.SatelliteRepository;
+import seminars.repository.EnergySystemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ class SatelliteServiceTest {
 
     @Mock
     private SatelliteRepository satelliteRepository;
+
+    @Mock
+    private EnergySystemRepository energySystemRepository;
 
     @Mock
     private SatelliteFactory imagingFactory;

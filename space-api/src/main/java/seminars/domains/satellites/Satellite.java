@@ -3,8 +3,8 @@ package seminars.domains.satellites;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,7 @@ import seminars.domains.constellations.SatelliteConstellation;
 @DiscriminatorColumn(name = "satellite_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Satellite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

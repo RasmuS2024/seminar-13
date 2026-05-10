@@ -17,7 +17,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
+      schema-locations: classpath:schema.sql
     show-sql: false
     open-in-view: false
     properties:
@@ -29,3 +30,9 @@ spring:
         order_inserts: true
         order_updates: true
         default_schema: space
+
+  sql:
+    init:
+      mode: {SPRING_SQL_INIT_MODE: always}
+      schema-locations: classpath:schema.sql
+      continue-on-error: false

@@ -1,8 +1,9 @@
-package seminars.domains.satellites;
+package seminars.domains.satellites.params;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import seminars.domains.satellites.SatelliteType;
 
 import static seminars.constants.ImagingSatelliteConstants.DEFAULT_RESOLUTION;
 

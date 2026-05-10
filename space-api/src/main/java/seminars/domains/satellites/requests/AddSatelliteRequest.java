@@ -1,6 +1,6 @@
 package seminars.domains.satellites.requests;
 
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 import java.util.List;
 
 /**

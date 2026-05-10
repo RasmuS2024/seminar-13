@@ -1,7 +1,7 @@
 package seminars.services;
 
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 
 import java.util.List;
 
@@ -16,4 +16,5 @@ public interface SatelliteService {
     void deActivateSatellite(Long satelliteId);
     void performSatelliteMission(Long satelliteId);
     String getSatelliteStatus(Long satelliteId);
+    Satellite updateSatellite(Long id, SatelliteParam param);
 }

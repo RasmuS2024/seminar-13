@@ -11,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import seminars.domains.satellites.CommunicationSatellite;
-import seminars.domains.satellites.CommunicationSatelliteParam;
+import seminars.domains.satellites.params.CommunicationSatelliteParam;
 import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.ImagingSatelliteParam;
+import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
 import seminars.factory.impl.CommunicationSatelliteFactory;
 import seminars.factory.impl.ImagingSatelliteFactory;

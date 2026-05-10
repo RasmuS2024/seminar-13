@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: ./space-api/Dockerfile
-    image: ghcr.io/rasmus2024/seminar1/space-api:latest
+    #image: ghcr.io/rasmus2024/seminar1/space-api:latest
     container_name: space-api
     depends_on:
       postgres:
@@ -34,7 +34,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/${DB_NAME}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
     ports:
       - "8080:8080"
     networks:
@@ -44,7 +44,7 @@ services:
     build:
       context: .
       dockerfile: ./space-scheduler/Dockerfile
-    image: ghcr.io/rasmus2024/seminar1/space-scheduler:latest
+    #image: ghcr.io/rasmus2024/seminar1/space-scheduler:latest
     container_name: space-scheduler
     depends_on:
       - space-api

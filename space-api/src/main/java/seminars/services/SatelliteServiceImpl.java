@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.SatelliteParam;
+import seminars.domains.satellites.params.SatelliteParam;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 import seminars.repository.SatelliteRepository;
@@ -114,5 +114,13 @@ public class SatelliteServiceImpl implements SatelliteService {
         String status = satellite.getState().toString();
         log.info("{}", status);
         return status;
+    }
+
+    @Override
+    public Satellite updateSatellite(Long id, SatelliteParam param) {
+        Satellite satellite = getSatelliteById(id);
+        satellite.setName(param.getName());
+        log.info("Обновлен спутник с id: {}", id);
+        return satelliteRepository.save(satellite);
     }
 }
