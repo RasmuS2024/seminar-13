@@ -2,13 +2,13 @@
 CREATE SCHEMA IF NOT EXISTS space;
 
 -- satellite_constellation
-CREATE TABLE space.satellite_constellation (
+CREATE TABLE satellite_constellation (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
 -- energy_system
-CREATE TABLE space.energy_system (
+CREATE TABLE energy_system (
     id BIGSERIAL PRIMARY KEY,
     battery_level DOUBLE PRECISION NOT NULL,
     low_battery_threshold DOUBLE PRECISION NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE space.energy_system (
 );
 
 -- satellite
-CREATE TABLE space.satellite (
+CREATE TABLE satellite (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
     constellation_id BIGINT REFERENCES space.satellite_constellation(id),
