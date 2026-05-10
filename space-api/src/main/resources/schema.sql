@@ -27,6 +27,20 @@ CREATE TABLE IF NOT EXISTS satellite (
     satellite_type VARCHAR(50)
 );
 
-CREATE INDEX idx_satellite_constellation_id ON satellite(constellation_id);
-CREATE INDEX idx_satellite_is_active ON satellite(is_active);
-CREATE INDEX idx_satellite_type ON satellite(satellite_type);
+CREATE INDEX IF NOT EXISTS idx_satellite_constellation_id ON satellite(constellation_id);
+CREATE INDEX IF NOT EXISTS idx_satellite_is_active ON satellite(is_active);
+CREATE INDEX IF NOT EXISTS idx_satellite_type ON satellite(satellite_type);
+
+-- telemetry_history
+CREATE TABLE IF NOT EXISTS telemetry_history (
+    id BIGSERIAL PRIMARY KEY,
+    satellite_id BIGINT REFERENCES satellite(id),
+    device_id VARCHAR(255) NOT NULL,
+    cpu_temperature DOUBLE PRECISION,
+    external_temperature DOUBLE PRECISION,
+    timestamp BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_telemetry_satellite_id ON telemetry_history(satellite_id);
+CREATE INDEX IF NOT EXISTS idx_telemetry_timestamp ON telemetry_history(timestamp);

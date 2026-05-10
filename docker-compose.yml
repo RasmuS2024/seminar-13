@@ -56,6 +56,28 @@ services:
     networks:
       - app-network
 
+  telemetry-service:
+    build:
+      context: ./telemetry-service
+      dockerfile: Dockerfile
+    container_name: telemetry-service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT=9091
+      - DB_HOST=postgres
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - TELEMETRY_SERVICE_HOST=telemetry-service
+      - TELEMETRY_SERVICE_PORT=9090
+    ports:
+      - "9091:9091"
+    networks:
+      - app-network
+
+
 volumes:
   postgres_data:
     name: space-postgres-data

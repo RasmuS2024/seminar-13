@@ -19,6 +19,7 @@ import java.util.List;
 public class SatelliteServiceImpl implements SatelliteService {
     private final List<SatelliteFactory> factories;
     private final SatelliteRepository satelliteRepository;
+    private final TelemetryService telemetryService;
 
     @Override
     public Satellite createSatellite(SatelliteParam param) {
@@ -75,6 +76,7 @@ public class SatelliteServiceImpl implements SatelliteService {
 
     @Override
     public void deleteSatellite(Long id) {
+        telemetryService.stopMonitoring(id);
         if (!satelliteRepository.existsById(id)) {
             throw new SpaceOperationException("Спутник с id = " + id + " не найден");
         }
@@ -88,7 +90,9 @@ public class SatelliteServiceImpl implements SatelliteService {
         boolean activated = satellite.activate();
 
         if (activated) {
-            log.info("Спутник {} активирован", satellite.getName());
+            String deviceId = "satellite-" + satelliteId;
+            telemetryService.startMonitoring(satelliteId, deviceId);
+            log.info("Спутник {} активирован, телеметрия запущена", satellite.getName());
         } else {
             log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
         }
@@ -98,7 +102,8 @@ public class SatelliteServiceImpl implements SatelliteService {
     public void deActivateSatellite(Long satelliteId) {
         Satellite satellite = getSatelliteById(satelliteId);
         satellite.deActivate();
-        log.info("Спутник {} деактивирован", satellite.getName());
+        telemetryService.stopMonitoring(satelliteId);
+        log.info("Спутник {} деактивирован, телеметрия остановлена", satellite.getName());
     }
 
     @Override

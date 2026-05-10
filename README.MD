@@ -14,9 +14,9 @@
  - 
 
 
-![Java CI](https://github.com/RasmuS2024/seminar-9.2/actions/workflows/main.yml/badge.svg)
+![Java CI](https://github.com/RasmuS2024/seminar-10/actions/workflows/main.yml/badge.svg)
 
-![Docker Build](https://github.com/RasmuS2024/seminar-9.2/actions/workflows/deploy.yml/badge.svg)
+![Docker Build](https://github.com/RasmuS2024/seminar-10/actions/workflows/deploy.yml/badge.svg)
 
 
 

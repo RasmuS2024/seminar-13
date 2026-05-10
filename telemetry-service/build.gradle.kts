@@ -3,12 +3,8 @@ plugins {
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
-    id("checkstyle")
     id("com.google.protobuf") version "0.9.5"
 }
-
-ext["spring-framework.version"] = "6.2.11"
-ext["grpcVersion"] = "1.68.1"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -17,31 +13,37 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set("grpcVersion", "1.68.1")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("io.grpc:grpc-bom:${ext.get("grpcVersion")}")
+    }
+}
+
 dependencies {
-    implementation(platform("io.grpc:grpc-bom:1.68.1"))
-    
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
-    implementation ("org.springframework.boot:spring-boot-starter-web")
-    implementation ("org.springframework.boot:spring-boot-starter-actuator")
-    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation ("org.springframework.boot:spring-boot-starter-validation")
-
-    implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
-
-    implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
+    implementation("net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE")
     implementation("io.grpc:grpc-protobuf")
     implementation("io.grpc:grpc-stub")
-    implementation("io.grpc:grpc-netty-shaded")
+    implementation("io.grpc:grpc-netty")
+    implementation("javax.annotation:javax.annotation-api:1.3.2")
+
     implementation("com.google.protobuf:protobuf-java:3.25.5")
-    compileOnly ("org.apache.tomcat:annotations-api:6.0.53")
+    implementation("com.google.protobuf:protobuf-java-util:3.25.5")
+
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     compileOnly ("org.projectlombok:lombok")
+    compileOnly("org.apache.tomcat:annotations-api:6.0.53")
+
     annotationProcessor ("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-    runtimeOnly("org.postgresql:postgresql")
 }
 
 protobuf {

@@ -1,6 +1,12 @@
 server:
   port: ${SERVER_PORT:8080}
 
+grpc:
+  client:
+    telemetry-service:
+      address: ${TELEMETRY_SERVICE_HOST:telemetry-service}:${TELEMETRY_SERVICE_PORT:9091}
+      negotiationType: plaintext
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}
@@ -17,7 +23,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-      schema-locations: classpath:schema.sql
     show-sql: false
     open-in-view: false
     properties:

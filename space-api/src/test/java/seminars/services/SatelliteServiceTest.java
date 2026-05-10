@@ -48,13 +48,16 @@ class SatelliteServiceTest {
     @Mock
     private SatelliteFactory imagingFactory;
 
+    @Mock
+    private TelemetryService telemetryService;
+
     private SatelliteServiceImpl satelliteService;
 
     @BeforeEach
     void setUp() {
         List<SatelliteFactory> factories = new ArrayList<>();
         factories.add(imagingFactory);
-        satelliteService = new SatelliteServiceImpl(factories, satelliteRepository);
+        satelliteService = new SatelliteServiceImpl(factories, satelliteRepository, telemetryService);
     }
 
     @Test

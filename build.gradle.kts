@@ -5,6 +5,8 @@ plugins {
     id("checkstyle")
 }
 
+val grpcVersion = "1.68.1"
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
