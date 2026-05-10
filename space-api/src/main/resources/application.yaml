@@ -33,6 +33,6 @@ spring:
 
   sql:
     init:
-      mode: {SPRING_SQL_INIT_MODE: always}
+      mode: {SPRING_SQL_INIT_MODE: none}
       schema-locations: classpath:schema.sql
       continue-on-error: false
