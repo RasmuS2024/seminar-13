@@ -35,10 +35,10 @@
 
         - name: Tag and push with commit SHA
           run: |
-            docker tag ghcr.io/rasmus2024/seminar1/space-api:latest ghcr.io/rasmus2024/seminar1/space-api:${{ github.sha }}
-            docker tag ghcr.io/rasmus2024/seminar1/space-scheduler:latest ghcr.io/rasmus2024/seminar1/space-scheduler:${{ github.sha }}
-            docker push ghcr.io/rasmus2024/seminar1/space-api:${{ github.sha }}
-            docker push ghcr.io/rasmus2024/seminar1/space-scheduler:${{ github.sha }}
+            docker tag ghcr.io/rasmus2024/seminar10/space-api:latest ghcr.io/rasmus2024/seminar10/space-api:${{ github.sha }}
+            docker tag ghcr.io/rasmus2024/seminar10/space-scheduler:latest ghcr.io/rasmus2024/seminar10/space-scheduler:${{ github.sha }}
+            docker push ghcr.io/rasmus2024/seminar10/space-api:${{ github.sha }}
+            docker push ghcr.io/rasmus2024/seminar10/space-scheduler:${{ github.sha }}
 
     test-compose:
       needs: build-and-push
