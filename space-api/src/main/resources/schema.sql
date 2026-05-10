@@ -1,6 +1,3 @@
--- Создать схему space
-CREATE SCHEMA IF NOT EXISTS space;
-
 -- satellite_constellation
 CREATE TABLE satellite_constellation (
     id BIGSERIAL PRIMARY KEY,
@@ -20,12 +17,12 @@ CREATE TABLE energy_system (
 CREATE TABLE satellite (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
-    constellation_id BIGINT REFERENCES space.satellite_constellation(id),
+    constellation_id BIGINT REFERENCES satellite_constellation(id),
     state VARCHAR(50),
-    energy_id BIGINT UNIQUE REFERENCES space.energy_system(id),
+    energy_id BIGINT UNIQUE REFERENCES energy_system(id),
     satellite_type VARCHAR(50)
 );
 
-CREATE INDEX idx_satellite_constellation_id ON space.satellite(constellation_id);
-CREATE INDEX idx_satellite_state ON space.satellite(state);
-CREATE INDEX idx_satellite_type ON space.satellite(satellite_type);
+CREATE INDEX idx_satellite_constellation_id ON satellite(constellation_id);
+CREATE INDEX idx_satellite_state ON satellite(state);
+CREATE INDEX idx_satellite_type ON satellite(satellite_type);
