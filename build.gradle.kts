@@ -2,7 +2,6 @@ plugins {
     id("java")
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
-    id("checkstyle")
 }
 
 val grpcVersion = "1.68.1"
@@ -14,19 +13,10 @@ repositories {
     mavenCentral()
 }
 
-checkstyle {
-        toolVersion = "10.12.5"
-        configFile = rootProject.file("config/checkstyle/checkstyle.xml")
-}
-
 tasks.test {
     useJUnitPlatform()
 }
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
 }

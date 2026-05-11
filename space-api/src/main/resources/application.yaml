@@ -4,7 +4,7 @@ server:
 grpc:
   client:
     telemetry-service:
-      address: ${TELEMETRY_SERVICE_HOST:telemetry-service}:${TELEMETRY_SERVICE_PORT:9091}
+      address: ${TELEMETRY_SERVICE_HOST:telemetry-service}:${TELEMETRY_SERVICE_PORT:9090}
       negotiationType: plaintext
 
 spring:

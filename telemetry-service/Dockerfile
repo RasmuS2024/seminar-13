@@ -19,6 +19,7 @@ COPY --from=build /app/app.jar app.jar
 RUN chown -R appuser:appgroup /app
 USER appuser
 EXPOSE 9091
+EXPOSE 9090
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:9091/actuator/health || exit 1
 ENTRYPOINT ["java", "-jar", "app.jar"]

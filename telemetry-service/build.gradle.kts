@@ -44,6 +44,8 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito:mockito-core:5.14.2")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.14.2")
 }
 
 protobuf {
@@ -89,8 +91,4 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
-}
-
-tasks.withType<Checkstyle>().configureEach {
-    enabled = false
 }

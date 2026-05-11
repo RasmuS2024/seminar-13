@@ -3,7 +3,6 @@ plugins {
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
-    id("checkstyle")
     id("com.google.protobuf") version "0.9.5"
 }
 
@@ -83,12 +82,4 @@ tasks.test {
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
-}
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-}
-
-tasks.withType<Checkstyle>().configureEach {
-    enabled = false
 }

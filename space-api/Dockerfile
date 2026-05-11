@@ -6,7 +6,7 @@ RUN chmod +x gradlew
 COPY gradle ./gradle
 COPY space-api/build.gradle.kts ./space-api/
 COPY space-api/src ./space-api/src
-COPY config/checkstyle ./config/checkstyle
+COPY config ./config
 
 RUN ./gradlew :space-api:build -x test --no-daemon && \
     cp $(find /app/space-api/build/libs -name "*.jar" -not -name "*plain*" | head -1) /app/app.jar

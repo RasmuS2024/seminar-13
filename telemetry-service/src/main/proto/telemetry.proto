@@ -12,8 +12,8 @@ service TelemetryService {
 message TelemetryRequest {
   string device_id = 1;
   repeated string metrics = 2;
-  int32 interval_ms = 2000;
-  optional int32 duration_ms = 3000;
+  int32 interval_ms = 3;
+  optional int32 duration_ms = 4;
 }
 
 message TelemetryUpdate {

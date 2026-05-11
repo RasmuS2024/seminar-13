@@ -7,10 +7,8 @@ import org.example.telemetry.proto.MetricValue;
 import org.example.telemetry.proto.TelemetryRequest;
 import org.example.telemetry.proto.TelemetryServiceGrpc;
 import org.example.telemetry.proto.TelemetryUpdate;
-import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,39 +18,41 @@ public class TelemetryServiceImpl extends TelemetryServiceGrpc.TelemetryServiceI
 
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-    private final Map<String, StreamObserver<TelemetryUpdate>> activeStreams = new ConcurrentHashMap<>();
+    boolean isShutdown() {
+        return executor.isShutdown();
+    }
+
+    private static final List<EmulatedSatellite> SATELLITES = List.of(
+            new EmulatedSatellite("emulated-satellite-1", "Космос-1"),
+            new EmulatedSatellite("emulated-satellite-2", "Космос-2"),
+            new EmulatedSatellite("emulated-satellite-3", "Космос-3")
+    );
 
     @Override
     public void streamTelemetry(TelemetryRequest request,
                                 StreamObserver<TelemetryUpdate> responseObserver) {
-        String deviceId = request.getDeviceId();
-        int intervalMs = request.getIntervalMs();
-
-        activeStreams.put(deviceId, responseObserver);
-
         executor.scheduleAtFixedRate(() -> {
-            StreamObserver<TelemetryUpdate> observer = activeStreams.get(deviceId);
-            if (observer != null) {
-                double temp = Math.random() * 30 + 15;
-                double externalTemp = Math.random() * 50 - 40;
+            for (EmulatedSatellite satellite : SATELLITES) {
+                satellite.updateTemperatures();
 
                 TelemetryUpdate update = TelemetryUpdate.newBuilder()
-                        .setDeviceId(deviceId)
+                        .setDeviceId(satellite.getId())
                         .setTimestamp(System.currentTimeMillis())
+                        .putMetrics("satellite_name", MetricValue.newBuilder()
+                                .setStringValue(satellite.getName()).build())
                         .putMetrics("cpu_temperature", MetricValue.newBuilder()
-                                .setDoubleValue(temp).build())
+                                .setDoubleValue(satellite.getInternalTemp()).build())
                         .putMetrics("external_temperature", MetricValue.newBuilder()
-                                .setDoubleValue(externalTemp).build())
+                                .setDoubleValue(satellite.getExternalTemp()).build())
                         .build();
 
-                observer.onNext(update);
+                responseObserver.onNext(update);
             }
-        }, 0, intervalMs, TimeUnit.MILLISECONDS);
+        }, 0, 2000, TimeUnit.MILLISECONDS);
     }
 
     @PreDestroy
     public void shutdown() {
-        activeStreams.clear();
         executor.shutdown();
         try {
             if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
@@ -61,6 +61,39 @@ public class TelemetryServiceImpl extends TelemetryServiceGrpc.TelemetryServiceI
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
+        }
+    }
+
+    private static class EmulatedSatellite {
+        private final String id;
+        private final String name;
+        private double internalTemp;
+        private double externalTemp;
+
+        EmulatedSatellite(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public double getInternalTemp() {
+            return internalTemp;
+        }
+
+        public double getExternalTemp() {
+            return externalTemp;
+        }
+
+        public void updateTemperatures() {
+            this.internalTemp = Math.random() * 30 + 15;
+            this.externalTemp = Math.random() * 50 - 40;
         }
     }
 }

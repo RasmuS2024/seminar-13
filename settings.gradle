@@ -1,4 +1,0 @@
-rootProject.name = 'space-system'
-include 'space-api'
-include 'space-scheduler'
-include 'telemetry-service'

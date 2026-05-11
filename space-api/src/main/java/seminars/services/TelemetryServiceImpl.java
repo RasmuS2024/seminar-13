@@ -125,7 +125,7 @@ public class TelemetryServiceImpl implements TelemetryService {
                         .build();
 
                 telemetryHistoryRepository.save(history);
-                log.debug("Saved telemetry for satellite {}: cpu={}, external={}", 
+                log.debug("Saved telemetry for satellite {}: cpu={}, external={}",
                         satelliteId, cpuTemp, externalTemp);
             }
         } catch (Exception e) {

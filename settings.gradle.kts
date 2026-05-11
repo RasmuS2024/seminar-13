@@ -1,4 +1,4 @@
-rootProject.name = "space-program"
+rootProject.name = "space-system"
 
 include("space-api")
 include("telemetry-service")

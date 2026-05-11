@@ -49,10 +49,13 @@
         <property name="fileNamePattern" value="module\-info\.java$"/>
     </module>
 
+    <module name="BeforeExecutionExclusionFileFilter">
+        <property name="fileNamePattern" value="[\\/]build[\\/]generated[\\/].*\.java$"/>
+    </module>
+
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
     <module name="SuppressionFilter">
-        <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
-                  default="checkstyle-suppressions.xml" />
+        <property name="file" value="checkstyle-suppressions.xml"/>
         <property name="optional" value="true"/>
     </module>
 

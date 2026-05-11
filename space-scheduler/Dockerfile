@@ -6,7 +6,7 @@ RUN chmod +x gradlew
 COPY gradle ./gradle
 COPY space-scheduler/build.gradle.kts ./space-scheduler/
 COPY space-scheduler/src ./space-scheduler/src
-COPY config/checkstyle ./config/checkstyle
+COPY config ./config
 
 RUN ./gradlew :space-scheduler:build -x test --no-daemon && \
     cp $(find /app/space-scheduler/build/libs -name "*.jar" -not -name "*plain*" | head -1) /app/app.jar
