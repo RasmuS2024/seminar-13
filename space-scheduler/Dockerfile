@@ -1,14 +1,14 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle gradlew ./
+COPY build.gradle.kts settings.gradle.kts gradlew ./
 RUN chmod +x gradlew
 COPY gradle ./gradle
 COPY space-scheduler/build.gradle.kts ./space-scheduler/
 COPY space-scheduler/src ./space-scheduler/src
 COPY config ./config
 
-RUN ./gradlew :space-scheduler:build -x test --no-daemon && \
+RUN ./gradlew :space-scheduler:bootJar -x test --no-daemon && \
     cp $(find /app/space-scheduler/build/libs -name "*.jar" -not -name "*plain*" | head -1) /app/app.jar
 
 FROM eclipse-temurin:21-jre-alpine AS runtime
