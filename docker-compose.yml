@@ -24,6 +24,8 @@ services:
     build:
       context: .
       dockerfile: ./space-api/Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     image: ghcr.io/rasmus2024/seminar10/space-api:latest
     container_name: space-api
     depends_on:
@@ -45,6 +47,8 @@ services:
     build:
       context: .
       dockerfile: ./space-scheduler/Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     image: ghcr.io/rasmus2024/seminar10/space-scheduler:latest
     container_name: space-scheduler
     depends_on:
@@ -61,6 +65,8 @@ services:
     build:
       context: ./telemetry-service
       dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     container_name: telemetry-service
     depends_on:
       postgres:
