@@ -30,12 +30,11 @@ public class TelemetryServiceImpl implements TelemetryService {
 
     private final Map<Long, StreamObserver<TelemetryUpdate>> activeObservers = new ConcurrentHashMap<>();
     private final Map<Long, AtomicBoolean> monitoringFlags = new ConcurrentHashMap<>();
-    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     @Override
     public void startMonitoring(Long satelliteId, String deviceId) {
         if (monitoringFlags.containsKey(satelliteId) && monitoringFlags.get(satelliteId).get()) {
-            log.warn("Telemetry monitoring already active for satellite {}", satelliteId);
+            log.warn("Телеметрия запущена для спутника {}", satelliteId);
             return;
         }
 
@@ -53,7 +52,7 @@ public class TelemetryServiceImpl implements TelemetryService {
 
             @Override
             public void onError(Throwable t) {
-                log.error("gRPC error for satellite {}: {}", satelliteId, t.getMessage());
+                log.error("Ошибка gRPC для сптуника {}: {}", satelliteId, t.getMessage());
                 isActive.set(false);
                 monitoringFlags.remove(satelliteId);
                 activeObservers.remove(satelliteId);
@@ -61,7 +60,7 @@ public class TelemetryServiceImpl implements TelemetryService {
 
             @Override
             public void onCompleted() {
-                log.info("Telemetry stream completed for satellite {}", satelliteId);
+                log.info("Телеметрия остановлена для спутникa {}", satelliteId);
                 isActive.set(false);
                 monitoringFlags.remove(satelliteId);
                 activeObservers.remove(satelliteId);
@@ -76,7 +75,7 @@ public class TelemetryServiceImpl implements TelemetryService {
                 .build();
 
         telemetryStub.streamTelemetry(request, observer);
-        log.info("Started telemetry monitoring for satellite {} with device {}", satelliteId, deviceId);
+        log.info("Запущена телеметрия для спутника: {} с устройством {}", satelliteId, deviceId);
     }
 
     @Override
@@ -88,7 +87,7 @@ public class TelemetryServiceImpl implements TelemetryService {
 
         StreamObserver<TelemetryUpdate> observer = activeObservers.remove(satelliteId);
         if (observer != null) {
-            log.info("Stopped telemetry monitoring for satellite {}", satelliteId);
+            log.info("Телеметря остановлена для спутника {}", satelliteId);
         }
 
         monitoringFlags.remove(satelliteId);
@@ -125,11 +124,11 @@ public class TelemetryServiceImpl implements TelemetryService {
                         .build();
 
                 telemetryHistoryRepository.save(history);
-                log.debug("Saved telemetry for satellite {}: cpu={}, external={}",
+                log.debug("Сохранены данные о спутнике {}: cpu={}, external={}",
                         satelliteId, cpuTemp, externalTemp);
             }
         } catch (Exception e) {
-            log.error("Failed to process telemetry update for satellite {}: {}", satelliteId, e.getMessage());
+            log.error("Ошибка получения телеметрии от спутника {}: {}", satelliteId, e.getMessage());
         }
     }
 }

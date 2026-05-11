@@ -92,7 +92,7 @@ public class SatelliteServiceImpl implements SatelliteService {
         if (activated) {
             String deviceId = "satellite-" + satelliteId;
             telemetryService.startMonitoring(satelliteId, deviceId);
-            log.info("Спутник {} активирован, телеметрия запущена", satellite.getName());
+            log.info("Спутник {} активирован", satellite.getName());
         } else {
             log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
         }
@@ -103,7 +103,7 @@ public class SatelliteServiceImpl implements SatelliteService {
         Satellite satellite = getSatelliteById(satelliteId);
         satellite.deActivate();
         telemetryService.stopMonitoring(satelliteId);
-        log.info("Спутник {} деактивирован, телеметрия остановлена", satellite.getName());
+        log.info("Спутник {} деактивирован", satellite.getName());
     }
 
     @Override

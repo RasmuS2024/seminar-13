@@ -1,14 +1,15 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle gradlew ./
+COPY build.gradle.kts settings.gradle.kts gradlew ./
 RUN chmod +x gradlew
 COPY gradle ./gradle
 COPY space-api/build.gradle.kts ./space-api/
+COPY space-api/settings.gradle.kts ./space-api/
 COPY space-api/src ./space-api/src
 COPY config ./config
 
-RUN ./gradlew :space-api:build -x test --no-daemon && \
+RUN ./gradlew :space-api:bootJar -x test --no-daemon && \
     cp $(find /app/space-api/build/libs -name "*.jar" -not -name "*plain*" | head -1) /app/app.jar
 
 FROM eclipse-temurin:21-jre-alpine AS runtime

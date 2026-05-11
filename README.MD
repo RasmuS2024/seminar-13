@@ -6,14 +6,19 @@
 Проект содержит 3 подпроекта:
 - space-api (основной сервис), запускается на порту 8080;
 - space-scheduler (планировщик), запускается на порту 8081;
-- telemetry-service (сервис телеметрии).
+- telemetry-service (сервис телеметрии), запускается на порту 9091, сервис gRPC 9090.
+
+А также сервис PostgreSQL.
 
 Реализовано:
- - 
- - 
- - 
+ - сервис телеметрии;
+ - создана таблица в БД для записи телеметрии;
+ - при активации спутника стартует телеметрия и начинает запись в БД (со стороны сервиса телеметрии конечно нужно доработать, сделать чтобы передавалась на конкретные спутники).
+ - общий Docker-compose файл.
 
+Протестировано через Swagger UI, проверена запись в БД.
 
+GitHub Actions:
 ![Java CI](https://github.com/RasmuS2024/seminar-10/actions/workflows/main.yml/badge.svg)
 
 ![Docker Build](https://github.com/RasmuS2024/seminar-10/actions/workflows/deploy.yml/badge.svg)

@@ -67,10 +67,6 @@ services:
         condition: service_healthy
     environment:
       - SERVER_PORT=9091
-      - DB_HOST=postgres
-      - DB_NAME=${DB_NAME}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
       - TELEMETRY_SERVICE_HOST=telemetry-service
       - TELEMETRY_SERVICE_PORT=9090
     ports:
@@ -78,7 +74,6 @@ services:
       - "9090:9090"
     networks:
       - app-network
-
 
 volumes:
   postgres_data:
