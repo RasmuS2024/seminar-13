@@ -2,10 +2,13 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 import seminars.repository.SatelliteRepository;
@@ -53,7 +56,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     @Override
     public Satellite getSatelliteById(Long id) {
         return satelliteRepository.findById(id)
-                .orElseThrow(() -> new SpaceOperationException("Спутник не найден по id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Спутник не найден по id: " + id));
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +66,7 @@ public class SatelliteServiceImpl implements SatelliteService {
             throw new SpaceOperationException("Имя спутника не может быть пустым");
         }
         return satelliteRepository.findByName(name)
-                .orElseThrow(() -> new SpaceOperationException("Спутник не найден по имени: " + name));
+                .orElseThrow(() -> new ResourceNotFoundException("Спутник не найден по имени: " + name));
     }
 
     @Transactional(readOnly = true)
@@ -82,7 +85,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     public void deleteSatellite(Long id) {
         telemetryService.stopMonitoring(id);
         if (!satelliteRepository.existsById(id)) {
-            throw new SpaceOperationException("Спутник с id = " + id + " не найден");
+            throw new ResourceNotFoundException("Спутник с id = " + id + " не найден");
         }
         satelliteRepository.deleteById(id);
         log.info("Удален спутник с id: {}", id);

@@ -1,5 +1,6 @@
 package seminars.controllers;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +35,16 @@ public class ConstellationController {
     }
 
     @GetMapping("/{id}")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<SatelliteConstellation> getConstellationById(@PathVariable Long id) {
         SatelliteConstellation constellation = constellationService.getConstellationById(id);
         return ResponseEntity.ok(constellation);
     }
 
     @GetMapping("/{id}/status")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<String> getConstellationStatus(@PathVariable Long id) {
         SatelliteConstellation constellation = constellationService.getConstellationById(id);
         String status = constellation.getAllSatellitesStatuses();
@@ -47,24 +52,32 @@ public class ConstellationController {
     }
 
     @PostMapping("/{name}/activate")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<Void> activateAllSatellites(@PathVariable String name) {
         constellationService.activateAllSatellites(name);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{name}/mission")
+    @ApiResponse(responseCode = "200")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<Void> executeConstellationMission(@PathVariable String name) {
         constellationService.executeConstellationMission(name);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/name/{name}")
+    @ApiResponse(responseCode = "204")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<Void> deleteConstellationByName(@PathVariable String name) {
         constellationService.deleteConstellationByName(name);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "204")
+    @ApiResponse(responseCode = "404", description = "Группировка не найдена")
     public ResponseEntity<Void> deleteConstellationById(@PathVariable Long id) {
         constellationService.deleteConstellation(id);
         return ResponseEntity.noContent().build();

@@ -9,15 +9,17 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import seminars.domains.satellites.EnergySystem;
+import seminars.domains.satellites.requests.EnergySystemUpdateRequest;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.services.EnergySystemService;
 
-import java.util.Map;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,26 +37,24 @@ class EnergySystemControllerTest {
     private EnergySystemService energySystemService;
 
     @Test
-    @DisplayName("POST /api/energy-systems — создание, возвращает 201")
-    void shouldCreateEnergySystemReturn201() throws Exception {
-        EnergySystem energySystem = EnergySystem.builder()
-                .id(1L)
-                .batteryLevel(0.85)
-                .lowBatteryThreshold(0.2)
-                .maxBattery(1.0)
-                .minBattery(0.0)
-                .build();
+    @DisplayName("GET /api/energy-systems — получить все системы, возвращает 200")
+    void shouldGetAllEnergySystemsReturn200() throws Exception {
+        List<EnergySystem> systems = List.of(
+                EnergySystem.builder().id(1L).batteryLevel(0.85).lowBatteryThreshold(0.2).maxBattery(1.0).minBattery(0.0).build(),
+                EnergySystem.builder().id(2L).batteryLevel(0.50).lowBatteryThreshold(0.2).maxBattery(1.0).minBattery(0.0).build()
+        );
 
-        when(energySystemService.createEnergySystem(0.85)).thenReturn(energySystem);
+        when(energySystemService.getAllEnergySystems()).thenReturn(systems);
 
-        mockMvc.perform(post("/api/energy-systems")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("batteryLevel", 0.85))))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.batteryLevel").value(0.85));
+        mockMvc.perform(get("/api/energy-systems"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].batteryLevel").value(0.85))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].batteryLevel").value(0.50));
 
-        verify(energySystemService).createEnergySystem(0.85);
+        verify(energySystemService).getAllEnergySystems();
     }
 
     @Test
@@ -79,52 +79,37 @@ class EnergySystemControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/energy-systems/{id} — не найден, возвращает 500")
-    void shouldGetEnergySystemByIdReturn500WhenNotFound() throws Exception {
+    @DisplayName("GET /api/energy-systems/{id} — не найден, возвращает 404")
+    void shouldGetEnergySystemByIdReturn404WhenNotFound() throws Exception {
         when(energySystemService.getEnergySystemById(999L))
-                .thenThrow(new SpaceOperationException("Энергосистема не найдена по id: 999"));
+                .thenThrow(new ResourceNotFoundException("Энергосистема не найдена по id: 999"));
 
         mockMvc.perform(get("/api/energy-systems/999"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isNotFound());
     }
 
     @Test
-    @DisplayName("POST /api/energy-systems/{id}/consume — успешное потребление")
-    void shouldConsumeEnergyReturnSuccess() throws Exception {
-        when(energySystemService.consumeEnergy(1L, 10.0)).thenReturn(true);
+    @DisplayName("PATCH /api/energy-systems/{id} — обновление батареи, возвращает 200")
+    void shouldUpdateEnergySystemReturn200() throws Exception {
+        EnergySystem updatedSystem = EnergySystem.builder()
+                .id(1L)
+                .batteryLevel(0.90)
+                .lowBatteryThreshold(0.2)
+                .maxBattery(1.0)
+                .minBattery(0.0)
+                .build();
 
-        mockMvc.perform(post("/api/energy-systems/1/consume")
+        when(energySystemService.updateEnergySystem(1L, 0.90)).thenReturn(updatedSystem);
+
+        EnergySystemUpdateRequest request = new EnergySystemUpdateRequest(0.90);
+
+        mockMvc.perform(patch("/api/energy-systems/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("amount", 10.0))))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true));
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.batteryLevel").value(0.90));
 
-        verify(energySystemService).consumeEnergy(1L, 10.0);
-    }
-
-    @Test
-    @DisplayName("POST /api/energy-systems/{id}/consume — недостаточно энергии")
-    void shouldConsumeEnergyReturnFalseWhenInsufficient() throws Exception {
-        when(energySystemService.consumeEnergy(1L, 100.0)).thenReturn(false);
-
-        mockMvc.perform(post("/api/energy-systems/1/consume")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(Map.of("amount", 100.0))))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(false));
-
-        verify(energySystemService).consumeEnergy(1L, 100.0);
-    }
-
-    @Test
-    @DisplayName("GET /api/energy-systems/{id}/power-status — проверка питания")
-    void shouldGetPowerStatusReturn200() throws Exception {
-        when(energySystemService.hasSufficientPower(1L)).thenReturn(true);
-
-        mockMvc.perform(get("/api/energy-systems/1/power-status"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.hasSufficientPower").value(true));
-
-        verify(energySystemService).hasSufficientPower(1L);
+        verify(energySystemService).updateEnergySystem(1L, 0.90);
     }
 }

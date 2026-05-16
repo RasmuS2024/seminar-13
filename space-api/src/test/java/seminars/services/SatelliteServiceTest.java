@@ -12,6 +12,7 @@ import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;
 import seminars.domains.satellites.SatelliteType;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 import seminars.repository.SatelliteRepository;
@@ -114,7 +115,7 @@ class SatelliteServiceTest {
     void getSatelliteByIdNotFoundThrowsException() {
         when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.empty());
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> satelliteService.getSatelliteById(SATELLITE_ID));
     }
 
@@ -203,7 +204,7 @@ class SatelliteServiceTest {
     void deleteSatelliteNotFoundThrowsException() {
         when(satelliteRepository.existsById(SATELLITE_ID)).thenReturn(false);
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> satelliteService.deleteSatellite(SATELLITE_ID));
         verify(satelliteRepository, never()).deleteById(SATELLITE_ID);
     }

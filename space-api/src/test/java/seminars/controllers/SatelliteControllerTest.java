@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import seminars.domains.satellites.CommunicationSatellite;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.CommunicationSatelliteParam;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.services.SatelliteService;
 
@@ -91,13 +92,13 @@ class SatelliteControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/satellites/{id} — не найден, возвращает 500")
-    void shouldGetSatelliteByIdReturn500WhenNotFound() throws Exception {
+    @DisplayName("GET /api/satellites/{id} — не найден, возвращает 404")
+    void shouldGetSatelliteByIdReturn404WhenNotFound() throws Exception {
         when(satelliteService.getSatelliteById(999L))
-                .thenThrow(new SpaceOperationException("Спутник не найден по id: 999"));
+                .thenThrow(new ResourceNotFoundException("Спутник не найден по id: 999"));
 
         mockMvc.perform(get("/api/satellites/999"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isNotFound());
     }
 
     @Test

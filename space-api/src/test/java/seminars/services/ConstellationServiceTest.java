@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.constellations.SatelliteConstellation;
 import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 import seminars.repository.SatelliteRepository;
@@ -104,7 +105,7 @@ class ConstellationServiceTest {
         when(constellationRepository.findByName(CONSTELLATION_NAME))
                 .thenReturn(Optional.empty());
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> constellationService.getConstellationByName(CONSTELLATION_NAME));
     }
 
@@ -124,7 +125,7 @@ class ConstellationServiceTest {
     void getConstellationByIdNotFoundThrowsException() {
         when(constellationRepository.findById(CONSTELLATION_ID)).thenReturn(Optional.empty());
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> constellationService.getConstellationById(CONSTELLATION_ID));
     }
 
@@ -156,7 +157,7 @@ class ConstellationServiceTest {
     void deleteConstellationNotFoundThrowsException() {
         when(constellationRepository.existsById(CONSTELLATION_ID)).thenReturn(false);
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> constellationService.deleteConstellation(CONSTELLATION_ID));
         verify(constellationRepository, never()).deleteById(CONSTELLATION_ID);
     }
@@ -193,7 +194,7 @@ class ConstellationServiceTest {
     void addSatelliteToConstellationWithNonExistentConstellationThrowsException() {
         when(constellationRepository.findById(CONSTELLATION_ID)).thenReturn(Optional.empty());
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> constellationService.addSatelliteToConstellation(CONSTELLATION_ID, SATELLITE_ID));
     }
 
@@ -204,7 +205,7 @@ class ConstellationServiceTest {
         when(constellationRepository.findById(CONSTELLATION_ID)).thenReturn(Optional.of(constellation));
         when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.empty());
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(ResourceNotFoundException.class,
                 () -> constellationService.addSatelliteToConstellation(CONSTELLATION_ID, SATELLITE_ID));
     }
 

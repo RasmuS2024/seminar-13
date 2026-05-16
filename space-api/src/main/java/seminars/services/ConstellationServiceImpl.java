@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.constellations.SatelliteConstellation;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 import seminars.repository.SatelliteRepository;
@@ -39,7 +40,7 @@ public class ConstellationServiceImpl implements ConstellationService {
         validateName(constellationName);
 
         return constellationRepository.findByName(constellationName)
-                .orElseThrow(() -> new SpaceOperationException("Группировка не найдена по имени: "
+                .orElseThrow(() -> new ResourceNotFoundException("Группировка не найдена по имени: "
                         + constellationName));
     }
 
@@ -47,7 +48,7 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     public SatelliteConstellation getConstellationById(Long id) {
         return constellationRepository.findById(id)
-                .orElseThrow(() -> new SpaceOperationException("Группировка не найдена по id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Группировка не найдена по id: " + id));
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +65,7 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     public void deleteConstellation(Long id) {
         if (!constellationRepository.existsById(id)) {
-            throw new SpaceOperationException("Группировка с id = " + id + " не найдена");
+            throw new ResourceNotFoundException("Группировка с id = " + id + " не найдена");
         }
         constellationRepository.deleteById(id);
         log.info("Удалена группировка с id: {}", id);
@@ -73,7 +74,7 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     public void deleteConstellationByName(String name) {
         if (!constellationRepository.existsByName(name)) {
-            throw new SpaceOperationException("Группировка с именем '" + name + "' не найдена");
+            throw new ResourceNotFoundException("Группировка с именем '" + name + "' не найдена");
         }
         constellationRepository.deleteByName(name);
         log.info("Удалена группировка с именем: {}", name);
@@ -82,9 +83,9 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     public void addSatelliteToConstellation(Long constellationId, Long satelliteId) {
         SatelliteConstellation constellation = constellationRepository.findById(constellationId)
-                .orElseThrow(() -> new SpaceOperationException("Не существует группировки c id = " + constellationId));
+                .orElseThrow(() -> new ResourceNotFoundException("Не существует группировки c id = " + constellationId));
         Satellite satellite = satelliteRepository.findById(satelliteId)
-                .orElseThrow(() -> new SpaceOperationException("Не существует спутника c id = " + satelliteId));
+                .orElseThrow(() -> new ResourceNotFoundException("Не существует спутника c id = " + satelliteId));
 
         constellation.addSatellite(satellite);
         satellite.setConstellation(constellation);
@@ -94,11 +95,12 @@ public class ConstellationServiceImpl implements ConstellationService {
 
     @Override
     public void removeSatelliteFromConstellation(String constellationName, String satelliteName) {
+        validateName(constellationName);
         SatelliteConstellation constellation = getConstellationByName(constellationName);
         Satellite satellite = constellation.getSatellites().stream()
                 .filter(sat -> sat.getName().equals(satelliteName))
                 .findFirst()
-                .orElseThrow(() -> new SpaceOperationException("Спутник не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Спутник не найден"));
         constellation.removeSatellite(satellite);
         satelliteRepository.delete(satellite);
         log.info("{} удален из группировки \"{}\"", satellite.getName(), constellation.getName());

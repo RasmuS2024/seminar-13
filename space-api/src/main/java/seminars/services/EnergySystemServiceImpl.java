@@ -6,10 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import seminars.constants.EnergySystemConstants;
 import seminars.domains.satellites.EnergySystem;
+import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.EnergySystemRepository;
+
+import java.util.List;
 
 import static seminars.constants.EnergySystemConstants.MAX_BATTERY;
 import static seminars.constants.EnergySystemConstants.MIN_BATTERY;
@@ -22,9 +27,21 @@ public class EnergySystemServiceImpl implements EnergySystemService {
     private final EnergySystemRepository energySystemRepository;
     private EnergySystemServiceImpl self;
 
-    @Autowired
-    public void setSelf(@Lazy EnergySystemServiceImpl self) {
-        this.self = self;
+    @Override
+    @Transactional(readOnly = true)
+    public List<EnergySystem> getAllEnergySystems() {
+        return energySystemRepository.findAll();
+    }
+
+    @Override
+    public EnergySystem updateEnergySystem(Long id, double batteryLevel) {
+        validateBatteryLevel(batteryLevel);
+
+        EnergySystem energySystem = self.getEnergySystemById(id);
+        energySystem.setBatteryLevel(batteryLevel);
+
+        log.info("Обновлена энергосистема id = {}, новый заряд: {}%", id, (int)(batteryLevel * 100));
+        return energySystem;
     }
 
     @Override
@@ -47,7 +64,7 @@ public class EnergySystemServiceImpl implements EnergySystemService {
     @Override
     public EnergySystem getEnergySystemById(Long id) {
         return energySystemRepository.findById(id)
-                .orElseThrow(() -> new SpaceOperationException("Энергосистема не найдена по id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Энергосистема не найдена по id: " + id));
     }
 
     @Override
