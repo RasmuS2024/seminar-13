@@ -36,6 +36,10 @@ public class SatelliteServiceImpl implements SatelliteService {
                 .findFirst()
                 .orElseThrow(() -> new SpaceOperationException("Данный тип параметров не поддерживается"));
 
+        if (satelliteRepository.findByName(param.getName()).isPresent()) {
+            throw new SpaceOperationException("Спутник с именем '" + param.getName() + "' уже существует");
+        }
+
         Satellite satellite = factory.createSatelliteWithParameter(param);
 
         log.info("Создан спутник: {} (заряд: {}%)",
@@ -124,6 +128,15 @@ public class SatelliteServiceImpl implements SatelliteService {
     @Override
     public Satellite updateSatellite(Long id, SatelliteParam param) {
         Satellite satellite = getSatelliteById(id);
+
+        if (!satellite.getName().equals(param.getName())) {
+            satelliteRepository.findByName(param.getName())
+                    .filter(existing -> !existing.getId().equals(id))
+                    .ifPresent(existing -> {
+                        throw new SpaceOperationException("Имя '" + param.getName() + "' уже используется другим спутником");
+                    });
+        }
+
         satellite.setName(param.getName());
         log.info("Обновлен спутник с id: {}", id);
         return satelliteRepository.save(satellite);

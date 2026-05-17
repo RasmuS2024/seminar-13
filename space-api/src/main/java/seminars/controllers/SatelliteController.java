@@ -1,5 +1,6 @@
 package seminars.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class SatelliteController {
     private final SatelliteService satelliteService;
 
     @PostMapping
-    public ResponseEntity<Satellite> createSatellite(@RequestBody SatelliteParam param) {
+    public ResponseEntity<Satellite> createSatellite(@Valid @RequestBody SatelliteParam param) {
         Satellite satellite = satelliteService.createSatellite(param);
         return ResponseEntity.status(HttpStatus.CREATED).body(satellite);
     }
@@ -89,14 +90,9 @@ public class SatelliteController {
     @PutMapping("/{id}")
     public ResponseEntity<Satellite> updateSatellite(
             @PathVariable Long id,
-            @RequestBody SatelliteParam param) {
+            @Valid @RequestBody SatelliteParam param) {
         Satellite satellite = satelliteService.updateSatellite(id, param);
         return ResponseEntity.ok(satellite);
     }
 
-    @ExceptionHandler(SpaceOperationException.class)
-    public ResponseEntity<Map<String, String>> handleSpaceOperationException(SpaceOperationException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", ex.getMessage()));
-    }
 }

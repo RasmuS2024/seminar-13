@@ -1,5 +1,6 @@
 package seminars.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,24 +21,36 @@ import seminars.services.SpaceOperationCenterService;
 public class SpaceOperationController {
     private final SpaceOperationCenterService spaceOperationCenterService;
 
+    /**
+     * Выполнить миссию для сптуника отдельно или для группировки
+     */
     @PostMapping("/missions")
-    public ResponseEntity<Void> executeMission(@RequestBody MissionRequest request) {
+    public ResponseEntity<Void> executeMission(@Valid @RequestBody MissionRequest request) {
         spaceOperationCenterService.executeMission(request);
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Добавление нового спутника(ов)
+     */
     @PostMapping("/add-satellites")
-    public ResponseEntity<Void> addSatellite(@RequestBody AddSatelliteRequest request) {
+    public ResponseEntity<Void> addSatellite(@Valid @RequestBody AddSatelliteRequest request) {
         spaceOperationCenterService.addSatellite(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * Вывод сводной информации о группировках и сптуниках
+     */
     @GetMapping("/overview")
     public ResponseEntity<String> getSystemOverview() {
         String overview = spaceOperationCenterService.getSystemOverview();
         return ResponseEntity.ok(overview);
     }
 
+    /**
+    * Вывод спутника из эксплуатации (деактивация и удаление из группировки)
+    */
     @DeleteMapping("/constellations/{constellationName}/satellites/{satelliteName}")
     public ResponseEntity<Void> decommissionSatellite(
             @PathVariable String constellationName,

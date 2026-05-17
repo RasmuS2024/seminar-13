@@ -6,12 +6,12 @@ public final class ImagingSatelliteConstants {
     }
 
     /**
-     *
+     * Разрешение камеры по умолчанию
      */
     public static final double DEFAULT_RESOLUTION = 155;
 
-/**
- * Количество энергии затрачиваемой для фотографирования.
- */
+    /**
+     * Количество энергии затрачиваемой для фотографирования.
+     */
     public static final double PHOTO_ENERGY_CONSUMPTION = 0.07;
 }

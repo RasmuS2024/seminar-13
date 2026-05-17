@@ -12,6 +12,9 @@ public interface ConstellationService {
     void deleteConstellation(Long id);
     void deleteConstellationByName(String name);
     void addSatelliteToConstellation(Long constellationId, Long satelliteId);
+
+    void removeSatelliteFromConstellation(String constellationName, String satelliteName);
+
     void executeConstellationMission(String constellationName);
     void activateAllSatellites(String constellationName);
     void showConstellationStatus(String constellationName);

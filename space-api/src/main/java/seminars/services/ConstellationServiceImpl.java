@@ -2,6 +2,7 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
@@ -86,8 +87,21 @@ public class ConstellationServiceImpl implements ConstellationService {
                 .orElseThrow(() -> new SpaceOperationException("Не существует спутника c id = " + satelliteId));
 
         constellation.addSatellite(satellite);
+        satellite.setConstellation(constellation);
         satelliteRepository.save(satellite);
         log.info("{} добавлен в группировку \"{}\"", satellite.getName(), constellation.getName());
+    }
+
+    @Override
+    public void removeSatelliteFromConstellation(String constellationName, String satelliteName) {
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
+        Satellite satellite = constellation.getSatellites().stream()
+                .filter(sat -> sat.getName().equals(satelliteName))
+                .findFirst()
+                .orElseThrow(() -> new SpaceOperationException("Спутник не найден"));
+        constellation.removeSatellite(satellite);
+        satelliteRepository.delete(satellite);
+        log.info("{} удален из группировки \"{}\"", satellite.getName(), constellation.getName());
     }
 
     @Override

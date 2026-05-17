@@ -183,4 +183,17 @@ class SatelliteControllerTest {
 
         verify(satelliteService).deleteSatellite(1L);
     }
+
+    @Test
+    @DisplayName("POST /api/satellites — batteryLevel > 1.0, возвращает 400")
+    void shouldReturn400WhenBatteryLevelExceedsMax() throws Exception {
+        CommunicationSatelliteParam param = new CommunicationSatelliteParam("TestSat", 10.99, 300.0);
+
+        mockMvc.perform(post("/api/satellites")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(param)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Validation Failed"))
+                .andExpect(jsonPath("$.fieldErrors[0].field").value("batteryLevel"));
+    }
 }
