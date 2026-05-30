@@ -26,7 +26,7 @@ services:
       dockerfile: ./space-api/Dockerfile
       args:
         - BUILDKIT_INLINE_CACHE=1
-    image: ghcr.io/rasmus2024/seminar10/space-api:latest
+    image: ghcr.io/rasmus2024/seminar11/space-api:latest
     container_name: space-api
     depends_on:
       postgres:
@@ -49,7 +49,7 @@ services:
       dockerfile: ./space-scheduler/Dockerfile
       args:
         - BUILDKIT_INLINE_CACHE=1
-    image: ghcr.io/rasmus2024/seminar10/space-scheduler:latest
+    image: ghcr.io/rasmus2024/seminar11/space-scheduler:latest
     container_name: space-scheduler
     depends_on:
       - space-api
