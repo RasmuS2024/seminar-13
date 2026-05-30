@@ -11,6 +11,9 @@ import seminars.domains.satellites.params.SatelliteParam;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
+import seminars.kafka.KafkaService;
+import seminars.kafka.KafkaUtils;
+import seminars.kafka.SatelliteEvent;
 import seminars.repository.SatelliteRepository;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class SatelliteServiceImpl implements SatelliteService {
     private final List<SatelliteFactory> factories;
     private final SatelliteRepository satelliteRepository;
     private final TelemetryService telemetryService;
+    private final KafkaService kafkaService;
+    private static final String SATELLITE_EVENTS_TOPIC = "satellite-events";
 
     @Override
     public Satellite createSatellite(SatelliteParam param) {
@@ -49,7 +54,14 @@ public class SatelliteServiceImpl implements SatelliteService {
                 satellite.getName(),
                 (int) (satellite.getEnergy().getBatteryLevel() * 100));
 
-        return satelliteRepository.save(satellite);
+        Satellite saved = satelliteRepository.save(satellite);
+
+        kafkaService.sendToKafkaSatellite(
+                SATELLITE_EVENTS_TOPIC,
+                KafkaUtils.createEvent(saved, SatelliteEvent.EventType.CREATED)
+        );
+
+        return saved;
     }
 
     @Transactional(readOnly = true)
@@ -83,11 +95,18 @@ public class SatelliteServiceImpl implements SatelliteService {
 
     @Override
     public void deleteSatellite(Long id) {
-        telemetryService.stopMonitoring(id);
-        if (!satelliteRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Спутник с id = " + id + " не найден");
-        }
+        Satellite satellite = satelliteRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Спутник с id = " + id + " не найден"));
+
         satelliteRepository.deleteById(id);
+
+        kafkaService.sendToKafkaSatellite(
+                SATELLITE_EVENTS_TOPIC,
+                KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
+        );
+
+        telemetryService.stopMonitoring(id);
+
         log.info("Удален спутник с id: {}", id);
     }
 

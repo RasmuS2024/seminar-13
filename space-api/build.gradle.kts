@@ -25,8 +25,9 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-actuator")
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation ("org.springframework.boot:spring-boot-starter-validation")
-
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+
+    implementation("org.springframework.kafka:spring-kafka")
 
     implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
     implementation("io.grpc:grpc-protobuf")
