@@ -13,9 +13,12 @@
 ### Перед запуском
 Создайте файл `.env` в корне проекта:
 ```env
+DB_HOST=localhost
+DB_PORT=5432
 DB_NAME=postgres
 DB_USERNAME=postgres
-DB_PASSWORD=your_password_here
+DB_PASSWORD=postgres_password
+SERVER_PORT=8080
 ```
 
 или скопируйте и настройте `.env`:
@@ -47,7 +50,7 @@ GitHub Actions:
 
 ![Java CI](https://github.com/RasmuS2024/seminar-11/actions/workflows/main.yml/badge.svg)
 
-![Docker Build](https://github.com/RasmuS2024/seminar-11/actions/workflows/deploy.yml/badge.svg)
+![Build and Push Docker Images](https://github.com/RasmuS2024/seminar-11/actions/workflows/deploy.yml/badge.svg)
 
 
 
