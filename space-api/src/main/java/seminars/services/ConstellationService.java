@@ -1,6 +1,8 @@
 package seminars.services;
 
 import seminars.domains.constellations.SatelliteConstellation;
+import seminars.dto.ConstellationStatusResponse;
+
 import java.util.List;
 
 public interface ConstellationService {
@@ -9,13 +11,12 @@ public interface ConstellationService {
     SatelliteConstellation getConstellationById(Long id);
     List<SatelliteConstellation> getAllConstellations();
     List<SatelliteConstellation> getAllConstellationsWithSatellites();
-    void deleteConstellation(Long id);
-    void deleteConstellationByName(String name);
+    void deleteConstellation(String name);
     void addSatelliteToConstellation(Long constellationId, Long satelliteId);
-
     void removeSatelliteFromConstellation(String constellationName, String satelliteName);
-
-    void executeConstellationMission(String constellationName);
-    void activateAllSatellites(String constellationName);
+    ConstellationStatusResponse executeConstellationMission(String constellationName);
+    ConstellationStatusResponse activateAllSatellites(String constellationName);
     void showConstellationStatus(String constellationName);
+    ConstellationStatusResponse getConstellationStatus(String constellationName);
+    void renameConstellation(String oldName, String newName);
 }

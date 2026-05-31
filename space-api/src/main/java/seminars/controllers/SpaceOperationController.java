@@ -13,44 +13,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
+import seminars.dto.AddSatellitesResponse;
+import seminars.dto.ConstellationStatusResponse;
+import seminars.dto.MissionResultResponse;
+import seminars.dto.SatelliteStatusResponse;
+import seminars.dto.SystemOverviewResponse;
 import seminars.services.SpaceOperationCenterService;
+import seminars.services.SatelliteService;
+import seminars.services.ConstellationService;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class SpaceOperationController {
     private final SpaceOperationCenterService spaceOperationCenterService;
+    private final SatelliteService satelliteService;
+    private final ConstellationService constellationService;
 
-    /**
-     * Выполнить миссию для сптуника отдельно или для группировки
-     */
     @PostMapping("/missions")
-    public ResponseEntity<Void> executeMission(@Valid @RequestBody MissionRequest request) {
-        spaceOperationCenterService.executeMission(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<MissionResultResponse> executeMission(@Valid @RequestBody MissionRequest request) {
+        MissionResultResponse result = spaceOperationCenterService.executeMission(request);
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Добавление нового спутника(ов)
-     */
     @PostMapping("/add-satellites")
-    public ResponseEntity<Void> addSatellite(@Valid @RequestBody AddSatelliteRequest request) {
-        spaceOperationCenterService.addSatellite(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<AddSatellitesResponse> addSatellite(@Valid @RequestBody AddSatelliteRequest request) {
+        AddSatellitesResponse result = spaceOperationCenterService.addSatellite(request);
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Вывод сводной информации о группировках и сптуниках
-     */
     @GetMapping("/overview")
-    public ResponseEntity<String> getSystemOverview() {
-        String overview = spaceOperationCenterService.getSystemOverview();
+    public ResponseEntity<SystemOverviewResponse> getSystemOverview() {
+        SystemOverviewResponse overview = spaceOperationCenterService.getSystemOverview();
         return ResponseEntity.ok(overview);
     }
 
-    /**
-    * Вывод спутника из эксплуатации (деактивация и удаление из группировки)
-    */
     @DeleteMapping("/constellations/{constellationName}/satellites/{satelliteName}")
     public ResponseEntity<Void> decommissionSatellite(
             @PathVariable String constellationName,
@@ -59,4 +56,45 @@ public class SpaceOperationController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/satellites/{id}/activate")
+    public ResponseEntity<SatelliteStatusResponse> activateSatellite(@PathVariable Long id) {
+        SatelliteStatusResponse status = satelliteService.activateSatellite(id);
+        return ResponseEntity.ok(status);
+    }
+
+    @PostMapping("/satellites/{id}/deactivate")
+    public ResponseEntity<SatelliteStatusResponse> deactivateSatellite(@PathVariable Long id) {
+        SatelliteStatusResponse status = satelliteService.deActivateSatellite(id);
+        return ResponseEntity.ok(status);
+    }
+
+    @PostMapping("/satellites/{id}/mission")
+    public ResponseEntity<SatelliteStatusResponse> performSatelliteMission(@PathVariable Long id) {
+        SatelliteStatusResponse status = satelliteService.performSatelliteMission(id);
+        return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/satellites/{id}/status")
+    public ResponseEntity<SatelliteStatusResponse> getSatelliteStatus(@PathVariable Long id) {
+        SatelliteStatusResponse status = satelliteService.getSatelliteStatus(id);
+        return ResponseEntity.ok(status);
+    }
+
+    @PostMapping("/constellations/{name}/activate")
+    public ResponseEntity<ConstellationStatusResponse> activateConstellation(@PathVariable String name) {
+        ConstellationStatusResponse status = constellationService.activateAllSatellites(name);
+        return ResponseEntity.ok(status);
+    }
+
+    @PostMapping("/constellations/{name}/mission")
+    public ResponseEntity<ConstellationStatusResponse> executeConstellationMission(@PathVariable String name) {
+        ConstellationStatusResponse status = constellationService.executeConstellationMission(name);
+        return ResponseEntity.ok(status);
+    }
+
+    @GetMapping("/constellations/{name}/status")
+    public ResponseEntity<ConstellationStatusResponse> getConstellationStatus(@PathVariable String name) {
+        ConstellationStatusResponse status = constellationService.getConstellationStatus(name);
+        return ResponseEntity.ok(status);
+    }
 }

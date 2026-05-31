@@ -45,7 +45,7 @@ class SatelliteTest {
     }
 
     @Test
-    @DisplayName("Активация: Отказ при повторной активации")
+    @DisplayName("Активация: Идемпотентность при повторной активации")
     void testActivateAlreadyActive() {
         // Arrange
         ImagingSatellite sat = new ImagingSatellite("Alpha", 0.9, 5.0);
@@ -55,7 +55,8 @@ class SatelliteTest {
         boolean result = sat.activate();
 
         // Assert
-        assertFalse(result, "Повторная активация должна вернуть false");
+        assertTrue(result, "Повторная активация должна вернуть true (идемпотентность)");
+        assertTrue(sat.getState().isActive(), "Состояние должно остаться активным");
     }
 
     @Test

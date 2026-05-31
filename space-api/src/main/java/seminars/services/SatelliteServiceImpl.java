@@ -2,12 +2,12 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;
+import seminars.dto.SatelliteStatusResponse;
+import seminars.exceptions.DuplicateResourceException;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
@@ -45,7 +45,7 @@ public class SatelliteServiceImpl implements SatelliteService {
                 .orElseThrow(() -> new SpaceOperationException("Данный тип параметров не поддерживается"));
 
         if (satelliteRepository.findByName(param.getName()).isPresent()) {
-            throw new SpaceOperationException("Спутник с именем '" + param.getName() + "' уже существует");
+            throw new DuplicateResourceException("Спутник с именем '" + param.getName() + "' уже существует");
         }
 
         Satellite satellite = factory.createSatelliteWithParameter(param);
@@ -111,7 +111,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     }
 
     @Override
-    public void activateSatellite(Long satelliteId) {
+    public SatelliteStatusResponse activateSatellite(Long satelliteId) {
         Satellite satellite = getSatelliteById(satelliteId);
         boolean activated = satellite.activate();
 
@@ -119,34 +119,41 @@ public class SatelliteServiceImpl implements SatelliteService {
             String deviceId = "satellite-" + satelliteId;
             telemetryService.startMonitoring(satelliteId, deviceId);
             log.info("Спутник {} активирован", satellite.getName());
-        } else if (satellite.getState().isActive()) {
-            log.warn("Спутник {} уже активирован", satellite.getName());
         } else {
             log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
         }
+
+        return getSatelliteStatus(satelliteId);
     }
 
     @Override
-    public void deActivateSatellite(Long satelliteId) {
+    public SatelliteStatusResponse deActivateSatellite(Long satelliteId) {
         Satellite satellite = getSatelliteById(satelliteId);
         satellite.deActivate();
         telemetryService.stopMonitoring(satelliteId);
         log.info("Спутник {} деактивирован", satellite.getName());
+        return getSatelliteStatus(satelliteId);
     }
 
     @Override
-    public void performSatelliteMission(Long satelliteId) {
+    public SatelliteStatusResponse performSatelliteMission(Long satelliteId) {
         Satellite satellite = getSatelliteById(satelliteId);
         log.info("ВЫПОЛНЕНИЕ МИССИИ СПУТНИКА {}", satellite.getName().toUpperCase());
         satellite.performMission();
+        return getSatelliteStatus(satelliteId);
     }
 
     @Override
-    public String getSatelliteStatus(Long satelliteId) {
+    public SatelliteStatusResponse getSatelliteStatus(Long satelliteId) {
         Satellite satellite = getSatelliteById(satelliteId);
-        String status = satellite.getState().toString();
-        log.info("{}", status);
-        return status;
+        log.info("Статус спутника {}: active={}", satellite.getName(), satellite.getState().isActive());
+        return new SatelliteStatusResponse(
+                satellite.getId(),
+                satellite.getName(),
+                satellite.getClass().getSimpleName(),
+                satellite.getState().isActive(),
+                satellite.getEnergy().getBatteryLevel()
+        );
     }
 
     @Override
@@ -157,7 +164,7 @@ public class SatelliteServiceImpl implements SatelliteService {
             satelliteRepository.findByName(param.getName())
                     .filter(existing -> !existing.getId().equals(id))
                     .ifPresent(existing -> {
-                        throw new SpaceOperationException("Имя '" + param.getName() + "' уже используется другим спутником");
+                        throw new DuplicateResourceException("Имя '" + param.getName() + "' уже используется другим спутником");
                     });
         }
 

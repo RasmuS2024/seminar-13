@@ -16,6 +16,7 @@ public class ValidationErrorResponse {
     private String message;
     private String path;
     private List<FieldError> fieldErrors;
+
     @Data
     @Builder
     @NoArgsConstructor

@@ -2,11 +2,13 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.constellations.SatelliteConstellation;
+import seminars.dto.ConstellationStatusResponse;
+import seminars.dto.SatelliteStatusResponse;
+import seminars.exceptions.DuplicateResourceException;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
@@ -26,7 +28,7 @@ public class ConstellationServiceImpl implements ConstellationService {
     public SatelliteConstellation createConstellation(String constellationName) {
         validateName(constellationName);
         if (constellationRepository.existsByName(constellationName)) {
-            throw new SpaceOperationException("Группировка с именем '" + constellationName + "' уже существует");
+            throw new DuplicateResourceException("Группировка с именем '" + constellationName + "' уже существует");
         }
         SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
         log.info("Создана спутниковая группировка: {}", constellationName);
@@ -57,22 +59,14 @@ public class ConstellationServiceImpl implements ConstellationService {
         return constellationRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<SatelliteConstellation> getAllConstellationsWithSatellites() {
-        return constellationRepository.findAllWithSatellites();
+        return constellationRepository.findAll();
     }
 
     @Override
-    public void deleteConstellation(Long id) {
-        if (!constellationRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Группировка с id = " + id + " не найдена");
-        }
-        constellationRepository.deleteById(id);
-        log.info("Удалена группировка с id: {}", id);
-    }
-
-    @Override
-    public void deleteConstellationByName(String name) {
+    public void deleteConstellation(String name) {
         if (!constellationRepository.existsByName(name)) {
             throw new ResourceNotFoundException("Группировка с именем '" + name + "' не найдена");
         }
@@ -107,17 +101,18 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
-    public void executeConstellationMission(String constellationName) {
+    public ConstellationStatusResponse executeConstellationMission(String constellationName) {
         validateName(constellationName);
 
         SatelliteConstellation constellation = getConstellationByName(constellationName);
         log.info("ВЫПОЛНЕНИЕ МИССИЙ ГРУППИРОВКИ {}", constellationName.toUpperCase());
         log.info("=".repeat(50));
         constellation.executeAllMissions();
+        return getConstellationStatus(constellationName);
     }
 
     @Override
-    public void activateAllSatellites(String constellationName) {
+    public ConstellationStatusResponse activateAllSatellites(String constellationName) {
         validateName(constellationName);
 
         SatelliteConstellation constellation = getConstellationByName(constellationName);
@@ -127,12 +122,11 @@ public class ConstellationServiceImpl implements ConstellationService {
             boolean activated = satellite.activate();
             if (activated) {
                 log.info("Спутник {} активирован", satellite.getName());
-            } else if (satellite.getState().isActive()) {
-                log.warn("Спутник {} уже активирован", satellite.getName());
             } else {
                 log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
             }
         }
+        return getConstellationStatus(constellationName);
     }
 
     @Override
@@ -141,6 +135,45 @@ public class ConstellationServiceImpl implements ConstellationService {
 
         SatelliteConstellation satelliteConstellation = getConstellationByName(constellationName);
         log.info("{}", satelliteConstellation.getAllSatellitesStatuses());
+    }
+
+    @Override
+    public ConstellationStatusResponse getConstellationStatus(String constellationName) {
+        validateName(constellationName);
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
+
+        List<SatelliteStatusResponse> satelliteStatuses = constellation.getSatellites().stream()
+                .map(sat -> new SatelliteStatusResponse(
+                        sat.getId(),
+                        sat.getName(),
+                        sat.getClass().getSimpleName(),
+                        sat.getState().isActive(),
+                        sat.getEnergy().getBatteryLevel()
+                ))
+                .toList();
+
+        long activeCount = satelliteStatuses.stream().filter(SatelliteStatusResponse::active).count();
+
+        return new ConstellationStatusResponse(
+                constellation.getId(),
+                constellation.getName(),
+                constellation.getSatellites().size(),
+                (int) activeCount,
+                satelliteStatuses
+        );
+    }
+
+    @Override
+    public void renameConstellation(String oldName, String newName) {
+        validateName(oldName);
+        validateName(newName);
+        SatelliteConstellation constellation = getConstellationByName(oldName);
+        if (!oldName.equals(newName) && constellationRepository.existsByName(newName)) {
+            throw new DuplicateResourceException("Группировка с именем '" + newName + "' уже существует");
+        }
+        constellation.setName(newName);
+        constellationRepository.save(constellation);
+        log.info("Группировка переименована с '{}' на '{}'", oldName, newName);
     }
 
     private void validateName(String name) {

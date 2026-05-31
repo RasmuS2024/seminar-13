@@ -23,6 +23,10 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
   jpa:
     hibernate:
       ddl-auto: none

@@ -11,9 +11,15 @@ import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.params.SatelliteParam;
+import seminars.dto.ConstellationStatusResponse;
+import seminars.dto.SystemOverviewResponse;
 import seminars.exceptions.SpaceOperationException;
+import seminars.repository.ConstellationRepository;
 
 import java.util.List;
+
+import seminars.dto.SatelliteStatusResponse;
+import seminars.dto.AddSatellitesResponse;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -36,6 +41,9 @@ class SpaceOperationCenterServiceTest {
 
     @Mock
     private SatelliteService satelliteService;
+
+    @Mock
+    private ConstellationRepository constellationRepository;
 
     @InjectMocks
     private SpaceOperationCenterService spaceOperationCenterService;
@@ -74,6 +82,11 @@ class SpaceOperationCenterServiceTest {
                 seminars.domains.satellites.requests.MissionTargetType.CONSTELLATION,
                 constellationName, null);
 
+        when(constellationService.activateAllSatellites(constellationName))
+                .thenReturn(new ConstellationStatusResponse(1L, constellationName, 1, 0, List.of()));
+        when(constellationService.executeConstellationMission(constellationName))
+                .thenReturn(new ConstellationStatusResponse(1L, constellationName, 1, 0, List.of()));
+
         spaceOperationCenterService.executeMission(missionRequest);
 
         verify(constellationService).activateAllSatellites(constellationName);
@@ -90,11 +103,13 @@ class SpaceOperationCenterServiceTest {
         constellation.addSatellite(satellite);
 
         when(satelliteService.getSatelliteByName(satelliteName)).thenReturn(satellite);
-        doAnswer(invocation -> {
+        when(satelliteService.activateSatellite(any())).thenAnswer(invocation -> {
             satellite.activate();
-            return null;
-        }).when(satelliteService).activateSatellite(any());
-        doNothing().when(satelliteService).performSatelliteMission(any());
+            return new SatelliteStatusResponse(
+                    invocation.getArgument(0), satelliteName, "ImagingSatellite", true, 0.8);
+        });
+        when(satelliteService.performSatelliteMission(any()))
+                .thenReturn(new SatelliteStatusResponse(1L, satelliteName, "ImagingSatellite", true, 0.7));
 
         var missionRequest = new seminars.domains.satellites.requests.MissionRequest(
                 seminars.domains.satellites.requests.MissionTargetType.SINGLE_SATELLITE,
@@ -133,10 +148,12 @@ class SpaceOperationCenterServiceTest {
 
         when(constellationService.getConstellationByName(constellationName)).thenReturn(constellation);
         when(satelliteService.getSatelliteByName(satelliteName)).thenReturn(satellite);
+        when(constellationRepository.save(any())).thenReturn(constellation);
 
         spaceOperationCenterService.decommissionSatellite(constellationName, satelliteName);
 
         assertFalse(constellation.getSatellites().contains(satellite));
+        verify(constellationRepository).save(constellation);
     }
 
     @Test
@@ -155,18 +172,19 @@ class SpaceOperationCenterServiceTest {
     }
 
     @Test
-    @DisplayName("getSystemOverview возвращает сводку")
+    @DisplayName("getSystemOverview возвращает сводку в DTO")
     void getSystemOverviewReturnsOverview() {
         SatelliteConstellation constellation = new SatelliteConstellation("TestConstellation");
         Satellite satellite = new ImagingSatellite("TestSatellite", 0.8, 1.0);
         constellation.addSatellite(satellite);
 
         when(constellationService.getAllConstellationsWithSatellites()).thenReturn(List.of(constellation));
+        when(constellationService.getConstellationStatus("TestConstellation"))
+                .thenReturn(new ConstellationStatusResponse(1L, "TestConstellation", 1, 1, List.of()));
 
-        String overview = spaceOperationCenterService.getSystemOverview();
+        var overview = spaceOperationCenterService.getSystemOverview();
 
         assertNotNull(overview);
-        assertTrue(overview.contains("TestConstellation"));
-        assertTrue(overview.contains("TestSatellite"));
+        assertTrue(overview.totalConstellations() > 0);
     }
 }

@@ -12,12 +12,12 @@ import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;
 import seminars.domains.satellites.SatelliteType;
+import seminars.dto.SatelliteStatusResponse;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
 import seminars.kafka.KafkaService;
 import seminars.repository.SatelliteRepository;
-import seminars.repository.EnergySystemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +46,6 @@ class SatelliteServiceTest {
 
     @Mock
     private SatelliteRepository satelliteRepository;
-
-    @Mock
-    private EnergySystemRepository energySystemRepository;
 
     @Mock
     private SatelliteFactory imagingFactory;
@@ -186,14 +183,17 @@ class SatelliteServiceTest {
     }
 
     @Test
-    @DisplayName("getSatelliteStatus возвращает статус")
+    @DisplayName("getSatelliteStatus возвращает статус DTO")
     void getSatelliteStatusReturnsStatus() {
         Satellite satellite = new ImagingSatellite(NAME, BATTERY_LEVEL, RESOLUTION);
+        satellite.setId(SATELLITE_ID);
         when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.of(satellite));
 
-        String status = satelliteService.getSatelliteStatus(SATELLITE_ID);
+        SatelliteStatusResponse status = satelliteService.getSatelliteStatus(SATELLITE_ID);
 
         assertNotNull(status);
+        assertEquals(NAME, status.name());
+        assertEquals(SATELLITE_ID, status.id());
     }
 
     @Test

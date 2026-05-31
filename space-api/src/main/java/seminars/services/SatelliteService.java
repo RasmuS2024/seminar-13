@@ -2,6 +2,7 @@ package seminars.services;
 
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;
+import seminars.dto.SatelliteStatusResponse;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public interface SatelliteService {
     List<Satellite> getAllSatellites();
     List<Satellite> getSatellitesByConstellationId(Long constellationId);
     void deleteSatellite(Long id);
-    void activateSatellite(Long satelliteId);
-    void deActivateSatellite(Long satelliteId);
-    void performSatelliteMission(Long satelliteId);
-    String getSatelliteStatus(Long satelliteId);
+    SatelliteStatusResponse activateSatellite(Long satelliteId);
+    SatelliteStatusResponse deActivateSatellite(Long satelliteId);
+    SatelliteStatusResponse performSatelliteMission(Long satelliteId);
+    SatelliteStatusResponse getSatelliteStatus(Long satelliteId);
     Satellite updateSatellite(Long id, SatelliteParam param);
 }

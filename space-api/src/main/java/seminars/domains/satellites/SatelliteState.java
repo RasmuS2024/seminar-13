@@ -16,13 +16,15 @@ public class SatelliteState {
     }
 
     public boolean activate(boolean hasSufficientPower) {
-
-        if (hasSufficientPower && !isActive) {
+        if (isActive) {
+            return true;
+        }
+        if (hasSufficientPower) {
             isActive = true;
             statusMessage = "Активен";
             return true;
         }
-        statusMessage = hasSufficientPower ? "Уже активен" : "Недостаточно энергии";
+        statusMessage = "Недостаточно энергии";
         return false;
     }
 

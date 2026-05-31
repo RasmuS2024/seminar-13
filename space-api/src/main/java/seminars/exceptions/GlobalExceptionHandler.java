@@ -1,5 +1,6 @@
 package seminars.exceptions;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,8 @@ import seminars.exceptions.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,13 +45,28 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         ValidationErrorResponse response = ValidationErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error("Space Operation Error")
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Bad Request")
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
                 .fieldErrors(List.of())
                 .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ValidationErrorResponse> handleDuplicateResourceException(
+            DuplicateResourceException ex,
+            HttpServletRequest request) {
+        ValidationErrorResponse response = ValidationErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("Conflict")
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .fieldErrors(List.of())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -78,6 +96,7 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .fieldErrors(List.of())
                 .build();
+        log.error("Unhandled exception pu-pu-pu", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

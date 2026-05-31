@@ -2,12 +2,8 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import seminars.constants.EnergySystemConstants;
 import seminars.domains.satellites.EnergySystem;
 import seminars.exceptions.ResourceNotFoundException;
@@ -25,7 +21,6 @@ import static seminars.constants.EnergySystemConstants.MIN_BATTERY;
 @Transactional
 public class EnergySystemServiceImpl implements EnergySystemService {
     private final EnergySystemRepository energySystemRepository;
-    private EnergySystemServiceImpl self;
 
     @Override
     @Transactional(readOnly = true)
@@ -34,10 +29,17 @@ public class EnergySystemServiceImpl implements EnergySystemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public EnergySystem getEnergySystemById(Long id) {
+        return energySystemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Энергосистема не найдена по id: " + id));
+    }
+
+    @Override
     public EnergySystem updateEnergySystem(Long id, double batteryLevel) {
         validateBatteryLevel(batteryLevel);
 
-        EnergySystem energySystem = self.getEnergySystemById(id);
+        EnergySystem energySystem = getEnergySystemById(id);
         energySystem.setBatteryLevel(batteryLevel);
 
         log.info("Обновлена энергосистема id = {}, новый заряд: {}%", id, (int)(batteryLevel * 100));
@@ -60,20 +62,13 @@ public class EnergySystemServiceImpl implements EnergySystemService {
         return energySystemRepository.save(energySystem);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public EnergySystem getEnergySystemById(Long id) {
-        return energySystemRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Энергосистема не найдена по id: " + id));
-    }
-
     @Override
     public boolean consumeEnergy(Long energySystemId, double amount) {
         if (amount <= 0) {
             throw new SpaceOperationException("Потребляемая энергия должна быть положительной");
         }
 
-        EnergySystem energySystem = self.getEnergySystemById(energySystemId);
+        EnergySystem energySystem = getEnergySystemById(energySystemId);
         boolean result = energySystem.consume(amount);
 
         if (result) {
@@ -85,10 +80,10 @@ public class EnergySystemServiceImpl implements EnergySystemService {
         return result;
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public boolean hasSufficientPower(Long energySystemId) {
-        EnergySystem energySystem = self.getEnergySystemById(energySystemId);
+        EnergySystem energySystem = getEnergySystemById(energySystemId);
         return energySystem.hasSufficientPower();
     }
 

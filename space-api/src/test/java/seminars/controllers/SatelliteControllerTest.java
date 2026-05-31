@@ -12,13 +12,11 @@ import seminars.domains.satellites.CommunicationSatellite;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.CommunicationSatelliteParam;
 import seminars.exceptions.ResourceNotFoundException;
-import seminars.exceptions.SpaceOperationException;
 import seminars.services.SatelliteService;
 
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -41,8 +39,8 @@ class SatelliteControllerTest {
     private SatelliteService satelliteService;
 
     @Test
-    @DisplayName("POST /api/satellites — создание, возвращает 201")
-    void shouldCreateSatelliteReturn201() throws Exception {
+    @DisplayName("POST /api/satellites — создание, возвращает 200")
+    void shouldCreateSatelliteReturn200() throws Exception {
         Satellite satellite = new CommunicationSatellite("TestSat", 0.85, 300.0);
 
         when(satelliteService.createSatellite(any(CommunicationSatelliteParam.class))).thenReturn(satellite);
@@ -52,7 +50,7 @@ class SatelliteControllerTest {
         mockMvc.perform(post("/api/satellites")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(param)))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("TestSat"));
 
         verify(satelliteService).createSatellite(any(CommunicationSatelliteParam.class));
@@ -130,55 +128,8 @@ class SatelliteControllerTest {
     }
 
     @Test
-    @DisplayName("POST /api/satellites/{id}/activate — активация, возвращает 200")
-    void shouldActivateSatelliteReturn200() throws Exception {
-        doNothing().when(satelliteService).activateSatellite(1L);
-
-        mockMvc.perform(post("/api/satellites/1/activate"))
-                .andExpect(status().isOk());
-
-        verify(satelliteService).activateSatellite(1L);
-    }
-
-    @Test
-    @DisplayName("POST /api/satellites/{id}/deactivate — деактивация, возвращает 200")
-    void shouldDeactivateSatelliteReturn200() throws Exception {
-        doNothing().when(satelliteService).deActivateSatellite(1L);
-
-        mockMvc.perform(post("/api/satellites/1/deactivate"))
-                .andExpect(status().isOk());
-
-        verify(satelliteService).deActivateSatellite(1L);
-    }
-
-    @Test
-    @DisplayName("POST /api/satellites/{id}/mission — выполнение миссии, возвращает 200")
-    void shouldPerformMissionReturn200() throws Exception {
-        doNothing().when(satelliteService).performSatelliteMission(1L);
-
-        mockMvc.perform(post("/api/satellites/1/mission"))
-                .andExpect(status().isOk());
-
-        verify(satelliteService).performSatelliteMission(1L);
-    }
-
-    @Test
-    @DisplayName("GET /api/satellites/{id}/status — получение статуса, возвращает 200")
-    void shouldGetSatelliteStatusReturn200() throws Exception {
-        when(satelliteService.getSatelliteStatus(1L)).thenReturn("ACTIVE");
-
-        mockMvc.perform(get("/api/satellites/1/status"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("ACTIVE"));
-
-        verify(satelliteService).getSatelliteStatus(1L);
-    }
-
-    @Test
     @DisplayName("DELETE /api/satellites/{id} — удаление, возвращает 204")
     void shouldDeleteSatelliteReturn204() throws Exception {
-        doNothing().when(satelliteService).deleteSatellite(1L);
-
         mockMvc.perform(delete("/api/satellites/1"))
                 .andExpect(status().isNoContent());
 

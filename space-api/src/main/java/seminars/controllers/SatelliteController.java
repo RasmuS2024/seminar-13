@@ -28,7 +28,7 @@ public class SatelliteController {
     @PostMapping
     public ResponseEntity<Satellite> createSatellite(@Valid @RequestBody SatelliteParam param) {
         Satellite satellite = satelliteService.createSatellite(param);
-        return ResponseEntity.status(HttpStatus.CREATED).body(satellite);
+        return ResponseEntity.ok(satellite);
     }
 
     @GetMapping
@@ -59,38 +59,6 @@ public class SatelliteController {
         return ResponseEntity.ok(satellites);
     }
 
-    @PostMapping("/{id}/activate")
-    @ApiResponse(responseCode = "200")
-    @ApiResponse(responseCode = "404", description = "Спутник не найден")
-    public ResponseEntity<Void> activateSatellite(@PathVariable Long id) {
-        satelliteService.activateSatellite(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/deactivate")
-    @ApiResponse(responseCode = "200")
-    @ApiResponse(responseCode = "404", description = "Спутник не найден")
-    public ResponseEntity<Void> deactivateSatellite(@PathVariable Long id) {
-        satelliteService.deActivateSatellite(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/mission")
-    @ApiResponse(responseCode = "200")
-    @ApiResponse(responseCode = "404", description = "Спутник не найден")
-    public ResponseEntity<Void> performMission(@PathVariable Long id) {
-        satelliteService.performSatelliteMission(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{id}/status")
-    @ApiResponse(responseCode = "200")
-    @ApiResponse(responseCode = "404", description = "Спутник не найден")
-    public ResponseEntity<String> getSatelliteStatus(@PathVariable Long id) {
-        String status = satelliteService.getSatelliteStatus(id);
-        return ResponseEntity.ok(status);
-    }
-
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     @ApiResponse(responseCode = "404", description = "Спутник не найден")
@@ -108,5 +76,4 @@ public class SatelliteController {
         Satellite satellite = satelliteService.updateSatellite(id, param);
         return ResponseEntity.ok(satellite);
     }
-
 }

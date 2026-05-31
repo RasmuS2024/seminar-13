@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.constellations.SatelliteConstellation;
 import seminars.domains.satellites.ImagingSatellite;
 import seminars.domains.satellites.Satellite;
+import seminars.exceptions.DuplicateResourceException;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
@@ -81,7 +82,7 @@ class ConstellationServiceTest {
     void createConstellationWithDuplicateNameThrowsException() {
         when(constellationRepository.existsByName(CONSTELLATION_NAME)).thenReturn(true);
 
-        assertThrows(SpaceOperationException.class,
+        assertThrows(DuplicateResourceException.class,
                 () -> constellationService.createConstellation(CONSTELLATION_NAME));
         verify(constellationRepository, never()).save(any());
     }
@@ -110,26 +111,6 @@ class ConstellationServiceTest {
     }
 
     @Test
-    @DisplayName("getConstellationById возвращает группировку")
-    void getConstellationByIdReturnsConstellation() {
-        SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME);
-        when(constellationRepository.findById(CONSTELLATION_ID)).thenReturn(Optional.of(constellation));
-
-        SatelliteConstellation result = constellationService.getConstellationById(CONSTELLATION_ID);
-
-        assertNotNull(result);
-    }
-
-    @Test
-    @DisplayName("getConstellationById для несуществующей выбрасывает исключение")
-    void getConstellationByIdNotFoundThrowsException() {
-        when(constellationRepository.findById(CONSTELLATION_ID)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class,
-                () -> constellationService.getConstellationById(CONSTELLATION_ID));
-    }
-
-    @Test
     @DisplayName("getAllConstellations возвращает все группировки")
     void getAllConstellationsReturnsAll() {
         SatelliteConstellation c1 = new SatelliteConstellation("C1");
@@ -142,35 +123,24 @@ class ConstellationServiceTest {
     }
 
     @Test
-    @DisplayName("deleteConstellation удаляет группировку")
+    @DisplayName("deleteConstellation удаляет группировку по имени")
     void deleteConstellationDeletesConstellation() {
-        when(constellationRepository.existsById(CONSTELLATION_ID)).thenReturn(true);
-        doNothing().when(constellationRepository).deleteById(CONSTELLATION_ID);
+        when(constellationRepository.existsByName(CONSTELLATION_NAME)).thenReturn(true);
+        doNothing().when(constellationRepository).deleteByName(CONSTELLATION_NAME);
 
-        constellationService.deleteConstellation(CONSTELLATION_ID);
+        constellationService.deleteConstellation(CONSTELLATION_NAME);
 
-        verify(constellationRepository).deleteById(CONSTELLATION_ID);
+        verify(constellationRepository).deleteByName(CONSTELLATION_NAME);
     }
 
     @Test
     @DisplayName("deleteConstellation для несуществующей выбрасывает исключение")
     void deleteConstellationNotFoundThrowsException() {
-        when(constellationRepository.existsById(CONSTELLATION_ID)).thenReturn(false);
+        when(constellationRepository.existsByName(CONSTELLATION_NAME)).thenReturn(false);
 
         assertThrows(ResourceNotFoundException.class,
-                () -> constellationService.deleteConstellation(CONSTELLATION_ID));
-        verify(constellationRepository, never()).deleteById(CONSTELLATION_ID);
-    }
-
-    @Test
-    @DisplayName("deleteConstellationByName удаляет группировку по имени")
-    void deleteConstellationByNameDeletesConstellation() {
-        when(constellationRepository.existsByName(CONSTELLATION_NAME)).thenReturn(true);
-        doNothing().when(constellationRepository).deleteByName(CONSTELLATION_NAME);
-
-        constellationService.deleteConstellationByName(CONSTELLATION_NAME);
-
-        verify(constellationRepository).deleteByName(CONSTELLATION_NAME);
+                () -> constellationService.deleteConstellation(CONSTELLATION_NAME));
+        verify(constellationRepository, never()).deleteByName(CONSTELLATION_NAME);
     }
 
     @Test
