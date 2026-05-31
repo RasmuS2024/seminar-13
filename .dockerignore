@@ -12,5 +12,3 @@ bin/
 **/.project
 **/.settings/
 data/
-space-scheduler/
-telemetry-service/
