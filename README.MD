@@ -10,6 +10,13 @@
 - Docker
 - Docker Compose
 
+### Установка
+Склонируйте репозиторий:
+```bash
+git clone https://github.com/RasmuS2024/seminar-11.git
+cd seminar-11
+```
+
 ### Перед запуском
 Создайте файл `.env` в корне проекта:
 ```env
@@ -31,6 +38,8 @@ cp .env.example .env
 Запустите командой:
 ```docker compose up```
 
+
+
 ## Описание проекта
 Работа со спутниками, их группировками и выполнением миссий.
 
@@ -43,7 +52,6 @@ cp .env.example .env
 - Kafka на порту 9093;
 - Kafka UI на порту 8085;
 - PostgreSQL на порту 5432.
-
 
 
 GitHub Actions:
