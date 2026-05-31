@@ -48,7 +48,8 @@ cp .env.example .env
   (после запуска доступен Swagger: http://localhost:8080/swagger-ui/index.html);
 - space-scheduler (планировщик), запускается на порту 8081;
 - telemetry-service (сервис телеметрии), запускается на порту 9091, сервис gRPC 9090;
-  А также сервисы:
+  
+- А также сервисы:
 - Kafka на порту 9093;
 - Kafka UI на порту 8085;
 - PostgreSQL на порту 5432.
