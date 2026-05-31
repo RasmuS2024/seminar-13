@@ -4,18 +4,17 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.example.telemetry.proto.MetricValue;
 import org.example.telemetry.proto.TelemetryRequest;
 import org.example.telemetry.proto.TelemetryServiceGrpc;
 import org.example.telemetry.proto.TelemetryUpdate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import seminars.domains.telemetry.TelemetryHistory;
 import seminars.repository.TelemetryHistoryRepository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
@@ -30,6 +29,9 @@ public class TelemetryServiceImpl implements TelemetryService {
 
     private final Map<Long, StreamObserver<TelemetryUpdate>> activeObservers = new ConcurrentHashMap<>();
     private final Map<Long, AtomicBoolean> monitoringFlags = new ConcurrentHashMap<>();
+
+    @Value("${telemetry.interval-ms:5000}")
+    private int telemetryIntervalMs;
 
     @Override
     public void startMonitoring(Long satelliteId, String deviceId) {
@@ -47,7 +49,7 @@ public class TelemetryServiceImpl implements TelemetryService {
                 if (!isActive.get()) {
                     return;
                 }
-                processUpdate(satelliteId, deviceId, update);
+                processUpdate(satelliteId, update);
             }
 
             @Override
@@ -71,7 +73,7 @@ public class TelemetryServiceImpl implements TelemetryService {
 
         TelemetryRequest request = TelemetryRequest.newBuilder()
                 .setDeviceId(deviceId)
-                .setIntervalMs(2000)
+                .setIntervalMs(telemetryIntervalMs)
                 .build();
 
         telemetryStub.streamTelemetry(request, observer);
@@ -99,34 +101,18 @@ public class TelemetryServiceImpl implements TelemetryService {
         return isActive != null && isActive.get();
     }
 
-    private void processUpdate(Long satelliteId, String deviceId, TelemetryUpdate update) {
+    private void processUpdate(Long satelliteId, TelemetryUpdate update) {
         try {
-            Double cpuTemp = null;
-            Double externalTemp = null;
+            TelemetryHistory history = TelemetryHistory.builder()
+                    .satelliteId(satelliteId)
+                    .cpuTemperature(update.getTemperatureInside())
+                    .externalTemperature(update.getTemperatureOutside())
+                    .timestamp(update.getTimestamp())
+                    .build();
 
-            MetricValue cpuMetric = update.getMetricsMap().get("cpu_temperature");
-            if (cpuMetric != null && cpuMetric.hasDoubleValue()) {
-                cpuTemp = cpuMetric.getDoubleValue();
-            }
-
-            MetricValue externalMetric = update.getMetricsMap().get("external_temperature");
-            if (externalMetric != null && externalMetric.hasDoubleValue()) {
-                externalTemp = externalMetric.getDoubleValue();
-            }
-
-            if (cpuTemp != null || externalTemp != null) {
-                TelemetryHistory history = TelemetryHistory.builder()
-                        .satelliteId(satelliteId)
-                        .deviceId(deviceId)
-                        .cpuTemperature(cpuTemp)
-                        .externalTemperature(externalTemp)
-                        .timestamp(update.getTimestamp())
-                        .build();
-
-                telemetryHistoryRepository.save(history);
-                log.debug("Сохранены данные о спутнике {}: cpu={}, external={}",
-                        satelliteId, cpuTemp, externalTemp);
-            }
+            telemetryHistoryRepository.save(history);
+            log.info("Сохранены данные о спутнике {}: inside={}, outside={}",
+                    satelliteId, update.getTemperatureInside(), update.getTemperatureOutside());
         } catch (Exception e) {
             log.error("Ошибка получения телеметрии от спутника {}: {}", satelliteId, e.getMessage());
         }

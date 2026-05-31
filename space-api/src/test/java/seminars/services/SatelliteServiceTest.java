@@ -140,6 +140,29 @@ class SatelliteServiceTest {
     }
 
     @Test
+    @DisplayName("activateSatellite повторно не активирует уже активный спутник")
+    void activateSatelliteDoesNotReactivateAlreadyActive() {
+        Satellite satellite = new ImagingSatellite(NAME, BATTERY_LEVEL, RESOLUTION);
+        satellite.activate();
+        when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.of(satellite));
+
+        satelliteService.activateSatellite(SATELLITE_ID);
+
+        assertTrue(satellite.getState().isActive());
+    }
+
+    @Test
+    @DisplayName("activateSatellite не активирует при низком заряде")
+    void activateSatelliteFailsWithLowBattery() {
+        Satellite satellite = new ImagingSatellite(NAME, 0.05, RESOLUTION);
+        when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.of(satellite));
+
+        satelliteService.activateSatellite(SATELLITE_ID);
+
+        assertFalse(satellite.getState().isActive());
+    }
+
+    @Test
     @DisplayName("deActivateSatellite деактивирует спутник")
     void deActivateSatelliteDeActivatesSatellite() {
         Satellite satellite = new ImagingSatellite(NAME, BATTERY_LEVEL, RESOLUTION);

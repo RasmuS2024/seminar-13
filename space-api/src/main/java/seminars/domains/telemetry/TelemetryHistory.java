@@ -29,9 +29,6 @@ public class TelemetryHistory {
     @Column(name = "satellite_id")
     private Long satelliteId;
 
-    @Column(name = "device_id")
-    private String deviceId;
-
     @Column(name = "cpu_temperature")
     private Double cpuTemperature;
 

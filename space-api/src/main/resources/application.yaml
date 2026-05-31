@@ -7,6 +7,9 @@ grpc:
       address: ${TELEMETRY_SERVICE_HOST:telemetry-service}:${TELEMETRY_SERVICE_PORT:9090}
       negotiationType: plaintext
 
+telemetry:
+  interval-ms : 5000
+
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}

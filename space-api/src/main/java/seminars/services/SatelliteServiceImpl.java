@@ -119,6 +119,8 @@ public class SatelliteServiceImpl implements SatelliteService {
             String deviceId = "satellite-" + satelliteId;
             telemetryService.startMonitoring(satelliteId, deviceId);
             log.info("Спутник {} активирован", satellite.getName());
+        } else if (satellite.getState().isActive()) {
+            log.warn("Спутник {} уже активирован", satellite.getName());
         } else {
             log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
         }

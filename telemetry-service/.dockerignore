@@ -11,6 +11,3 @@ bin/
 **/.classpath
 **/.project
 **/.settings/
-data/
-space-scheduler/
-telemetry-service/

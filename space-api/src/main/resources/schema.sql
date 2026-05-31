@@ -35,7 +35,6 @@ CREATE INDEX IF NOT EXISTS idx_satellite_type ON satellite(satellite_type);
 CREATE TABLE IF NOT EXISTS telemetry_history (
     id BIGSERIAL PRIMARY KEY,
     satellite_id BIGINT REFERENCES satellite(id),
-    device_id VARCHAR(255) NOT NULL,
     cpu_temperature DOUBLE PRECISION,
     external_temperature DOUBLE PRECISION,
     timestamp BIGINT NOT NULL,

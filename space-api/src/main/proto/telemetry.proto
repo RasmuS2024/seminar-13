@@ -11,22 +11,12 @@ service TelemetryService {
 
 message TelemetryRequest {
   string device_id = 1;
-  repeated string metrics = 2;
   int32 interval_ms = 2000;
-  optional int32 duration_ms = 4000;
 }
 
 message TelemetryUpdate {
-  string device_id = 1;
+  uint64 satellite_id = 1;
   int64 timestamp = 2;
-  map<string, MetricValue> metrics = 3;
-}
-
-message MetricValue {
-  oneof value {
-    double double_value = 1;
-    int64 int_value = 2;
-    string string_value = 3;
-    bool bool_value = 4;
-  }
+  double temperature_inside = 3;
+  double temperature_outside = 4;
 }

@@ -123,7 +123,16 @@ public class ConstellationServiceImpl implements ConstellationService {
         SatelliteConstellation constellation = getConstellationByName(constellationName);
         log.info("АКТИВАЦИЯ СПУТНИКОВ ГРУППИРОВКИ {}", constellationName.toUpperCase());
         log.info("=".repeat(50));
-        constellation.activateAllSatellites();
+        for (Satellite satellite : constellation.getSatellites()) {
+            boolean activated = satellite.activate();
+            if (activated) {
+                log.info("Спутник {} активирован", satellite.getName());
+            } else if (satellite.getState().isActive()) {
+                log.warn("Спутник {} уже активирован", satellite.getName());
+            } else {
+                log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());
+            }
+        }
     }
 
     @Override
