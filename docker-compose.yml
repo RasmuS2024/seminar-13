@@ -70,6 +70,7 @@ services:
       dockerfile: Dockerfile
       args:
         - BUILDKIT_INLINE_CACHE=1
+    image: ghcr.io/rasmus2024/seminar11/telemetry-service:latest
     container_name: telemetry-service
     depends_on:
       postgres:
