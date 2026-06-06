@@ -1,13 +1,13 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.5.0"
+    id("org.springframework.boot") version "3.5.14"
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
     id("checkstyle")
 }
 
-ext["tomcat.version"] = "11.0.21"
-ext["spring-framework.version"] = "6.2.11"
+ext["tomcat.version"] = "11.0.22"
+ext["spring-framework.version"] = "6.2.18"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
