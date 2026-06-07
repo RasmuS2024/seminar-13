@@ -7,19 +7,21 @@ RUN chmod +x gradlew
 
 RUN --mount=type=cache,target=/root/.gradle/caches \
     --mount=type=cache,target=/root/.gradle/wrapper \
-    ./gradlew dependencies --no-daemon --quiet
+    ./gradlew :telemetry-service:dependencies --no-daemon --quiet
 
-COPY src/main/proto ./src/main/proto
+COPY config ./config
+COPY telemetry-service/build.gradle.kts ./telemetry-service/
+
+COPY telemetry-service/src/main/proto ./telemetry-service/src/main/proto
+RUN --mount=type=cache,target=/root/.gradle/caches \
+    ./gradlew :telemetry-service:generateProto --no-daemon
+
+COPY telemetry-service/src/main/java ./telemetry-service/src/main/java
+COPY telemetry-service/src/main/resources ./telemetry-service/src/main/resources
 
 RUN --mount=type=cache,target=/root/.gradle/caches \
-    ./gradlew generateProto --no-daemon
-
-COPY src/main/java ./src/main/java
-COPY src/main/resources ./src/main/resources
-
-RUN --mount=type=cache,target=/root/.gradle/caches \
-    ./gradlew bootJar -x test --no-daemon --parallel && \
-    mv /app/build/libs/*.jar /app/app.jar
+    ./gradlew :telemetry-service:bootJar -x test --no-daemon --parallel && \
+    mv /app/telemetry-service/build/libs/*.jar /app/app.jar
 
 RUN java -Djarmode=layertools -jar app.jar extract
 
