@@ -13,11 +13,7 @@ repositories {
     mavenCentral()
 }
 
-val grpcVersion = "1.75.0"
-ext {
-    set("spring-framework.version", "6.2.18")
-    set("tomcat.version", "10.1.55")
-}
+val grpcVersion: String by project
 
 dependencyManagement {
     imports {

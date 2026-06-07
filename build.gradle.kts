@@ -4,11 +4,12 @@ plugins {
     id("jacoco")
 }
 
-val grpcVersion = "1.68.1"
-
 subprojects {
-    ext["netty.version"] = "4.1.133.Final"
-    ext["commons-lang3.version"] = "3.18.0"
+    extra.set("grpcVersion", "1.75.0")
+    extra.set("spring-framework.version", "6.2.18")
+    extra.set("tomcat.version", "11.0.22")
+    extra.set("netty.version", "4.1.133.Final")
+    extra.set("commons-lang3.version", "3.18.0")
 }
 
 group = "org.example"

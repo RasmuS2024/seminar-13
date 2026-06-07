@@ -6,9 +6,7 @@ plugins {
     id("com.google.protobuf") version "0.9.5"
 }
 
-val grpcVersion = "1.75.0"
-ext["spring-framework.version"] = "6.2.18"
-ext["tomcat.version"] = "10.1.55"
+val grpcVersion: String by project
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -43,7 +41,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.postgresql:postgresql:42.7.11")
 }
 
 protobuf {

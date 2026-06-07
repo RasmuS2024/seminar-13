@@ -6,9 +6,6 @@ plugins {
     id("checkstyle")
 }
 
-ext["tomcat.version"] = "11.0.22"
-ext["spring-framework.version"] = "6.2.18"
-
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
