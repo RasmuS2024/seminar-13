@@ -35,7 +35,7 @@ jobs:
         run: docker compose build
 
       - name: Run Trivy vulnerability scanner for space-api
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'ghcr.io/rasmus2024/seminar11/space-api:latest'
           format: 'table'
@@ -44,7 +44,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Run Trivy vulnerability scanner for space-scheduler
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'ghcr.io/rasmus2024/seminar11/space-scheduler:latest'
           format: 'table'
@@ -53,7 +53,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Run Trivy vulnerability scanner for telemetry-service
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'ghcr.io/rasmus2024/seminar11/telemetry-service:latest'
           format: 'table'
