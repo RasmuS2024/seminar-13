@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import seminars.dto.ValidationErrorResponse;
 import seminars.dto.ValidationErrorResponse.FieldError;
-import seminars.exceptions.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
