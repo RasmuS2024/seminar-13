@@ -6,9 +6,9 @@ plugins {
     id("com.google.protobuf") version "0.9.5"
 }
 
+val grpcVersion = "1.75.0"
 ext["spring-framework.version"] = "6.2.18"
 ext["tomcat.version"] = "10.1.55"
-ext["grpcVersion"] = "1.75.0"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("io.grpc:grpc-bom:1.68.1"))
+    implementation(platform("io.grpc:grpc-bom:${grpcVersion}"))
     
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -43,7 +43,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    runtimeOnly("org.postgresql:postgresql:42.7.11")
+    runtimeOnly("org.postgresql:postgresql")
 }
 
 protobuf {
@@ -52,7 +52,7 @@ protobuf {
     }
     plugins {
         create("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.68.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
     }
     generateProtoTasks {

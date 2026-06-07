@@ -13,15 +13,15 @@ repositories {
     mavenCentral()
 }
 
+val grpcVersion = "1.75.0"
 ext {
-    set("grpcVersion", "1.75.0")
     set("spring-framework.version", "6.2.18")
     set("tomcat.version", "10.1.55")
 }
 
 dependencyManagement {
     imports {
-        mavenBom("io.grpc:grpc-bom:${ext.get("grpcVersion")}")
+        mavenBom("io.grpc:grpc-bom:${grpcVersion}")
     }
 }
 
@@ -57,7 +57,7 @@ protobuf {
     }
     plugins {
         create("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.68.1"
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
     }
     generateProtoTasks {
