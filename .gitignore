@@ -46,3 +46,15 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+
+### Security checks ###
+sbom.json
+sbom2.json
+grype-report.json
+zap-full-report.html
+semgrep-report.json
+zap-full-report.json
+grype-report2.json
+gitleaks-git-report.json
+gitleaks-report.json

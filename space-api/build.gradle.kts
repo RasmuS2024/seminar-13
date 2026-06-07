@@ -8,7 +8,7 @@ plugins {
 
 ext["spring-framework.version"] = "6.2.18"
 ext["tomcat.version"] = "10.1.55"
-ext["grpcVersion"] = "1.68.1"
+ext["grpcVersion"] = "1.75.0"
 
 group = "org.example"
 version = "1.0-SNAPSHOT"

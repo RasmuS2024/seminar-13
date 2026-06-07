@@ -14,7 +14,7 @@ repositories {
 }
 
 ext {
-    set("grpcVersion", "1.68.1")
+    set("grpcVersion", "1.75.0")
     set("spring-framework.version", "6.2.18")
     set("tomcat.version", "10.1.55")
 }
