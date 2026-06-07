@@ -77,7 +77,15 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 management:
+  server:
+    port: 8082
   endpoints:
     web:
       exposure:
-        exclude: "*"
+        include: health
+  endpoint:
+    health:
+      show-details: never
+      show-components: never
+      probes:
+        enabled: true
