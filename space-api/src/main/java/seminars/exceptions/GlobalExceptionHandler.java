@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import seminars.dto.ValidationErrorResponse;
 import seminars.dto.ValidationErrorResponse.FieldError;
@@ -104,6 +105,22 @@ public class GlobalExceptionHandler {
                 .fieldErrors(List.of())
                 .build();
         log.warn("Ресурс не найден: {}", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ValidationErrorResponse> handleNoHandlerFound(
+            NoHandlerFoundException ex,
+            HttpServletRequest request) {
+        ValidationErrorResponse response = ValidationErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Not Found")
+                .message("Запрашиваемый ресурс не найден")
+                .path(request.getRequestURI())
+                .fieldErrors(List.of())
+                .build();
+        log.warn("Ресурс не найден: {} {} {}", ex.getHttpMethod(), request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
