@@ -1,10 +1,11 @@
 # Cеминар 11 по SysDеsign
 
+## Нагрузочное тестирование -> [README](README_JMeter.MD)
 
 ## Реализовано (Семинар-11):
-- добавлен сервис Kafka в конфиги Docker-compose и в сервисы space-api, telemetry-service
+- добавлен сервис Kafka в сервисы space-api, telemetry-service и соответственно в конфиги Docker-compose
 
-## Запуск
+## Запуск проекта
 
 ### Требования
 - Docker
@@ -39,8 +40,6 @@ cp .env.example .env
 Запустите командой:
 ```docker compose up```
 
-
-
 ## Описание проекта
 Работа со спутниками, их группировками и выполнением миссий.
 
@@ -58,9 +57,8 @@ cp .env.example .env
 
 GitHub Actions:
 
-![Java CI](https://github.com/RasmuS2024/seminar-11/actions/workflows/main.yml/badge.svg)
+![CI](https://github.com/RasmuS2024/seminar-11/actions/workflows/ci.yml/badge.svg)
 
-![Build and Push Docker Images](https://github.com/RasmuS2024/seminar-11/actions/workflows/deploy.yml/badge.svg)
 
 
 

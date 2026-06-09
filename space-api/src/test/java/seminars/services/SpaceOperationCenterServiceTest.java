@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -58,15 +59,15 @@ class SpaceOperationCenterServiceTest {
                 constellationName, List.of(param));
 
         Satellite satellite = new ImagingSatellite(satName, 0.8, 1.0);
+        satellite.setId(1L);
         SatelliteConstellation constellation = new SatelliteConstellation(constellationName);
+        constellation.setId(1L);
 
-        doThrow(new SpaceOperationException("Не найдена"))
-                .when(constellationService)
-                .showConstellationStatus(anyString());
+        when(constellationRepository.existsByName(anyString())).thenReturn(false);
         when(constellationService.createConstellation(anyString())).thenReturn(constellation);
         when(constellationService.getConstellationByName(anyString())).thenReturn(constellation);
         when(satelliteService.createSatellite(param)).thenReturn(satellite);
-        doNothing().when(constellationService).addSatelliteToConstellation(any(), any());
+        doNothing().when(constellationService).addSatelliteToConstellation(anyLong(), anyLong());
 
         spaceOperationCenterService.addSatellite(request);
 

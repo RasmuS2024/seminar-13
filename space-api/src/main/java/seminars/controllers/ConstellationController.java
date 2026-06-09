@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import seminars.domains.constellations.SatelliteConstellation;
+import seminars.dto.ConstellationStatusResponse;
 import seminars.dto.CreateConstellationRequest;
 import seminars.dto.RenameConstellationRequest;
 import seminars.services.ConstellationService;
@@ -65,4 +66,16 @@ public class ConstellationController {
         SatelliteConstellation constellation = constellationService.getConstellationByName(request.newName());
         return ResponseEntity.ok(constellation);
     }
+
+    @PatchMapping("/{constellationName}/satellites/{satelliteName}")
+    @ApiResponse(responseCode = "200", description = "Спутник привязан к группировке")
+    @ApiResponse(responseCode = "404", description = "Группировка или спутник не найдены")
+    public ResponseEntity<ConstellationStatusResponse> addSatelliteToConstellation(
+            @PathVariable String constellationName,
+            @PathVariable String satelliteName) {
+        constellationService.addSatelliteToConstellation(constellationName, satelliteName);
+        ConstellationStatusResponse status = constellationService.getConstellationStatus(constellationName);
+        return ResponseEntity.ok(status);
+    }
+
 }

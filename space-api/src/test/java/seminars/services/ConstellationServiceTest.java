@@ -195,6 +195,47 @@ class ConstellationServiceTest {
     }
 
     @Test
+    @DisplayName("addSatelliteToConstellation по имени добавляет спутник в группировку")
+    void addSatelliteToConstellationByNameAddsSatellite() {
+        SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME);
+        Satellite satellite = new ImagingSatellite(SATELLITE_NAME, 0.8, 1.0);
+
+        when(constellationRepository.findByName(CONSTELLATION_NAME))
+                .thenReturn(Optional.of(constellation));
+        when(satelliteRepository.findByName(SATELLITE_NAME))
+                .thenReturn(Optional.of(satellite));
+        when(satelliteRepository.save(satellite)).thenReturn(satellite);
+
+        constellationService.addSatelliteToConstellation(CONSTELLATION_NAME, SATELLITE_NAME);
+
+        verify(satelliteRepository).save(satellite);
+        assertTrue(constellation.getSatellites().contains(satellite));
+    }
+
+    @Test
+    @DisplayName("addSatelliteToConstellation по имени для несуществующей группировки выбрасывает исключение")
+    void addSatelliteToConstellationByNameWithNonExistentConstellationThrowsException() {
+        when(constellationRepository.findByName(CONSTELLATION_NAME))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> constellationService.addSatelliteToConstellation(CONSTELLATION_NAME, SATELLITE_NAME));
+    }
+
+    @Test
+    @DisplayName("addSatelliteToConstellation по имени для несуществующего спутника выбрасывает исключение")
+    void addSatelliteToConstellationByNameWithNonExistentSatelliteThrowsException() {
+        SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME);
+        when(constellationRepository.findByName(CONSTELLATION_NAME))
+                .thenReturn(Optional.of(constellation));
+        when(satelliteRepository.findByName(SATELLITE_NAME))
+                .thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> constellationService.addSatelliteToConstellation(CONSTELLATION_NAME, SATELLITE_NAME));
+    }
+
+    @Test
     @DisplayName("activateAllSatellites активирует все спутники")
     void activateAllSatellitesActivatesAll() {
         SatelliteConstellation constellation = new SatelliteConstellation(CONSTELLATION_NAME);

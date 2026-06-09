@@ -88,6 +88,20 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    public void addSatelliteToConstellation(String constellationName, String satelliteName) {
+        validateName(constellationName);
+        SatelliteConstellation constellation = getConstellationByName(constellationName);
+        Satellite satellite = satelliteRepository.findByName(satelliteName)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Спутник не найден по имени: " + satelliteName));
+
+        constellation.addSatellite(satellite);
+        satellite.setConstellation(constellation);
+        satelliteRepository.save(satellite);
+        log.info("{} добавлен в группировку \"{}\"", satellite.getName(), constellation.getName());
+    }
+
+    @Override
     public void removeSatelliteFromConstellation(String constellationName, String satelliteName) {
         validateName(constellationName);
         SatelliteConstellation constellation = getConstellationByName(constellationName);

@@ -29,9 +29,7 @@ public class SpaceOperationCenterService {
 
     @LogExecutionTime()
     public AddSatellitesResponse addSatellite(AddSatelliteRequest addSatelliteRequest) {
-        try {
-            constellationService.showConstellationStatus(addSatelliteRequest.constellationName());
-        } catch (Exception e) {
+        if (!constellationRepository.existsByName(addSatelliteRequest.constellationName())) {
             constellationService.createConstellation(addSatelliteRequest.constellationName());
         }
 

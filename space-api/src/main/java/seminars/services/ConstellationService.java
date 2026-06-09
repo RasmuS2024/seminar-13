@@ -13,6 +13,7 @@ public interface ConstellationService {
     List<SatelliteConstellation> getAllConstellationsWithSatellites();
     void deleteConstellation(String name);
     void addSatelliteToConstellation(Long constellationId, Long satelliteId);
+    void addSatelliteToConstellation(String constellationName, String satelliteName);
     void removeSatelliteFromConstellation(String constellationName, String satelliteName);
     ConstellationStatusResponse executeConstellationMission(String constellationName);
     ConstellationStatusResponse activateAllSatellites(String constellationName);
