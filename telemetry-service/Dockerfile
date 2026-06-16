@@ -13,7 +13,7 @@ COPY config ./config
 COPY telemetry-service/build.gradle.kts ./telemetry-service/
 
 COPY telemetry-service/src/main/proto ./telemetry-service/src/main/proto
-RUN --mount=type=cache,target=/root/.gradle/caches \
+RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
     ./gradlew :telemetry-service:generateProto --no-daemon
 
 COPY telemetry-service/src/main/java ./telemetry-service/src/main/java

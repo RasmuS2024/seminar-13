@@ -27,7 +27,7 @@ dependencies {
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
 
-    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.kafka:spring-kafka:3.3.16")
 
     implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
     implementation("io.grpc:grpc-protobuf")

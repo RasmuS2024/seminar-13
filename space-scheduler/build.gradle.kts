@@ -6,6 +6,16 @@ plugins {
     id("checkstyle")
 }
 
+checkstyle {
+    toolVersion = "13.6.0"
+}
+
+configurations.checkstyle {
+    resolutionStrategy {
+        force("org.codehaus.plexus:plexus-utils:3.6.1")
+    }
+}
+
 group = "org.example"
 version = "1.0-SNAPSHOT"
 
