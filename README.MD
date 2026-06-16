@@ -1,9 +1,7 @@
-# Cеминар 11 по SysDеsign
+# Cеминар 12 по SysDеsign
 
-## Нагрузочное тестирование -> [README](README_JMeter.MD)
 
-## Реализовано (Семинар-11):
-- добавлен сервис Kafka в сервисы space-api, telemetry-service и соответственно в конфиги Docker-compose
+## Реализовано (Семинар-12):
 
 ## Запуск проекта
 
@@ -15,8 +13,8 @@
 ### Установка
 Склонируйте репозиторий:
 ```bash
-git clone https://github.com/RasmuS2024/seminar-11.git
-cd seminar-11
+git clone https://github.com/RasmuS2024/seminar-12.git
+cd seminar-12
 ```
 
 ### Перед запуском
@@ -54,10 +52,9 @@ cp .env.example .env
 - Kafka UI на порту 8085;
 - PostgreSQL на порту 5432.
 
-
 GitHub Actions:
 
-![CI](https://github.com/RasmuS2024/seminar-11/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/RasmuS2024/seminar-12/actions/workflows/ci.yml/badge.svg)
 
 
 
