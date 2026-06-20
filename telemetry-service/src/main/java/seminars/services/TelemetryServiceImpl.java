@@ -8,10 +8,7 @@ import org.example.telemetry.proto.TelemetryRequest;
 import org.example.telemetry.proto.TelemetryServiceGrpc;
 import org.example.telemetry.proto.TelemetryUpdate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,18 +25,13 @@ public class TelemetryServiceImpl extends TelemetryServiceGrpc.TelemetryServiceI
     @Override
     public void streamTelemetry(TelemetryRequest request,
                                 StreamObserver<TelemetryUpdate> responseObserver) {
+        long satelliteId = request.getSatelliteId();
+        satelliteIdRepository.add(satelliteId);
+
         executor.scheduleAtFixedRate(() -> {
             try {
-                Set<Long> activeIds = satelliteIdRepository.getAll();
-                if (activeIds.isEmpty()) {
-                    return;
-                }
-
-                List<Long> idList = new ArrayList<>(activeIds);
-                Long satId = idList.get(random.nextInt(idList.size()));
-
                 TelemetryUpdate update = TelemetryUpdate.newBuilder()
-                        .setSatelliteId(satId)
+                        .setSatelliteId(satelliteId)
                         .setTemperatureInside(20.0 + random.nextDouble() * 10)
                         .setTemperatureOutside(-50.0 + random.nextDouble() * 30)
                         .setTimestamp(System.currentTimeMillis())

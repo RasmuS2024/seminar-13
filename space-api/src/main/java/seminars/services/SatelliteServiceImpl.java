@@ -11,9 +11,9 @@ import seminars.exceptions.DuplicateResourceException;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
-import seminars.kafka.KafkaService;
 import seminars.kafka.KafkaUtils;
 import seminars.kafka.SatelliteEvent;
+import seminars.kafka.outbox.OutboxService;
 import seminars.repository.SatelliteRepository;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     private final List<SatelliteFactory> factories;
     private final SatelliteRepository satelliteRepository;
     private final TelemetryService telemetryService;
-    private final KafkaService kafkaService;
+    private final OutboxService outboxService;
     private static final String SATELLITE_EVENTS_TOPIC = "satellite-events";
 
     @Override
@@ -58,8 +58,8 @@ public class SatelliteServiceImpl implements SatelliteService {
                 saved.getClass().getSimpleName(),
                 (int) (saved.getEnergy().getBatteryLevel() * 100));
 
-        kafkaService.sendToKafkaSatellite(
-                SATELLITE_EVENTS_TOPIC,
+        outboxService.publishToOutbox(
+                saved.getId(),
                 KafkaUtils.createEvent(saved, SatelliteEvent.EventType.CREATED)
         );
 
@@ -105,16 +105,12 @@ public class SatelliteServiceImpl implements SatelliteService {
 
         satelliteRepository.deleteById(id);
 
-        try {
-            kafkaService.sendToKafkaSatellite(
-                    SATELLITE_EVENTS_TOPIC,
-                    KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
-            );
-        } catch (Exception e) {
-            log.error("Не удалось отправить событие DELETED в Kafka: id={}, name={}", id, name, e);
-        }
-
         telemetryService.stopMonitoring(id);
+
+        outboxService.publishToOutbox(
+                id,
+                KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
+        );
 
         log.info("Удален спутник: id={}, name={}, type={}", id, name, type);
     }
@@ -125,8 +121,7 @@ public class SatelliteServiceImpl implements SatelliteService {
         boolean activated = satellite.activate();
 
         if (activated) {
-            String deviceId = "satellite-" + satelliteId;
-            telemetryService.startMonitoring(satelliteId, deviceId);
+            telemetryService.startMonitoring(satelliteId);
             log.info("Спутник {} активирован", satellite.getName());
         } else {
             log.warn("Спутник {} не удалось активировать (недостаточно энергии)", satellite.getName());

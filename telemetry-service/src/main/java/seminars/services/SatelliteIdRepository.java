@@ -1,34 +1,44 @@
 package seminars.services;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SatelliteIdRepository {
-    private final Set<Long> activeIds = ConcurrentHashMap.newKeySet();
+    private final ActiveSatelliteRepository repository;
 
+    @Transactional
     public void add(Long satelliteId) {
-        if (activeIds.add(satelliteId)) {
+        if (!repository.existsById(satelliteId)) {
+            repository.save(new ActiveSatellite(satelliteId));
             log.info("Спутник ID={} добавлен в реестр телеметрии", satelliteId);
         }
     }
 
+    @Transactional
     public void remove(Long satelliteId) {
-        if (activeIds.remove(satelliteId)) {
+        if (repository.existsById(satelliteId)) {
+            repository.deleteById(satelliteId);
             log.info("Спутник ID={} удалён из реестра телеметрии", satelliteId);
         }
     }
 
+    @Transactional(readOnly = true)
     public Set<Long> getAll() {
-        return Collections.unmodifiableSet(activeIds);
+        return repository.findAll().stream()
+                .map(ActiveSatellite::getSatelliteId)
+                .collect(Collectors.toSet());
     }
 
+    @Transactional(readOnly = true)
     public boolean isEmpty() {
-        return activeIds.isEmpty();
+        return repository.count() == 0;
     }
 }

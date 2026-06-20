@@ -80,6 +80,10 @@ services:
       - TELEMETRY_SERVICE_HOST=telemetry-service
       - TELEMETRY_SERVICE_PORT=9090
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9093
+      - DB_HOST=postgres
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     ports:
       - "9091:9091"
       - "9090:9090"

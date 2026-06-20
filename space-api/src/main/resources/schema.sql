@@ -57,21 +57,15 @@ CREATE INDEX IF NOT EXISTS idx_telemetry_timestamp ON telemetry_history(timestam
 
 -- outbox
 CREATE TABLE IF NOT EXISTS outbox (
-    id            BIGSERIAL PRIMARY KEY,
-    aggregate_id  BIGINT NOT NULL,
-    event_type    VARCHAR(20) NOT NULL CONSTRAINT chk_outbox_event_type
-    CHECK (event_type IN ('CREATED', 'DELETED')),
-    payload       JSONB NOT NULL,
-    created_at    TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    status        VARCHAR(10) NOT NULL DEFAULT 'PENDING'
-    CONSTRAINT chk_outbox_status CHECK (status IN ('PENDING', 'SENT')),
+    id UUID PRIMARY KEY,
+    aggregate_id BIGINT NOT NULL,
+    event_type VARCHAR(10) NOT NULL,
+    CONSTRAINT chk_outbox_event_type CHECK (event_type IN ('CREATED', 'DELETED')),
+    payload TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(10) NOT NULL DEFAULT 'PENDING',
+    CONSTRAINT chk_outbox_status CHECK (status IN ('PENDING', 'SENT', 'FAILED'))
+);
 
-    CONSTRAINT fk_outbox_satellite
-        FOREIGN KEY (aggregate_id)
-        REFERENCES satellite(id)
-        ON DELETE CASCADE
-   );
-
-CREATE INDEX idx_outbox_status_created_at ON outbox (status, created_at);
-CREATE INDEX idx_outbox_aggregate_id ON outbox (aggregate_id);
-CREATE INDEX idx_outbox_event_type ON outbox (event_type);
+CREATE INDEX IF NOT EXISTS idx_outbox_status_created_at ON outbox (status, created_at);
+CREATE INDEX IF NOT EXISTS idx_outbox_aggregate_id ON outbox (aggregate_id);

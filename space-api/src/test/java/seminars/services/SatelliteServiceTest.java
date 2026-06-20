@@ -15,7 +15,7 @@ import seminars.dto.SatelliteStatusResponse;
 import seminars.exceptions.ResourceNotFoundException;
 import seminars.exceptions.SpaceOperationException;
 import seminars.factory.SatelliteFactory;
-import seminars.kafka.KafkaService;
+import seminars.kafka.outbox.OutboxService;
 import seminars.repository.SatelliteRepository;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -53,7 +53,7 @@ class SatelliteServiceTest {
     private TelemetryService telemetryService;
 
     @Mock
-    private KafkaService kafkaService;
+    private OutboxService outboxService;
 
     private SatelliteServiceImpl satelliteService;
 
@@ -61,7 +61,7 @@ class SatelliteServiceTest {
     void setUp() {
         List<SatelliteFactory> factories = new ArrayList<>();
         factories.add(imagingFactory);
-        satelliteService = new SatelliteServiceImpl(factories, satelliteRepository, telemetryService, kafkaService);
+        satelliteService = new SatelliteServiceImpl(factories, satelliteRepository, telemetryService, outboxService);
     }
 
     @Test
@@ -73,15 +73,16 @@ class SatelliteServiceTest {
         when(imagingFactory.isSatelliteTypeSupported(SatelliteType.IMAGE)).thenReturn(true);
         when(imagingFactory.createSatelliteWithParameter(param)).thenReturn(satellite);
         when(satelliteRepository.findByName(NAME)).thenReturn(Optional.empty());
+        satellite.setId(SATELLITE_ID);
         when(satelliteRepository.save(satellite)).thenReturn(satellite);
-        doNothing().when(kafkaService).sendToKafkaSatellite(anyString(), any());
+        doNothing().when(outboxService).publishToOutbox(anyLong(), any());
 
         Satellite result = satelliteService.createSatellite(param);
 
         assertNotNull(result);
         assertEquals(NAME, result.getName());
         verify(satelliteRepository).save(satellite);
-        verify(kafkaService).sendToKafkaSatellite(anyString(), any());
+        verify(outboxService).publishToOutbox(anyLong(), any());
     }
 
     @Test
@@ -225,13 +226,13 @@ class SatelliteServiceTest {
         Satellite satellite = new ImagingSatellite(NAME, BATTERY_LEVEL, RESOLUTION);
         satellite.setId(SATELLITE_ID);
         when(satelliteRepository.findById(SATELLITE_ID)).thenReturn(Optional.of(satellite));
-        doNothing().when(kafkaService).sendToKafkaSatellite(anyString(), any());
+        doNothing().when(outboxService).publishToOutbox(anyLong(), any());
         doNothing().when(telemetryService).stopMonitoring(SATELLITE_ID);
 
         satelliteService.deleteSatellite(SATELLITE_ID);
 
         verify(satelliteRepository).deleteById(SATELLITE_ID);
-        verify(kafkaService).sendToKafkaSatellite(anyString(), any());
+        verify(outboxService).publishToOutbox(anyLong(), any());
         verify(telemetryService).stopMonitoring(SATELLITE_ID);
     }
 
@@ -243,7 +244,7 @@ class SatelliteServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> satelliteService.deleteSatellite(SATELLITE_ID));
         verify(satelliteRepository, never()).deleteById(any());
-        verify(kafkaService, never()).sendToKafkaSatellite(anyString(), any());
+        verify(outboxService, never()).publishToOutbox(anyLong(), any());
         verify(telemetryService, never()).stopMonitoring(any());
     }
 }

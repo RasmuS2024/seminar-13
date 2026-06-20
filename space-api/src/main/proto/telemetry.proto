@@ -10,8 +10,8 @@ service TelemetryService {
 }
 
 message TelemetryRequest {
-  string device_id = 1;
-  int32 interval_ms = 2000;
+  int32 interval_ms = 1;
+  uint64 satellite_id = 2;
 }
 
 message TelemetryUpdate {

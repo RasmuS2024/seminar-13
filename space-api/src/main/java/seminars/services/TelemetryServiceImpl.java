@@ -34,7 +34,7 @@ public class TelemetryServiceImpl implements TelemetryService {
     private int telemetryIntervalMs;
 
     @Override
-    public void startMonitoring(Long satelliteId, String deviceId) {
+    public void startMonitoring(Long satelliteId) {
         if (monitoringFlags.containsKey(satelliteId) && monitoringFlags.get(satelliteId).get()) {
             log.warn("Телеметрия запущена для спутника {}", satelliteId);
             return;
@@ -72,12 +72,12 @@ public class TelemetryServiceImpl implements TelemetryService {
         activeObservers.put(satelliteId, observer);
 
         TelemetryRequest request = TelemetryRequest.newBuilder()
-                .setDeviceId(deviceId)
                 .setIntervalMs(telemetryIntervalMs)
+                .setSatelliteId(satelliteId)
                 .build();
 
         telemetryStub.streamTelemetry(request, observer);
-        log.info("Запущена телеметрия для спутника: {} с устройством {}", satelliteId, deviceId);
+        log.info("Запущена телеметрия для спутника: {}", satelliteId);
     }
 
     @Override
