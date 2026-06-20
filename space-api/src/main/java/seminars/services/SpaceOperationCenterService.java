@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.aop.LogExecutionTime;
 import seminars.domains.satellites.Satellite;
-import seminars.domains.satellites.params.SatelliteParam;
 import seminars.domains.satellites.requests.AddSatelliteRequest;
 import seminars.domains.satellites.requests.MissionRequest;
 import seminars.dto.AddSatellitesResponse;
@@ -36,7 +35,8 @@ public class SpaceOperationCenterService {
         List<SatelliteStatusResponse> createdSatellites = addSatelliteRequest.satelliteParams().stream()
                 .map(param -> {
                     Satellite satellite = satelliteService.createSatellite(param);
-                    var constellation = constellationService.getConstellationByName(addSatelliteRequest.constellationName());
+                    var constellation = constellationService.getConstellationByName(
+                            addSatelliteRequest.constellationName());
                     constellationService.addSatelliteToConstellation(constellation.getId(), satellite.getId());
                     return new SatelliteStatusResponse(
                             satellite.getId(),
@@ -54,7 +54,8 @@ public class SpaceOperationCenterService {
     public MissionResultResponse executeMission(MissionRequest missionRequest) {
         return switch (missionRequest.targetType()) {
             case CONSTELLATION -> {
-                ConstellationStatusResponse status = constellationService.activateAllSatellites(missionRequest.constellationName());
+                ConstellationStatusResponse status = constellationService.activateAllSatellites(
+                        missionRequest.constellationName());
                 constellationService.executeConstellationMission(missionRequest.constellationName());
                 long activeCount = status.satellites().stream().filter(SatelliteStatusResponse::active).count();
                 yield new MissionResultResponse(

@@ -25,6 +25,7 @@ public class SatelliteEventListener {
             switch (event.eventType()) {
                 case CREATED -> satelliteIdRepository.add(event.satelliteId());
                 case DELETED -> satelliteIdRepository.remove(event.satelliteId());
+                default -> log.warn("Неизвестный тип события: {}", event.eventType());
             }
         } catch (Exception e) {
             log.error("Ошибка обработки события (offset={}): {}", record.offset(), e.getMessage(), e);

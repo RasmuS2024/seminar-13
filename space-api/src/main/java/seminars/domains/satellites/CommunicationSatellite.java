@@ -2,6 +2,8 @@ package seminars.domains.satellites;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,6 +16,8 @@ import static seminars.constants.CommunicationSatelliteConstants.SEND_DATA_ENERG
 @Getter
 @ToString
 @Entity
+@Table(name = "communication_satellite")
+@PrimaryKeyJoinColumn(name = "satellite_id")
 @DiscriminatorValue("COMMUNICATION")
 @NoArgsConstructor
 public class CommunicationSatellite extends Satellite {

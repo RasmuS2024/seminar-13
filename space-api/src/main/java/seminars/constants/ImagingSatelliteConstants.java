@@ -6,7 +6,7 @@ public final class ImagingSatelliteConstants {
     }
 
     /**
-     * Разрешение камеры по умолчанию
+     * Разрешение камеры по умолчанию.
      */
     public static final double DEFAULT_RESOLUTION = 155;
 

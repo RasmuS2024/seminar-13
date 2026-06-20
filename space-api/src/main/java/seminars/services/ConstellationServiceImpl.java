@@ -77,7 +77,8 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     public void addSatelliteToConstellation(Long constellationId, Long satelliteId) {
         SatelliteConstellation constellation = constellationRepository.findById(constellationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Не существует группировки c id = " + constellationId));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Не существует группировки c id = " + constellationId));
         Satellite satellite = satelliteRepository.findById(satelliteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Не существует спутника c id = " + satelliteId));
 

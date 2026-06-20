@@ -6,4 +6,4 @@ public record SatelliteStatusResponse(
         String type,
         boolean active,
         double batteryLevel
-) {}
+) { }

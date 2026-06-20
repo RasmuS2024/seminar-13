@@ -125,10 +125,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            HttpMediaTypeNotAcceptableException.class,
-            HttpMediaTypeNotSupportedException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MissingServletRequestParameterException.class
+        HttpMediaTypeNotAcceptableException.class,
+        HttpMediaTypeNotSupportedException.class,
+        HttpRequestMethodNotSupportedException.class,
+        MissingServletRequestParameterException.class
     })
     public ResponseEntity<ValidationErrorResponse> handleSpringWebExceptions(
             Exception ex,

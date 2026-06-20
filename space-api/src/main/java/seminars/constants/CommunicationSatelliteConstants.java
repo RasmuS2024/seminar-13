@@ -6,7 +6,7 @@ public final class CommunicationSatelliteConstants {
     }
 
     /**
-     * Скорость передачи данных по умолчанию
+     * Скорость передачи данных по умолчанию.
      */
     public static final double DEFAULT_BANDWIDTH = 125;
 

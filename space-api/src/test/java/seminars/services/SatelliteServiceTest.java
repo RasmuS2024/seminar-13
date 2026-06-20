@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import seminars.domains.satellites.ImagingSatellite;
-import seminars.domains.satellites.params.CommunicationSatelliteParam;
 import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.SatelliteParam;

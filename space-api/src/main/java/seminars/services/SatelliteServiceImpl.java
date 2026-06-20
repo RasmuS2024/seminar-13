@@ -50,11 +50,13 @@ public class SatelliteServiceImpl implements SatelliteService {
 
         Satellite satellite = factory.createSatelliteWithParameter(param);
 
-        log.info("Создан спутник: {} (заряд: {}%)",
-                satellite.getName(),
-                (int) (satellite.getEnergy().getBatteryLevel() * 100));
-
         Satellite saved = satelliteRepository.save(satellite);
+
+        log.info("Создан спутник: id={}, name={}, type={}, battery={}%",
+                saved.getId(),
+                saved.getName(),
+                saved.getClass().getSimpleName(),
+                (int) (saved.getEnergy().getBatteryLevel() * 100));
 
         kafkaService.sendToKafkaSatellite(
                 SATELLITE_EVENTS_TOPIC,
@@ -98,16 +100,23 @@ public class SatelliteServiceImpl implements SatelliteService {
         Satellite satellite = satelliteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Спутник с id = " + id + " не найден"));
 
+        String name = satellite.getName();
+        String type = satellite.getClass().getSimpleName();
+
         satelliteRepository.deleteById(id);
 
-        kafkaService.sendToKafkaSatellite(
-                SATELLITE_EVENTS_TOPIC,
-                KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
-        );
+        try {
+            kafkaService.sendToKafkaSatellite(
+                    SATELLITE_EVENTS_TOPIC,
+                    KafkaUtils.createEvent(satellite, SatelliteEvent.EventType.DELETED)
+            );
+        } catch (Exception e) {
+            log.error("Не удалось отправить событие DELETED в Kafka: id={}, name={}", id, name, e);
+        }
 
         telemetryService.stopMonitoring(id);
 
-        log.info("Удален спутник с id: {}", id);
+        log.info("Удален спутник: id={}, name={}, type={}", id, name, type);
     }
 
     @Override
@@ -164,7 +173,8 @@ public class SatelliteServiceImpl implements SatelliteService {
             satelliteRepository.findByName(param.getName())
                     .filter(existing -> !existing.getId().equals(id))
                     .ifPresent(existing -> {
-                        throw new DuplicateResourceException("Имя '" + param.getName() + "' уже используется другим спутником");
+                        throw new DuplicateResourceException(
+                                "Имя '" + param.getName() + "' уже используется другим спутником");
                     });
         }
 

@@ -4,6 +4,17 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
     id("com.google.protobuf") version "0.9.5"
+    id("checkstyle")
+}
+
+checkstyle {
+    toolVersion = "13.6.0"
+}
+
+configurations.checkstyle {
+    resolutionStrategy {
+        force("org.codehaus.plexus:plexus-utils:3.6.1")
+    }
 }
 
 val grpcVersion: String by project

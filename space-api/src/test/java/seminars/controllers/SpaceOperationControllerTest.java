@@ -25,7 +25,6 @@ import seminars.services.SpaceOperationCenterService;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -98,7 +97,8 @@ class SpaceOperationControllerTest {
                 MissionTargetType.CONSTELLATION,
                 constellationName, null);
 
-        MissionResultResponse response = new MissionResultResponse(constellationName, null, true, "Активировано 2 из 3 спутников");
+        MissionResultResponse response = new MissionResultResponse(
+                constellationName, null, true, "Активировано 2 из 3 спутников");
         when(spaceOperationCenterService.executeMission(any(MissionRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/missions")
@@ -121,7 +121,8 @@ class SpaceOperationControllerTest {
                 MissionTargetType.SINGLE_SATELLITE,
                 constellationName, satelliteName);
 
-        MissionResultResponse response = new MissionResultResponse(constellationName, satelliteName, true, "Миссия выполнена");
+        MissionResultResponse response = new MissionResultResponse(
+                constellationName, satelliteName, true, "Миссия выполнена");
         when(spaceOperationCenterService.executeMission(any(MissionRequest.class))).thenReturn(response);
 
         mockMvc.perform(post("/api/missions")
@@ -168,7 +169,8 @@ class SpaceOperationControllerTest {
     @Test
     @DisplayName("POST /api/satellites/{id}/activate — возвращает 200 с SatelliteStatusResponse")
     void shouldActivateSatelliteReturn200() throws Exception {
-        SatelliteStatusResponse status = new SatelliteStatusResponse(1L, "TestSat", "CommunicationSatellite", true, 0.8);
+        SatelliteStatusResponse status = new SatelliteStatusResponse(
+                1L, "TestSat", "CommunicationSatellite", true, 0.8);
         when(satelliteService.activateSatellite(1L)).thenReturn(status);
 
         mockMvc.perform(post("/api/satellites/1/activate"))
@@ -184,7 +186,8 @@ class SpaceOperationControllerTest {
     @Test
     @DisplayName("POST /api/satellites/{id}/deactivate — возвращает 200 с SatelliteStatusResponse")
     void shouldDeactivateSatelliteReturn200() throws Exception {
-        SatelliteStatusResponse status = new SatelliteStatusResponse(1L, "TestSat", "CommunicationSatellite", false, 0.8);
+        SatelliteStatusResponse status = new SatelliteStatusResponse(
+                1L, "TestSat", "CommunicationSatellite", false, 0.8);
         when(satelliteService.deActivateSatellite(1L)).thenReturn(status);
 
         mockMvc.perform(post("/api/satellites/1/deactivate"))
@@ -198,7 +201,8 @@ class SpaceOperationControllerTest {
     @Test
     @DisplayName("POST /api/satellites/{id}/mission — возвращает 200 с SatelliteStatusResponse")
     void shouldPerformMissionReturn200() throws Exception {
-        SatelliteStatusResponse status = new SatelliteStatusResponse(1L, "TestSat", "CommunicationSatellite", true, 0.7);
+        SatelliteStatusResponse status = new SatelliteStatusResponse(
+                1L, "TestSat", "CommunicationSatellite", true, 0.7);
         when(satelliteService.performSatelliteMission(1L)).thenReturn(status);
 
         mockMvc.perform(post("/api/satellites/1/mission"))

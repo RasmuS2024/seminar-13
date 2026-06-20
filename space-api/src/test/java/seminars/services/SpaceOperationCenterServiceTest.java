@@ -12,14 +12,11 @@ import seminars.domains.satellites.Satellite;
 import seminars.domains.satellites.params.ImagingSatelliteParam;
 import seminars.domains.satellites.params.SatelliteParam;
 import seminars.dto.ConstellationStatusResponse;
-import seminars.dto.SystemOverviewResponse;
+import seminars.dto.SatelliteStatusResponse;
 import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 
 import java.util.List;
-
-import seminars.dto.SatelliteStatusResponse;
-import seminars.dto.AddSatellitesResponse;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -29,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

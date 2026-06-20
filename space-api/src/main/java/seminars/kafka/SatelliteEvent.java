@@ -2,7 +2,7 @@ package seminars.kafka;
 
 import java.time.Instant;
 
-public record SatelliteEvent (
+public record SatelliteEvent(
     Long satelliteId,
     String satelliteName,
     EventType eventType,

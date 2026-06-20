@@ -5,4 +5,4 @@ public record MissionResultResponse(
         String satelliteName,
         boolean success,
         String message
-) {}
+) { }

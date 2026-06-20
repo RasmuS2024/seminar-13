@@ -42,7 +42,7 @@ public class EnergySystemServiceImpl implements EnergySystemService {
         EnergySystem energySystem = getEnergySystemById(id);
         energySystem.setBatteryLevel(batteryLevel);
 
-        log.info("Обновлена энергосистема id = {}, новый заряд: {}%", id, (int)(batteryLevel * 100));
+        log.info("Обновлена энергосистема id = {}, новый заряд: {}%", id, (int) (batteryLevel * 100));
         return energySystem;
     }
 

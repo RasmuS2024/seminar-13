@@ -2,6 +2,8 @@ package seminars.domains.satellites;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -15,6 +17,8 @@ import static seminars.constants.ImagingSatelliteConstants.PHOTO_ENERGY_CONSUMPT
 @Getter
 @ToString
 @Entity
+@Table(name = "imaging_satellite")
+@PrimaryKeyJoinColumn(name = "satellite_id")
 @DiscriminatorValue("IMAGING")
 @NoArgsConstructor
 public class ImagingSatellite extends Satellite {

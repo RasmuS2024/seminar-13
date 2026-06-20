@@ -11,12 +11,12 @@ public final class EnergySystemConstants {
     public static final double MIN_BATTERY = 0.0;
 
     /**
-     * для валидации
+     * Для валидации.
      */
     public static final String MAX_BATTERY_STR = "1.0";
 
     /**
-     * для валидации
+     * Для валидации.
      */
     public static final String MIN_BATTERY_STR = "0.0";
 

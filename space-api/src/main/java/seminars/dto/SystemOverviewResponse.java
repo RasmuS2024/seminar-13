@@ -6,4 +6,4 @@ public record SystemOverviewResponse(
         int totalConstellations,
         int totalSatellites,
         List<ConstellationStatusResponse> constellations
-) {}
+) { }

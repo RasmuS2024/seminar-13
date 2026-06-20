@@ -3,7 +3,6 @@ package seminars.controllers;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +27,8 @@ public class ConstellationController {
     private final ConstellationService constellationService;
 
     @PostMapping
-    public ResponseEntity<SatelliteConstellation> createConstellation(@Valid @RequestBody CreateConstellationRequest request) {
+    public ResponseEntity<SatelliteConstellation> createConstellation(
+            @Valid @RequestBody CreateConstellationRequest request) {
         SatelliteConstellation constellation = constellationService.createConstellation(request.name());
         return ResponseEntity.ok(constellation);
     }

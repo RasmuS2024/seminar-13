@@ -4,7 +4,9 @@ import io.grpc.stub.StreamObserver;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.example.telemetry.proto.*;
+import org.example.telemetry.proto.TelemetryRequest;
+import org.example.telemetry.proto.TelemetryServiceGrpc;
+import org.example.telemetry.proto.TelemetryUpdate;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,4 +8,4 @@ public record ConstellationStatusResponse(
         int satelliteCount,
         int activeCount,
         List<SatelliteStatusResponse> satellites
-) {}
+) { }
