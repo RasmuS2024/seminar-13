@@ -1,21 +1,13 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle.kts gradlew ./
-COPY gradle ./gradle
-RUN chmod +x gradlew
-
-RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
-    --mount=type=cache,target=/root/.gradle/wrapper,sharing=locked \
-    ./gradlew :space-scheduler:dependencies --no-daemon --quiet
-
+COPY build.gradle.kts settings.gradle.kts ./
 COPY config ./config
 COPY space-scheduler/build.gradle.kts ./space-scheduler/
-
 COPY space-scheduler/src ./space-scheduler/src
 
-RUN --mount=type=cache,target=/root/.gradle/caches \
-    ./gradlew :space-scheduler:bootJar -x test --no-daemon --parallel && \
+RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
+    gradle --no-daemon :space-scheduler:bootJar -x test --parallel && \
     mv /app/space-scheduler/build/libs/*.jar /app/app.jar
 
 RUN java -Djarmode=layertools -jar app.jar extract

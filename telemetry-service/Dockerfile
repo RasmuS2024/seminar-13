@@ -1,26 +1,15 @@
 FROM gradle:8.14-jdk21 AS build
 WORKDIR /app
 
-COPY build.gradle.kts settings.gradle.kts gradlew ./
-COPY gradle ./gradle
-RUN chmod +x gradlew
-
-RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
-    --mount=type=cache,target=/root/.gradle/wrapper,sharing=locked \
-    ./gradlew :telemetry-service:dependencies --no-daemon --quiet
-
+COPY build.gradle.kts settings.gradle.kts ./
 COPY config ./config
 COPY telemetry-service/build.gradle.kts ./telemetry-service/
-
 COPY telemetry-service/src/main/proto ./telemetry-service/src/main/proto
-RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
-    ./gradlew :telemetry-service:generateProto --no-daemon
-
 COPY telemetry-service/src/main/java ./telemetry-service/src/main/java
 COPY telemetry-service/src/main/resources ./telemetry-service/src/main/resources
 
-RUN --mount=type=cache,target=/root/.gradle/caches \
-    ./gradlew :telemetry-service:bootJar -x test --no-daemon --parallel && \
+RUN --mount=type=cache,target=/root/.gradle/caches,sharing=locked \
+    gradle --no-daemon :telemetry-service:bootJar -x test --parallel && \
     mv /app/telemetry-service/build/libs/*.jar /app/app.jar
 
 RUN java -Djarmode=layertools -jar app.jar extract
