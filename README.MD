@@ -1,8 +1,8 @@
-# Cеминар 12 по SysDеsign
+# Cеминар 13 по SysDеsign
 
 
-## Реализовано (Семинар-12):
-Переработано взаимодействие, внедрены паттерны Transactional Outbox на отправителе (space-api) и Inbox на получателе (telemetry-service)
+## Реализовано (Семинар-13):
+
 
 ## Запуск проекта
 
@@ -14,8 +14,8 @@
 ### Установка
 Склонируйте репозиторий:
 ```bash
-git clone https://github.com/RasmuS2024/seminar-12.git
-cd seminar-12
+git clone https://github.com/RasmuS2024/seminar-13.git
+cd seminar-13
 ```
 
 ### Перед запуском
@@ -52,13 +52,15 @@ cp .env.example .env
 - Kafka на порту 9093;
 - Kafka UI на порту 8085;
 - PostgreSQL на порту 5432 (
- для упрощения использована одна БД для двух сервисов - space-api и telemetry-service),
+ для упрощения использована одна БД для двух сервисов (как в вебинаре) - space-api и telemetry-service),
  описание таблиц БД реализовано в schema.sql для каждого сервиса
 )
 
+ Внедрены паттерны Transactional Outbox на отправителе (space-api) и Inbox на получателе (telemetry-service).
+
 GitHub Actions:
 
-![CI](https://github.com/RasmuS2024/seminar-12/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/RasmuS2024/seminar-13/actions/workflows/ci.yml/badge.svg)
 
 
 

@@ -15,28 +15,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
-      - uses: actions/setup-java@v5.2.0
+      - uses: gradle/actions/setup-gradle@v6.2.0
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          gradle-version: wrapper
+          cache-read-only: false
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v5.0.5
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Run Checkstyle
-        run: ./gradlew checkstyleMain checkstyleTest
-
-      - name: Build and test
+      - name: Build and test (incl. checkstyle)
         run: ./gradlew build
 
   security-scan:
@@ -44,29 +30,27 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
-      - uses: actions/setup-java@v5.2.0
+      - uses: dorny/paths-filter@v4.0.1
+        id: changed-gradle-files
         with:
-          java-version: '21'
-          distribution: 'temurin'
+          filters: |
+            gradle:
+              - '**/*.gradle.kts'
+              - '**/gradle-wrapper.properties'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v5.0.5
+      - uses: gradle/actions/setup-gradle@v6.2.0
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          gradle-version: wrapper
+          cache-read-only: true
 
       - name: Generate Gradle lockfiles for Trivy
+        if: steps.changed-gradle-files.outputs.gradle == 'true'
         run: ./gradlew :space-api:dependencies :space-scheduler:dependencies :telemetry-service:dependencies --write-locks
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -83,37 +67,45 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v4
+        uses: docker/login-action@v4.2.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4.1.0
+      - uses: docker/setup-buildx-action@v4.1.0
 
-      - name: Build images
-        run: docker compose build
+      - name: Build and push space-api
+        uses: docker/build-push-action@v7.2.0
+        with:
+          context: ./space-api
+          tags: |
+            ghcr.io/rasmus2024/seminar13/space-api:latest
+            ghcr.io/rasmus2024/seminar13/space-api:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
 
-      - name: Push images with latest tag
-        run: docker compose push
-
-      - name: Tag and push with commit SHA
-        run: |
-          docker tag ghcr.io/rasmus2024/seminar12/space-api:latest ghcr.io/rasmus2024/seminar12/space-api:${{ github.sha }}
-          docker tag ghcr.io/rasmus2024/seminar12/space-scheduler:latest ghcr.io/rasmus2024/seminar12/space-scheduler:${{ github.sha }}
-          docker push ghcr.io/rasmus2024/seminar12/space-api:${{ github.sha }}
-          docker push ghcr.io/rasmus2024/seminar12/space-scheduler:${{ github.sha }}
+      - name: Build and push space-scheduler
+        uses: docker/build-push-action@v7.2.0
+        with:
+          context: ./space-scheduler
+          tags: |
+            ghcr.io/rasmus2024/seminar13/space-scheduler:latest
+            ghcr.io/rasmus2024/seminar13/space-scheduler:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          push: true
 
   test-compose:
     if: github.event_name == 'push'
     needs: push-docker
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v7.0.0
 
       - name: Create .env file
         run: |
@@ -124,15 +116,25 @@ jobs:
           EOF
 
       - name: Build and start services
+        run: docker compose up -d
+
+      - name: Wait for space-api
         run: |
-          docker compose up -d
-          sleep 35
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8080/api/overview && break
+            echo "Waiting for API... ($i)"
+            sleep 3
+          done
+          curl --fail http://localhost:8080/api/overview || (echo "API not responding" && docker compose logs && exit 1)
 
-      - name: Verify space-api health
-        run: curl --fail http://localhost:8080/api/overview || (echo "API not responding" && docker compose logs && exit 1)
-
-      - name: Verify space-scheduler
-        run: curl --fail http://localhost:8081/actuator/health || (echo "Scheduler not responding" && docker compose logs && exit 1)
+      - name: Wait for space-scheduler
+        run: |
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8081/actuator/health && break
+            echo "Waiting for scheduler... ($i)"
+            sleep 3
+          done
+          curl --fail http://localhost:8081/actuator/health || (echo "Scheduler not responding" && docker compose logs && exit 1)
 
       - name: Cleanup
         if: always()
