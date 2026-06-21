@@ -97,7 +97,8 @@ jobs:
       - name: Build and push space-api
         uses: docker/build-push-action@v7.2.0
         with:
-          context: ./space-api
+          context: .
+          file: ./space-api/Dockerfile
           tags: |
             ghcr.io/rasmus2024/seminar13/space-api:latest
             ghcr.io/rasmus2024/seminar13/space-api:${{ github.sha }}
@@ -108,7 +109,8 @@ jobs:
       - name: Build and push space-scheduler
         uses: docker/build-push-action@v7.2.0
         with:
-          context: ./space-scheduler
+          context: .
+          file: ./space-scheduler/Dockerfile
           tags: |
             ghcr.io/rasmus2024/seminar13/space-scheduler:latest
             ghcr.io/rasmus2024/seminar13/space-scheduler:${{ github.sha }}
