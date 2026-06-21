@@ -37,14 +37,15 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-validation")
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
-
-    implementation("org.springframework.kafka:spring-kafka:3.3.16")
-
     implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
     implementation("io.grpc:grpc-protobuf")
     implementation("io.grpc:grpc-stub")
     implementation("io.grpc:grpc-netty-shaded")
     implementation("com.google.protobuf:protobuf-java:3.25.5")
+    implementation("org.springframework.kafka:spring-kafka:3.3.16")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     compileOnly ("org.apache.tomcat:annotations-api:6.0.53")
 
     compileOnly ("org.projectlombok:lombok")

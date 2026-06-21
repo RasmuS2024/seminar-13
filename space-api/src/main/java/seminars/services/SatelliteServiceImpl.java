@@ -2,6 +2,7 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
@@ -66,8 +67,10 @@ public class SatelliteServiceImpl implements SatelliteService {
         return saved;
     }
 
-    @Transactional(readOnly = true)
+
     @Override
+    @Cacheable(value = "satellite", key = "#id")
+    @Transactional(readOnly = true)
     public Satellite getSatelliteById(Long id) {
         return satelliteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Спутник не найден по id: " + id));
@@ -83,8 +86,9 @@ public class SatelliteServiceImpl implements SatelliteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Спутник не найден по имени: " + name));
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Cacheable(value = "satellites", key = "'all'")
+    @Transactional(readOnly = true)
     public List<Satellite> getAllSatellites() {
         return satelliteRepository.findAll();
     }

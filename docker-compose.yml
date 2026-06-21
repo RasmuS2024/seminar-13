@@ -132,10 +132,27 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:7-alpine
+    container_name: space-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
     name: space-postgres-data
+  redis_data:
+    name: space-redis-data
 
 networks:
   app-network:

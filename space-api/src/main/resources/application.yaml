@@ -76,14 +76,37 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+  cache:
+    type: redis
+    redis:
+      time-to-live: 600000
+      cache-null-values: false
+      cache-as-null-value: false
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    connect-timeout: 2000
+    timeout: 2000
+    lettuce:
+      pool:
+        max-active: 10
+        max-idle: 5
+        min-idle: 1
+      shutdown-timeout: 100
+
 management:
   server:
     port: 8082
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,metrics,caches
   endpoint:
+    cache:
+      enabled: true
+    metrics:
+      tags:
+        application: space-api
     health:
       show-details: never
       show-components: never
