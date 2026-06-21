@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew :space-api:dependencies :space-scheduler:dependencies :telemetry-service:dependencies --write-locks
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
