@@ -20,6 +20,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6.2.0
         with:
           gradle-version: wrapper
+          java-version: '21'
+          java-distribution: 'temurin'
           cache-read-only: false
 
       - name: Make gradlew executable
@@ -46,6 +48,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6.2.0
         with:
           gradle-version: wrapper
+          java-version: '21'
+          java-distribution: 'temurin'
           cache-read-only: true
 
       - name: Make gradlew executable
