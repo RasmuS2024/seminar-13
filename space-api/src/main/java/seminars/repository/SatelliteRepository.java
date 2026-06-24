@@ -9,4 +9,5 @@ public interface SatelliteRepository extends JpaRepository<Satellite, Long> {
     List<Satellite> findByConstellationId(Long constellationId);
     Optional<Satellite> findByNameAndConstellationId(String name, Long constellationId);
     Optional<Satellite> findByName(String name);
+    Optional<Satellite> findByNameAndConstellationName(String name, String constellationName);
 }

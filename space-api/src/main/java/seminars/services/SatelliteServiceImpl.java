@@ -2,7 +2,9 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
@@ -18,6 +20,7 @@ import seminars.kafka.outbox.OutboxService;
 import seminars.repository.SatelliteRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,6 +34,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     private static final String SATELLITE_EVENTS_TOPIC = "satellite-events";
 
     @Override
+    @CacheEvict(value = "satellites", key = "'all'")
     public Satellite createSatellite(SatelliteParam param) {
         if (param == null) {
             throw new SpaceOperationException("Параметры спутника не могут быть null");
@@ -100,6 +104,10 @@ public class SatelliteServiceImpl implements SatelliteService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "satellite", key = "#id"),
+        @CacheEvict(value = "satellites", key = "'all'")
+    })
     public void deleteSatellite(Long id) {
         Satellite satellite = satelliteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Спутник с id = " + id + " не найден"));
@@ -165,6 +173,7 @@ public class SatelliteServiceImpl implements SatelliteService {
     }
 
     @Override
+    @CacheEvict(value = "satellite", key = "#id")
     public Satellite updateSatellite(Long id, SatelliteParam param) {
         Satellite satellite = getSatelliteById(id);
 
@@ -180,5 +189,12 @@ public class SatelliteServiceImpl implements SatelliteService {
         satellite.setName(param.getName());
         log.info("Обновлен спутник с id: {}", id);
         return satelliteRepository.save(satellite);
+    }
+
+    @Override
+    @Cacheable(value = "satellite", key = "#constellationName + '::' + #satelliteName")
+    @Transactional(readOnly = true)
+    public Optional<Satellite> findByName(String constellationName, String satelliteName) {
+        return satelliteRepository.findByNameAndConstellationName(satelliteName, constellationName);
     }
 }

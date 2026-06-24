@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -37,5 +38,12 @@ public class RedisConfig {
                 .cacheDefaults(defaultConfig)
                 .withInitialCacheConfigurations(cacheConfigs)
                 .build();
+    }
+
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        String host = System.getenv().getOrDefault("SPRING_REDIS_HOST", "localhost");
+        int port = Integer.parseInt(System.getenv().getOrDefault("SPRING_REDIS_PORT", "6379"));
+        return new LettuceConnectionFactory(host, port);
     }
 }

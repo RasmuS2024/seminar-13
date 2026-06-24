@@ -2,6 +2,9 @@ package seminars.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import seminars.domains.satellites.Satellite;
@@ -36,8 +39,9 @@ public class ConstellationServiceImpl implements ConstellationService {
         return constellationRepository.save(constellation);
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Cacheable(value = "constellation", key = "#constellationName")
+    @Transactional(readOnly = true)
     public SatelliteConstellation getConstellationByName(String constellationName) {
         validateName(constellationName);
 
@@ -75,6 +79,10 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "constellation", key = "#constellationId"),
+        @CacheEvict(value = "satellites", key = "'all'")
+    })
     public void addSatelliteToConstellation(Long constellationId, Long satelliteId) {
         SatelliteConstellation constellation = constellationRepository.findById(constellationId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -89,6 +97,10 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "constellation", key = "#constellationName"),
+        @CacheEvict(value = "satellites", key = "'all'")
+    })
     public void addSatelliteToConstellation(String constellationName, String satelliteName) {
         validateName(constellationName);
         SatelliteConstellation constellation = getConstellationByName(constellationName);
@@ -103,6 +115,10 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "constellation", key = "#constellationName"),
+        @CacheEvict(value = "satellites", key = "'all'")
+    })
     public void removeSatelliteFromConstellation(String constellationName, String satelliteName) {
         validateName(constellationName);
         SatelliteConstellation constellation = getConstellationByName(constellationName);
