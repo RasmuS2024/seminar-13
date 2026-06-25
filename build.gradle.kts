@@ -14,6 +14,7 @@ subprojects {
     extra.set("tomcat.version", "11.0.22")
     extra.set("netty.version", "4.1.135.Final")
     extra.set("commons-lang3.version", "3.18.0")
+    extra.set("jackson-bom.version", "2.21.4")
 }
 
 group = "org.example"

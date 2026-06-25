@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     container_name: space-postgres
     environment:
       POSTGRES_DB: ${DB_NAME}
@@ -95,7 +95,7 @@ services:
       - app-network
 
   kafka:
-    image: apache/kafka:latest
+    image: apache/kafka:4.2.1
     container_name: kafka
     environment:
       KAFKA_NODE_ID: 1
@@ -123,7 +123,7 @@ services:
       - app-network
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: provectuslabs/kafka-ui:v0.7.2
     container_name: kafka-ui
     ports:
       - "8085:8080"
