@@ -111,3 +111,7 @@ management:
       show-components: never
       probes:
         enabled: true
+
+logging:
+  level:
+    org.springframework.cache: TRACE

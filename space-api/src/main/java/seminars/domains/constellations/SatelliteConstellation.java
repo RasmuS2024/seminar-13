@@ -1,6 +1,7 @@
 package seminars.domains.constellations;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,6 +34,7 @@ public class SatelliteConstellation {
     private String name;
 
     @JsonManagedReference
+    @JsonDeserialize(as = ArrayList.class, contentAs = Satellite.class)
     @OneToMany(mappedBy = "constellation", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Satellite> satellites = new ArrayList<>();
 

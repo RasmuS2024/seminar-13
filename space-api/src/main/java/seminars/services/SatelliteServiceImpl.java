@@ -34,7 +34,10 @@ public class SatelliteServiceImpl implements SatelliteService {
     private static final String SATELLITE_EVENTS_TOPIC = "satellite-events";
 
     @Override
-    @CacheEvict(value = "satellites", key = "'all'")
+    @Caching(evict = {
+        @CacheEvict(value = "constellations", allEntries = true),
+        @CacheEvict(value = "satellites", key = "'all'")
+    })
     public Satellite createSatellite(SatelliteParam param) {
         if (param == null) {
             throw new SpaceOperationException("Параметры спутника не могут быть null");
@@ -106,7 +109,8 @@ public class SatelliteServiceImpl implements SatelliteService {
     @Override
     @Caching(evict = {
         @CacheEvict(value = "satellite", key = "#id"),
-        @CacheEvict(value = "satellites", key = "'all'")
+        @CacheEvict(value = "satellites", key = "'all'"),
+        @CacheEvict(value = "constellations", allEntries = true)
     })
     public void deleteSatellite(Long id) {
         Satellite satellite = satelliteRepository.findById(id)

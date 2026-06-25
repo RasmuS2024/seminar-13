@@ -3,6 +3,12 @@
 
 ## Реализовано (Семинар-13):
 Внедрено кэширование через Redis с использованием Spring Cache abstraction.
+Добавил логирование в application.yaml:
+```
+logging:
+  level:
+    org.springframework.cache: TRACE
+```
 
 ## Запуск проекта
 

@@ -9,8 +9,23 @@ import lombok.ToString;
 @Getter
 @Embeddable
 public class SatelliteState {
-    @JsonProperty("isActive")
     protected boolean isActive = false;
+
+    @JsonProperty("isActive")
+    protected void setActive(boolean active) {
+        this.isActive = active;
+    }
+
+    @JsonProperty("isActive")
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @JsonProperty("statusMessage")
+    public void setStatusMessage(String statusMessage) {
+        this.statusMessage = statusMessage;
+    }
+
     private String statusMessage;
 
     public SatelliteState() {

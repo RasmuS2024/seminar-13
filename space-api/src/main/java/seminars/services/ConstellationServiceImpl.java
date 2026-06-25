@@ -17,6 +17,7 @@ import seminars.exceptions.SpaceOperationException;
 import seminars.repository.ConstellationRepository;
 import seminars.repository.SatelliteRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -28,6 +29,7 @@ public class ConstellationServiceImpl implements ConstellationService {
     private final SatelliteRepository satelliteRepository;
 
     @Override
+    @CacheEvict(value = "constellations", allEntries = true)
     public SatelliteConstellation createConstellation(String constellationName) {
         validateName(constellationName);
         if (constellationRepository.existsByName(constellationName)) {
@@ -63,13 +65,18 @@ public class ConstellationServiceImpl implements ConstellationService {
         return constellationRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
+
     @Override
+    @Cacheable(value = "constellations", key = "'all'")
+    @Transactional(readOnly = true)
     public List<SatelliteConstellation> getAllConstellationsWithSatellites() {
-        return constellationRepository.findAll();
+        List<SatelliteConstellation> constellations = constellationRepository.findAll();
+        constellations.forEach(c -> c.setSatellites(new ArrayList<>(c.getSatellites())));
+        return constellations;
     }
 
     @Override
+    @CacheEvict(value = "constellations", allEntries = true)
     public void deleteConstellation(String name) {
         if (!constellationRepository.existsByName(name)) {
             throw new ResourceNotFoundException("Группировка с именем '" + name + "' не найдена");
@@ -81,7 +88,8 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     @Caching(evict = {
         @CacheEvict(value = "constellation", key = "#constellationId"),
-        @CacheEvict(value = "satellites", key = "'all'")
+        @CacheEvict(value = "satellites", key = "'all'"),
+        @CacheEvict(value = "constellations", allEntries = true)
     })
     public void addSatelliteToConstellation(Long constellationId, Long satelliteId) {
         SatelliteConstellation constellation = constellationRepository.findById(constellationId)
@@ -99,7 +107,8 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     @Caching(evict = {
         @CacheEvict(value = "constellation", key = "#constellationName"),
-        @CacheEvict(value = "satellites", key = "'all'")
+        @CacheEvict(value = "satellites", key = "'all'"),
+        @CacheEvict(value = "constellations", allEntries = true)
     })
     public void addSatelliteToConstellation(String constellationName, String satelliteName) {
         validateName(constellationName);
@@ -117,7 +126,8 @@ public class ConstellationServiceImpl implements ConstellationService {
     @Override
     @Caching(evict = {
         @CacheEvict(value = "constellation", key = "#constellationName"),
-        @CacheEvict(value = "satellites", key = "'all'")
+        @CacheEvict(value = "satellites", key = "'all'"),
+        @CacheEvict(value = "constellations", allEntries = true)
     })
     public void removeSatelliteFromConstellation(String constellationName, String satelliteName) {
         validateName(constellationName);
@@ -195,6 +205,10 @@ public class ConstellationServiceImpl implements ConstellationService {
     }
 
     @Override
+    @Caching(evict = {
+        @CacheEvict(value = "constellation", key = "#oldName"),
+        @CacheEvict(value = "constellations", allEntries = true)
+    })
     public void renameConstellation(String oldName, String newName) {
         validateName(oldName);
         validateName(newName);
